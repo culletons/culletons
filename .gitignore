@@ -1,6 +1,5 @@
 node_modules/
-dist/
+dist/bundle.js
 build/
 package-lock.json
-bundle.js
 .DS_Store
