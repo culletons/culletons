@@ -20,7 +20,7 @@ class App extends React.Component {
   } 
 
   onLogin (userName, passWord) {
-    axios.post('./retired/login', {
+    axios.post('/auth/login', {
       params: {
         username: userName,
         password: passWord
