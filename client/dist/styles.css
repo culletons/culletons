@@ -1,1 +1,11 @@
 
+#home-jumbo {
+  background-image: url('./images/child-clouds-dad-110573.jpg');
+  background-size: cover;
+  background-position: center center;
+  height: 40vw;
+}
+
+.module {
+  background-color: grey;
+}
