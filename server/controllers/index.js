@@ -3,9 +3,11 @@ const parser = require('body-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
+const path = require('path');
+
 var app = express();
 
-app.use(express.static(__dirname + '/../client/dist'));
+app.use(express.static(path.join(__dirname + '/../../client/dist')));
 
 const routes = require('../routes.js');
 
