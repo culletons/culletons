@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 
 import Home from './components/Home.jsx';
-import Nav from './components/Nav.jsx';
+import Nav from './components/header/Nav.jsx';
 
 
 class App extends React.Component {
@@ -18,7 +18,7 @@ class App extends React.Component {
     return (
       <div>
         <Nav/>
-        <Home/> {/*RENDER HOME IF USER HAS LOGGED IN*/}
+        {/* <Home/> RENDER HOME IF USER HAS LOGGED IN */}
       </div>
     )
   }

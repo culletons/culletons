@@ -22,6 +22,7 @@
     "passport-oauth": "^1.0.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
+    "jquery": "1.11.3",
     "bookshelf": "^0.9.1"
   },
   "devDependencies": {
