@@ -4,8 +4,22 @@ class Login extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-
+      username: '',
+      password: ''
     }
+    this.handleChange = this.handleChange.bind(this);
+    this.clickHandler = this.clickHandler.bind(this);
+  }
+
+  clickHandler() {
+    this.props.onLogin(this.state.username, this.state.password);
+  }
+
+  handleChange(evt) {
+    this.setState({
+      [evt.target.name]: evt.target.value,
+      [evt.target.password]: evt.target.value
+    })
   }
 
   render() {
@@ -31,20 +45,24 @@ class Login extends React.Component {
 
               {/* MODAL: Body */}
               <div className="modal-body mx-4">
+                <form>
+
+                </form>
                 <div className="md-form mb-5">
-                  <input type="email" id="Form-email-login-1" className="form-control validate"/>
-                  <label data-error="wrong" data-success="right" htmlFor="Form-email-login-1">Your email</label>
+                  <input type="text" id="Form-email-login" className="form-control validate" name="username" onChange={this.handleChange}/>
+                  <label data-error="wrong" data-success="right" htmlFor="Form-email-login">Your username</label>
                 </div>
     
                 <div className="md-form pb-3">
-                    <input type="text" id="Form-pass-login-1" className="form-control validate"/>
-                    <label data-error="wrong" data-success="right" htmlFor="Form-pass-login-1">Your password</label>
+                    <input type="password" id="Form-pass-login" className="form-control validate" name="password" onChange={this.handleChange}/>
+                    <label data-error="wrong" data-success="right" htmlFor="Form-pass-login">Your password</label>
                 </div>
     
                 <div className="text-center mb-3">
                     {/* Button to make post request */}
-                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a">Sign in</button>
+                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" onClick={this.clickHandler} data-dismiss="modal" aria-hidden="true">Sign in</button>
                 </div>
+
                 <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2"> or Sign in with:</p>
     
                 <div className="row my-3 d-flex justify-content-center">
