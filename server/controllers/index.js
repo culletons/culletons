@@ -1,5 +1,8 @@
 const express = require('express');
 const parser = require('body-parser');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
 const path = require('path');
 
 var app = express();
