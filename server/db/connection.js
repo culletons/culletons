@@ -10,9 +10,9 @@ const knex = require('knex')({
     }
 })
 
-const db = require('bookshelf')(knex);
+const bookshelf = require('bookshelf')(knex);
 
-db.knex.schema.hasTable('users').then(function(exists) {
+bookshelf.knex.schema.hasTable('users').then(function(exists) {
     if (!exists) {
       db.knex.schema.createTable('users', function (user) {
         user.increments('id').primary();
@@ -52,6 +52,6 @@ db.knex.schema.hasTable('users').then(function(exists) {
   // })
 
 
-  module.exports = {db, knex}
+  module.exports = {bookshelf, knex}
 
   
