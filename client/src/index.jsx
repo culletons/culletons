@@ -15,12 +15,12 @@ class App extends React.Component {
       isLoggedIn: false
     }
     this.onLogin = this.onLogin.bind(this);
-    this.onSignup = this.onSignup.bind(this);
+    this.signUp = this.signUp.bind(this);
     this.logOut = this.logOut.bind(this);
   } 
 
   onLogin (userName, passWord) {
-    axios.post('/login', {
+    axios.post('./retired/login', {
       params: {
         username: userName,
         password: passWord
@@ -31,11 +31,22 @@ class App extends React.Component {
         isLoggedIn: true
       })
     })
-    .catch((err) => console.error(err))
+    .catch((err) => {
+      this.setState({
+        isLoggedIn: true
+      })
+    })
   }
 
-  signUp() {
-
+  signUp(userName, passWord) {
+    axios.post('./retired/users', {
+      params: {
+        username: userName,
+        password: passWord
+      }
+    })
+    .then(() => {})
+    .catch(() => {})
   }
   
   logOut() {
@@ -45,17 +56,11 @@ class App extends React.Component {
   }
 
   render() {
-    let page;
-    if (this.state.isLoggedIn) {
-      page = <Dashboard />;
-    } else {
-      page = <Home logIn={this.logIn}/>;
-    }
-
     return (
       <div className="container-fluid">
-        <Nav onLogin={this.onLogin}/>
-        { page }
+        <Nav onLogin={this.onLogin} onSignUp={this.signUp} isLoggedIn={this.state.isLoggedIn} logOut={this.logOut}/>
+        {this.state.isLoggedIn && <Dashboard/>}
+        {!this.state.isLoggedIn && <Home onSignUp={this.signUp}/>}
       </div>
     )
   }
