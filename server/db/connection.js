@@ -18,15 +18,15 @@ db.knex.schemadb.hasTable('users').then(function(exists) {
         user.string('username', 255);
         user.string('password', 255);
         user.string("email", 255);
-        user.integer('Answer1', 255);
-        user.integer('Answer2', 255);
-        user.integer('Answer3', 255);
-        user.integer('Answer4', 255);
-        user.integer('Answer5', 255);
-        user.integer('Answer6', 255);
-        user.integer('Answer7', 255);
-        user.integer('Answer8', 255);
-        user.integer('Answer9', 255);
+        user.integer('retirement age', 255);
+        user.integer('savings wanted for retirement', 255);
+        user.integer('dob', 255);
+        user.integer('current income', 255);
+        user.integer('current savings', 255);
+        user.integer('savings per month', 255);
+        user.integer('family size', 255);
+        user.integer('number of kids', 255);
+        user.integer('upcoming pay raise', 255);
         user.timestamps();
       }).then(function (table) {
         console.log('Created Table', table);
