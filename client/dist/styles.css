@@ -1,6 +1,16 @@
 .form-elegant .font-small {
     font-size: 0.8rem; }
 
+#home-jumbo {
+  background-image: url('./images/child-clouds-dad-110573.jpg');
+  background-size: cover;
+  background-position: center center;
+  height: 40vw;
+}
+
+.module {
+  background-color: grey;
+}
 .form-elegant .z-depth-1a {
     -webkit-box-shadow: 0 2px 5px 0 rgba(55, 161, 255, 0.26), 0 4px 12px 0 rgba(121, 155, 254, 0.25);
     box-shadow: 0 2px 5px 0 rgba(55, 161, 255, 0.26), 0 4px 12px 0 rgba(121, 155, 254, 0.25); }

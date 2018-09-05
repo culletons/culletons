@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 
 import Home from './components/Home.jsx';
+import Dashboard from './components/dashboard/Dashboard.jsx';
 import Nav from './components/header/Nav.jsx';
 
 
@@ -10,10 +11,12 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      username: ""
+      username: "",
+      isLoggedIn: false
     }
     this.onLogin = this.onLogin.bind(this);
     this.onSignup = this.onSignup.bind(this);
+    this.logOut = this.logOut.bind(this);
   } 
 
   onLogin (userName, passWord) {
@@ -25,21 +28,34 @@ class App extends React.Component {
     })
     .then(() => {
       this.setState({
-        
+        isLoggedIn: true
       })
     })
     .catch((err) => console.error(err))
   }
 
-  onSignup () {
+  signUp() {
 
+  }
+  
+  logOut() {
+    this.setState({
+      isLoggedIn: false
+    })
   }
 
   render() {
+    let page;
+    if (this.state.isLoggedIn) {
+      page = <Dashboard />;
+    } else {
+      page = <Home logIn={this.logIn}/>;
+    }
+
     return (
-      <div>
+      <div className="container-fluid">
         <Nav onLogin={this.onLogin}/>
-        {/* <Home/> RENDER HOME IF USER HAS LOGGED IN */}
+        { page }
       </div>
     )
   }

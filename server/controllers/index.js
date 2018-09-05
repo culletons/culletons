@@ -8,6 +8,8 @@ const path = require('path');
 var app = express();
 
 app.use(express.static(path.join(__dirname + '/../../client/dist')));
+console.log(path.join(__dirname, '/../../node_modules'));
+app.use(express.static(path.join(__dirname, '/../../node_modules')));
 
 const routes = require('../routes.js');
 
