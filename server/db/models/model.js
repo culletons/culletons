@@ -1,7 +1,7 @@
 const db = require('../connection')
 
 
-var User = db.Model.extend({
+var User = db.bookshelf.Model.extend({
     tablename: 'users',
     hasTimeStamps: true,
     // verifyPassword: function(password) {
@@ -13,7 +13,7 @@ var User = db.Model.extend({
 
 })
 
-var Users = db.Collection.extend({  
+var Users = db.bookshelf.Collection.extend({  
     model: User
 });
 
