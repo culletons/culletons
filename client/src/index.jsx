@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 
 import Home from './components/Home.jsx';
-import Nav from './components/Nav.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
+import Nav from './components/header/Nav.jsx';
+
 
 class App extends React.Component {
   constructor(props) {
