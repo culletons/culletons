@@ -45,17 +45,11 @@ class App extends React.Component {
   }
 
   render() {
-    let page;
-    if (this.state.isLoggedIn) {
-      page = <Dashboard />;
-    } else {
-      page = <Home logIn={this.logIn}/>;
-    }
-
     return (
       <div className="container-fluid">
         <Nav onLogin={this.onLogin}/>
-        { page }
+        {this.state.isLoggedIn && <Dashboard />}
+        {!this.state.isLoggedIn && <Home logIn={this.logIn} />}
       </div>
     )
   }
