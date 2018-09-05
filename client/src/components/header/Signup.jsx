@@ -32,18 +32,18 @@ class Signup extends React.Component {
               {/* MODAL: Body */}
               <div className="modal-body mx-4">
                 <div className="md-form mb-5">
-                  <input type="username" id="Form-username1" className="form-control validate"/>
-                  <label data-error="wrong" data-success="right" htmlFor="Form-username1">Your username</label>
+                  <input type="username" id="Form-username-signup" className="form-control validate"/>
+                  <label data-error="wrong" data-success="right" htmlFor="Form-username-signup">Your username</label>
                 </div>
 
                 <div className="md-form mb-5">
-                  <input type="email" id="Form-email1" className="form-control validate"/>
-                  <label data-error="wrong" data-success="right" htmlFor="Form-email1">Your email</label>
+                  <input type="email" id="Form-email-signup" className="form-control validate"/>
+                  <label data-error="wrong" data-success="right" htmlFor="Form-email-signup">Your email</label>
                 </div>
     
                 <div className="md-form pb-3">
-                    <input type="password" id="Form-pass1" className="form-control validate"/>
-                    <label data-error="wrong" data-success="right" htmlFor="Form-pass1">Your password</label>
+                    <input type="password" id="Form-pass-signup" className="form-control validate"/>
+                    <label data-error="wrong" data-success="right" htmlFor="Form-pass-signup">Your password</label>
                 </div>
     
                 <div className="text-center mb-3">
