@@ -10,14 +10,35 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      
+      username: ""
     }
+    this.onLogin = this.onLogin.bind(this);
+    this.onSignup = this.onSignup.bind(this);
+  } 
+
+  onLogin (userName, passWord) {
+    axios.post('/login', {
+      params: {
+        username: userName,
+        password: passWord
+      }
+    })
+    .then(() => {
+      this.setState({
+        
+      })
+    })
+    .catch((err) => console.error(err))
+  }
+
+  onSignup () {
+
   }
 
   render() {
     return (
       <div>
-        <Nav/>
+        <Nav onLogin={this.onLogin}/>
         {/* <Home/> RENDER HOME IF USER HAS LOGGED IN */}
       </div>
     )
