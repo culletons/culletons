@@ -1,15 +1,15 @@
 import React from 'react';
+import Signup from './header/Signup.jsx'
 
 const Home = (props) => (
   <div>
-    Nav Bar
     <br/>
     <br/>
     <div className="jumbotron jumbotron-fluid" id="home-jumbo">
       <div className="container">
         <h1 className="display-4">Culletons Planner</h1>
         <p className="lead">Kenni, come up with a motto.</p>
-        <button type="button" onClick={props.logIn} className="btn btn-success">Sign Up</button>
+        <Signup onSignUp={props.onSignUp}/>
       </div>
     </div>
     <div className="card-deck">

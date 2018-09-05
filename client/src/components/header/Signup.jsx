@@ -1,12 +1,28 @@
 import React from 'react'
 
 class Signup extends React.Component {
-  constructor(props) {
+  constructor(props){
     super(props);
     this.state = {
-    
+      username: '',
+      password: ''
     }
+    this.handleChange = this.handleChange.bind(this);
+    this.clickHandler = this.clickHandler.bind(this);
   }
+
+  clickHandler() {
+    this.props.onSignUp(this.state.username, this.state.password);
+  }
+
+  handleChange(evt) {
+    this.setState({
+      [evt.target.name]: evt.target.value,
+      [evt.target.password]: evt.target.value
+    })
+  }
+
+  
 
   render() {
     return (
@@ -14,7 +30,7 @@ class Signup extends React.Component {
       <div className="wrapper">
         {/* Creates button for Login */}
         <div className="container">
-          <a className="btn btn-outline-success mb-4" data-toggle="modal" data-target="#signUp" >Sign Up</a>
+          <a className="btn btn-success" data-toggle="modal" data-target="#signUp" >Sign Up</a>
         </div>
 
         {/* MODAL: Creates popup for Login */}
@@ -32,23 +48,18 @@ class Signup extends React.Component {
               {/* MODAL: Body */}
               <div className="modal-body mx-4">
                 <div className="md-form mb-5">
-                  <input type="username" id="Form-username-signup" className="form-control validate"/>
+                  <input type="username" id="Form-username-signup" className="form-control validate" name="username" onChange={this.handleChange}/>
                   <label data-error="wrong" data-success="right" htmlFor="Form-username-signup">Your username</label>
-                </div>
-
-                <div className="md-form mb-5">
-                  <input type="email" id="Form-email-signup" className="form-control validate"/>
-                  <label data-error="wrong" data-success="right" htmlFor="Form-email-signup">Your email</label>
                 </div>
     
                 <div className="md-form pb-3">
-                    <input type="password" id="Form-pass-signup" className="form-control validate"/>
+                    <input type="password" id="Form-pass-signup" className="form-control validate" name="password" onChange={this.handleChange}/>
                     <label data-error="wrong" data-success="right" htmlFor="Form-pass-signup">Your password</label>
                 </div>
     
                 <div className="text-center mb-3">
                     {/* Button to make post request */}
-                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a">Register</button>
+                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" onClick={this.clickHandler}>Register</button>
                 </div>
                 <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2"> or Register with:</p>
     

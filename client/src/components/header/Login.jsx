@@ -54,13 +54,13 @@ class Login extends React.Component {
                 </div>
     
                 <div className="md-form pb-3">
-                    <input type="text" id="Form-pass-login" className="form-control validate" name="password" onChange={this.handleChange}/>
+                    <input type="password" id="Form-pass-login" className="form-control validate" name="password" onChange={this.handleChange}/>
                     <label data-error="wrong" data-success="right" htmlFor="Form-pass-login">Your password</label>
                 </div>
     
                 <div className="text-center mb-3">
                     {/* Button to make post request */}
-                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" onClick={this.clickHandler}>Sign in</button>
+                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" onClick={this.clickHandler} data-dismiss="modal" aria-hidden="true">Sign in</button>
                 </div>
 
                 <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2"> or Sign in with:</p>
