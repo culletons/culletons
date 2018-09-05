@@ -46,10 +46,10 @@ db.knex.schema.hasTable('users').then(function(exists) {
 
 
   
-  connection.connect(function(err) {
-    if (err) throw err
-    console.log('You are now connected...')
-  })
+  // connection.connect(function(err) {
+  //   if (err) throw err
+  //   console.log('You are now connected...')
+  // })
 
 
   module.exports = {db, knex}
