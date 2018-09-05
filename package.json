@@ -16,7 +16,8 @@
     "knex": "^0.15.2",
     "mysql": "^2.16.0",
     "react": "^16.4.2",
-    "react-dom": "^16.4.2"
+    "react-dom": "^16.4.2",
+    "jquery": "1.11.3"
   },
   "devDependencies": {
     "babel-core": "^6.23.1",
