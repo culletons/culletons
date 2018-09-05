@@ -2,9 +2,6 @@ import React from 'react';
 
 const Home = (props) => (
   <div>
-    Nav Bar
-    <br/>
-    <br/>
     <div className="jumbotron jumbotron-fluid" id="home-jumbo">
       <div className="container">
         <h1 className="display-4">Culletons Planner</h1>

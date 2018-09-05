@@ -32,13 +32,13 @@ class Login extends React.Component {
               {/* MODAL: Body */}
               <div className="modal-body mx-4">
                 <div className="md-form mb-5">
-                  <input type="email" id="Form-email1" className="form-control validate"/>
-                  <label data-error="wrong" data-success="right" htmlFor="Form-email1">Your email</label>
+                  <input type="email" id="Form-email-login-1" className="form-control validate"/>
+                  <label data-error="wrong" data-success="right" htmlFor="Form-email-login-1">Your email</label>
                 </div>
     
                 <div className="md-form pb-3">
-                    <input type="password" id="Form-pass1" className="form-control validate"/>
-                    <label data-error="wrong" data-success="right" htmlFor="Form-pass1">Your password</label>
+                    <input type="text" id="Form-pass-login-1" className="form-control validate"/>
+                    <label data-error="wrong" data-success="right" htmlFor="Form-pass-login-1">Your password</label>
                 </div>
     
                 <div className="text-center mb-3">

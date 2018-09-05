@@ -46,6 +46,7 @@ class App extends React.Component {
 
     return (
       <div className="container-fluid">
+        <Nav />
         { page }
       </div>
     )

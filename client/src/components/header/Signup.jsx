@@ -37,13 +37,13 @@ class Signup extends React.Component {
                 </div>
 
                 <div className="md-form mb-5">
-                  <input type="email" id="Form-email1" className="form-control validate"/>
-                  <label data-error="wrong" data-success="right" htmlFor="Form-email1">Your email</label>
+                  <input type="email" id="Form-email-signup-1" className="form-control validate"/>
+                  <label data-error="wrong" data-success="right" htmlFor="Form-email-signup-1">Your email</label>
                 </div>
     
                 <div className="md-form pb-3">
-                    <input type="password" id="Form-pass1" className="form-control validate"/>
-                    <label data-error="wrong" data-success="right" htmlFor="Form-pass1">Your password</label>
+                    <input type="text" id="Form-pass-signup-1" className="form-control validate"/>
+                    <label data-error="wrong" data-success="right" htmlFor="Form-pass-signup-1">Your password</label>
                 </div>
     
                 <div className="text-center mb-3">
