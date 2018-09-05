@@ -9,6 +9,7 @@ const knex = require('knex')({
         database: 'Culletons'
     }
 })
+
 const db = require('bookshelf')(knex);
 
 db.knex.schema.hasTable('users').then(function(exists) {

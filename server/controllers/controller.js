@@ -31,7 +31,6 @@ module.exports = {
   },
 
   userLogin: (req, res) => {
-    res.sendStatus(500);
+    res.status(201).send(req.user)
   }
-
 }
