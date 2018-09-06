@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Login from './Login.jsx';
-import Signup from './Signup.jsx';
 
 class Nav extends React.Component {
   constructor(props) {
@@ -30,8 +29,7 @@ class Nav extends React.Component {
             <div className="nav-item">
               <a className="nav-link" href="#">Resources</a>
             </div>
-            {!this.props.isLoggedIn && <Login onLogin={this.props.onLogin}/>}
-              {/* {!this.props.isLoggedIn && <Signup onSignUp={this.props.onSignUp}/>} */}
+              {!this.props.isLoggedIn && <Login onLogin={this.props.onLogin} authenticate={this.props.authenticate}/>}
               {this.props.isLoggedIn && <button className="btn btn-outline-success mb-4" onClick={this.clickHandler}>Logout</button>}
             </div>
         </nav>
