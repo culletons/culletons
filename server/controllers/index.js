@@ -13,9 +13,11 @@ console.log(path.join(__dirname, '/../../node_modules'));
 app.use(express.static(path.join(__dirname, '/../../node_modules')));
 
 const routes = require('../routes.js');
+const authRoutes = require('../authRoutes.js')
 
 app.use(bodyParser.json())
 app.use('/retire', routes);
+app.use('/auth', authRoutes)
 app.use(session({ 
   secret: 'keyboard cat',
   resave: false,
