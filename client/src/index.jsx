@@ -13,7 +13,8 @@ class App extends React.Component {
     super(props)
     this.state = {
       username: "",
-      isLoggedIn: false
+      isLoggedIn: false,
+      user: null
     }
     this.onLogin = this.onLogin.bind(this);
     this.signUp = this.signUp.bind(this);
@@ -64,7 +65,7 @@ class App extends React.Component {
   }
 
   render() {
-    const options = {
+     const options = {
       title: {
         text: 'Retirement at a glance',
       },
@@ -103,7 +104,7 @@ class App extends React.Component {
                 
         <div id="cont"></div>
         <Nav onGetStarted={this.onGetStarted} onLogin={this.onLogin} onSignUp={this.signUp} isLoggedIn={this.state.isLoggedIn} logOut={this.logOut}/>
-        {this.state.isLoggedIn && <Dashboard/>}
+        {this.state.isLoggedIn && <Dashboard user={this.state.user} />}
         {!this.state.isLoggedIn && <Home onSignUp={this.signUp}/>}
         <LineChart options={options} />
       </div>

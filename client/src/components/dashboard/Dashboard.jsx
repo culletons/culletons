@@ -7,7 +7,8 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null
+      user: null,
+      formBasicToggle: true
     }
   }
 
@@ -20,8 +21,9 @@ class Dashboard extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col-md-3">
-            <SideRail />
+            <SideRail user={this.props.user} />
           </div>
+          {/* only render if user has no plan yet or if addPlan is clicked */}
           <div className="col-md-9">
             <BasicInfo />
           </div>

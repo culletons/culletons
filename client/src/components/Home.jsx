@@ -1,12 +1,47 @@
 import React from 'react';
 import Signup from './header/Signup.jsx'
 
-const Home = (props) => (
+const Home = (props) => {
+  const options = {
+    title: {
+      text: 'Retirement at a glance',
+    },
+    xAxis: {
+      tickInterval: 5,
+      labels: {
+        enabled: true
+      }
+    },
+    yAxis: {
+      title: {
+        text: '$ thousand',
+      },
+    },
+    chart: {
+      type: 'line',
+    },
+    series: [
+      {
+        name: 'Jane',
+        data: [1, 0, 4, 0, 3],
+      },
+      {
+        name: 'John',
+        data: [5, 7, 3, 2, 4],
+      },
+      {
+        name: 'Doe',
+        data: [0, 0, 0, 1, 0],
+      },
+    ],
+  };
+  return(
   <div>
     <div className="jumbotron jumbotron-fluid" id="home-jumbo">
-      <div className="container">
-        <h1 className="display-4">Culletons Planner</h1>
-        <p className="lead">Kenni, come up with a motto.</p>
+      <div className="container" style={{marginLeft: 50, marginRight: 25}}>
+        <h1 className="display-4">Culletons</h1>
+        <p className="lead">If you fail to plan, you plan to fail.</p>
+        <p className="lead">Let's plan for <em>SUCCESS</em>.</p>
         <Signup onSignUp={props.onSignUp}/>
       </div>
     </div>
