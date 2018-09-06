@@ -1,4 +1,5 @@
 import React from 'react';
+import LineChart from './LineChart.jsx'
 
 class BasicInfo extends React.Component {
   constructor(props) {
