@@ -1,18 +1,24 @@
 import React from 'react';
+import firebase from 'firebase';
 
 class Login extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
     }
     this.handleChange = this.handleChange.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
+    this.authHandler = this.authHandler.bind(this);
   }
 
-  clickHandler() {
-    this.props.onLogin(this.state.username, this.state.password);
+  authHandler(provider) {
+    this.props.authenticate(provider)
+  }
+
+  clickHandler(username, password, uid) {
+    this.props.onLogin(username, password, uid);
   }
 
   handleChange(evt) {
@@ -60,14 +66,18 @@ class Login extends React.Component {
     
                 <div className="text-center mb-3">
                     {/* Button to make post request */}
-                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" onClick={this.clickHandler} data-dismiss="modal" aria-hidden="true">Sign in</button>
+                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" 
+                      onClick={this.clickHandler.bind(this, this.state.username, this.state.password)} data-dismiss="modal" aria-hidden="true">Sign in
+                    </button>
                 </div>
 
                 <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2"> or Sign in with:</p>
     
                 <div className="row my-3 d-flex justify-content-center">
-                    {/* Button to Login with  */}
-                    <button type="button" className="btn btn-white btn-rounded z-depth-1a"><i className="fa fa-google-plus"></i></button>
+                    {/* Button to Login with google*/}
+                    <button type="button" className="btn btn-white btn-rounded z-depth-1a" onClick={this.authHandler.bind(this, new firebase.auth.GoogleAuthProvider())} data-dismiss="modal" aria-hidden="true">
+                      <i className="fa fa-google-plus"></i>
+                    </button>
                 </div>
               </div>
 
@@ -84,3 +94,6 @@ class Login extends React.Component {
 }
 
 export default Login;
+
+
+// ya29.GlsQBv5-FNvbldZWomUUcNvem-znOxOSQ4Nls5Y-5bLLuvIs5xq1cgRXxi2M1PIlFc9SFDGGgx29y57qYLC0FXRgwkZsRXPWKRooBKpJFZW2aeuUuVfks8Z1DTy_
