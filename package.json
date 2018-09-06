@@ -19,6 +19,7 @@
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "highcharts": "^6.1.2",
     "jquery": "^3.3.1",
     "knex": "^0.15.2",
     "mysql": "^2.16.0",
@@ -27,8 +28,10 @@
     "passport-oauth": "^1.0.0",
     "popper.js": "^1.14.4",
     "re-base": "^4.0.0",
+    "plaid": "^2.8.0",
     "react": "^16.4.2",
-    "react-dom": "^16.4.2"
+    "react-dom": "^16.4.2",
+    "react-highcharts": "^16.0.2"
   },
   "devDependencies": {
     "babel-core": "^6.23.1",

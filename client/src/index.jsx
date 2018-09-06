@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-
+import LineChart from './components/dashboard/LineChart.jsx'
 import Home from './components/Home.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
 import Nav from './components/header/Nav.jsx';
@@ -21,6 +21,7 @@ const app = firebase.initializeApp(config);
 const base = Rebase.createClass(app.database())
 
 
+
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -29,10 +30,10 @@ class App extends React.Component {
     }
 
     this.onLogin = this.onLogin.bind(this);
-    this.signUp = this.signUp.bind(this);
     this.logOut = this.logOut.bind(this);
     this.oAuthLogin = this.oAuthLogin.bind(this);
     this.oAuthSignUp = this.oAuthSignUp.bind(this);
+    this.onGetStarted = this.onGetStarted.bind(this);
   } 
 
   //for OAuth login
@@ -78,7 +79,12 @@ class App extends React.Component {
   oAuthSignUp (provider) {
     firebase.auth().signInWithPopup(provider)
       .then((authData) => {
-        axios.post('/retire/users', { fullname: authData.additionalUserInfo.profile.name, email: authData.additionalUserInfo.profile.email, oAuthToken: authData.credential.accessToken })
+        console.log(authData)
+        axios.post('/retire/users', { 
+          fullname: authData.additionalUserInfo.profile.name, 
+          email: authData.additionalUserInfo.profile.email, 
+          providerId: authData.additionalUserInfo.providerId, 
+          oAuthId: authData.additionalUserInfo.profile.id })
         .then(() => {
           this.setState({
             isLoggedIn: true
@@ -87,6 +93,12 @@ class App extends React.Component {
         .catch((err) => console.error(err))
       })
       .catch((err) => console.error(err));
+    }
+    
+  onGetStarted() {
+    this.setState({
+      isLoggedIn: true
+    })
   }
   
   logOut() {
@@ -100,11 +112,47 @@ class App extends React.Component {
   }
 
   render() {
+    const options = {
+      title: {
+        text: 'Retirement at a glance',
+      },
+      xAxis: {
+        tickInterval: 5,
+        labels: {
+          enabled: true
+        }
+      },
+      yAxis: {
+        title: {
+          text: '$ thousand',
+        },
+      },
+      chart: {
+        type: 'line',
+      },
+      series: [
+        {
+          name: 'Jane',
+          data: [1, 0, 4, 0, 3],
+        },
+        {
+          name: 'John',
+          data: [5, 7, 3, 2, 4],
+        },
+        {
+          name: 'Doe',
+          data: [0, 0, 0, 1, 0],
+        },
+      ],
+    };
+
     return (
       <div className="container-fluid">
-        <Nav onLogin={this.onLogin} onSignUp={this.signUp} isLoggedIn={this.state.isLoggedIn} logOut={this.logOut} authenticate={this.oAuthLogin}/>
+        <div id="cont"></div>
+        <Nav onGetStarted={this.onGetStarted} onLogin={this.onLogin} onSignUp={this.signUp} isLoggedIn={this.state.isLoggedIn} logOut={this.logOut}  authenticate={this.oAuthLogin}/>
         {this.state.isLoggedIn && <Dashboard/>}
         {!this.state.isLoggedIn && <Home onSignUp={this.signUp} authenticate={this.oAuthSignUp}/>}
+        <LineChart options={options} />
       </div>
     )
   }

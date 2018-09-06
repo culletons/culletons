@@ -34,7 +34,7 @@ class Login extends React.Component {
       <div className="wrapper">
         {/* Creates button for Login */}
         <div className="container">
-          <a className="btn btn-outline-success mb-4" data-toggle="modal" data-target="#elegantModalForm" >Log in</a>
+          <a className=" btn-outline-success mb-4 " data-toggle="modal" data-target="#elegantModalForm" >Log in</a>
         </div>
 
         {/* MODAL: Creates popup for Login */}
