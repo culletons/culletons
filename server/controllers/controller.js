@@ -8,9 +8,11 @@ module.exports = {
       model.getUserByOAuthFromDB(req.body.oAuthToken)
       .then(user => {
         console.log("this is returned from getUser get by OAuth ", user)
+        res.status(200).send(user)
       })
       .catch(err => {
         console.log("this error occurred in getUser get by OAuth ", err)
+        res.sendStatus(500);
       })
     }
     else {
@@ -21,6 +23,7 @@ module.exports = {
       })
       .catch(err => {
         console.log("this error occurred in getUser ", err)
+        res.sendStatus(500);
       })
     }
   },
@@ -34,6 +37,7 @@ module.exports = {
     })
     .catch(err => {
       console.log("this error occurred in createUser ", err)
+      res.sendStatus(500);
     })
   },
 
@@ -54,6 +58,7 @@ module.exports = {
     })
     .catch(err => {
       console.log("this error occurred in getPlan ", err)
+      res.sendStatus(500);
     })
   },
 
@@ -66,6 +71,7 @@ module.exports = {
     })
     .catch(err => {
       console.log("this error occurred in createPlan ", err)
+      res.sendStatus(500);
     })
   },
 
@@ -82,6 +88,7 @@ module.exports = {
     })
     .catch(err => {
       console.log("this error occurred in getItem ", err)
+      res.sendStatus(500);
     })
   },
 
@@ -94,6 +101,7 @@ module.exports = {
     })
     .catch(err => {
       console.log("this error occurred in createItem ", err)
+      res.sendStatus(500);
     })
   },
 
