@@ -51,9 +51,13 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
   bookshelf.knex.schema.hasTable('items').then(function(exists) {
     if (!exists) {
       bookshelf.knex.schema.createTable('items', function (item) {
-        item.foreign('userId').references('userId').inTable('users');
         item.increments('itemId').primary();
+        item.foreign('userId').references('userId').inTable('users');
         item.string('item', 255);
+        item.string('itemToken', 255);
+        item.string('institutionName', 255);
+        item.string('institutionId', 255);
+        item.string('linkSessionId', 255);
         item.timestamps();
       }).then(function (table) {
         console.log('Created Table', table);
