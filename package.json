@@ -28,7 +28,8 @@
     "passport-oauth": "^1.0.0",
     "popper.js": "^1.14.4",
     "react": "^16.4.2",
-    "react-dom": "^16.4.2"
+    "react-dom": "^16.4.2",
+    "react-highcharts": "^16.0.2"
   },
   "devDependencies": {
     "babel-core": "^6.23.1",
