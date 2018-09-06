@@ -3,9 +3,9 @@ const model = require('../db/models/model.js')
 module.exports = {
 
   getUser: (req, res) => {
-    console.log("this is req.body in getUser ", req.body)
-    if (req.body.oAuthToken !== null){
-      model.getUserByOAuthFromDB(req.body.oAuthToken)
+    console.log("this is req.query in getUser ", req.query)
+    if (req.query.oAuthToken !== null){
+      model.getUserByOAuthFromDB(req.query.oAuthToken)
       .then(user => {
         console.log("this is returned from getUser get by OAuth ", user)
         res.status(200).send(user)
@@ -16,7 +16,7 @@ module.exports = {
       })
     }
     else {
-      model.getUserFromDB(req.body.username, req.body.password)
+      model.getUserFromDB(req.query.username, req.query.password)
       .then(user => {
         console.log("this is returned from getUser ", user)
         res.sendStatus(200).send(user);
@@ -30,15 +30,28 @@ module.exports = {
 
   createUser: (req, res) => {
     console.log("this is req.body in createUser ", req.body)
-    model.createUserInDB(req.body.userId, req.body.username, req.body.fullName, req.body.password, req.body.email)
-    .then(user => {
-      console.log(user, "this user was created in the database controller.")
-      res.sendStatus(200);
-    })
-    .catch(err => {
-      console.log("this error occurred in createUser ", err)
-      res.sendStatus(500);
-    })
+    if (req.body.oAuthToken !== null){
+      model.createUserInDBByOAuth(req.body.oAuthToken, req.body.username, req.body.email)
+      .then(user => {
+        console.log(user, "this user was created in the database controller by OAuth.")
+        res.sendStatus(200);
+      })
+      .catch(err => {
+        console.log("this error occurred in createUser create by OAuth ", err)
+        res.sendStatus(500);
+      })
+    }
+    else {
+      model.createUserInDB(req.body.userId, req.body.username, req.body.fullName, req.body.password, req.body.email)
+      .then(user => {
+        console.log(user, "this user was created in the database controller.")
+        res.sendStatus(200);
+      })
+      .catch(err => {
+        console.log("this error occurred in createUser ", err)
+        res.sendStatus(500);
+      })
+    }
   },
 
   updateUser: (req, res) => {
@@ -50,8 +63,8 @@ module.exports = {
   },
 
   getPlans: (req, res) => {
-    console.log("this is req.body in getPlan ", req.body)
-    model.getPlansFromDB(req.body.userId)
+    console.log("this is req.query in getPlan ", req.query)
+    model.getPlansFromDB(req.query.userId)
     .then(plan => {
       console.log("this is returned from getPlan ", plan)
       res.sendStatus(200).send(plan);
@@ -80,8 +93,8 @@ module.exports = {
   },
 
   getItems: (req, res) => {
-    console.log("this is req.body in getItem ", req.body)
-    model.getItemsFromDB(req.body.userId)
+    console.log("this is req.query in getItem ", req.query)
+    model.getItemsFromDB(req.query.userId)
     .then(item => {
       console.log("this is returned from getItem ", item)
       res.sendStatus(200).send(item);

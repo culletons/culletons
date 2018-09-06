@@ -17,7 +17,7 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
       bookshelf.knex.schema.createTable('users', function (user) {
         user.increments('userId').primary();
         user.string('username', 255)
-        user.string('full name', 255)
+        user.string('fullName', 255)
         user.string('password', 255)
         user.string("email", 255)
         user.string('OAuthToken', 255)
@@ -33,14 +33,14 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
       bookshelf.knex.schema.createTable('plans', function (plan) {
         plan.foreign('userId').references('userId').inTable('users');
         plan.increments('planId').primary();
-        plan.integer('retirement age').notNullable();
-        plan.integer('retirement savings goal').notNullable();
+        plan.integer('retirementAge').notNullable();
+        plan.integer('retirementSavingsGoal').notNullable();
         plan.integer('dob').notNullable();
-        plan.integer('current income').notNullable();
-        plan.integer('current savings').notNullable();
-        plan.integer('savings per month').notNullable();
-        plan.integer('family size');
-        plan.integer('number of kids');
+        plan.integer('currentSavings').notNullable();
+        plan.integer('savingsPerMonth').notNullable();
+        plan.integer('monthlySpending').notNullable();
+        plan.integer('familySize');
+        plan.integer('numberOfKids');
         plan.timestamps();
       }).then(function (table) {
         console.log('Created Table', table);
@@ -64,23 +64,6 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
       });
     }
   });
-
-// const connection = mysql.createConnection({
-//     host: 'culletons.cj3egt8fhnki.us-east-1.rds.amazonaws.com',
-//     port: '3306',
-//     user: 'Culletons',
-//     password: 'culletons',
-//     database: 'Culletons'
-//   })
-
-
-
-  
-  // connection.connect(function(err) {
-  //   if (err) throw err
-  //   console.log('You are now connected...')
-  // })
-
 
   module.exports = {bookshelf, knex}
 

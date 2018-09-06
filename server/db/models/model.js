@@ -70,6 +70,20 @@ var createUserInDB = (username, fullName, password, email) => {
     })
 }
 
+var createUserInDBByOAuth = (OAuthToken, username, email) => {
+    new User({ OAuthToken: OAuthToken }).fetch().then(function(found, err) {
+        if(!found){
+            db.knex('users').insert({OAuthToken: OAuthToken}, {username: username}, {email: email})
+            .then(newUser => {
+                console.log(newUser, " was created in the database model.")
+            })
+            .catch(err => {
+                console.log("this error occurred in createUserInDBByOAuth ", err);
+            })
+        }
+    })
+}
+
 var updateUserInDB = (update) => {
 }
 
@@ -128,4 +142,4 @@ var createItemInDB = (userId, item, itemToken, institutionName, institutionId, l
 var updateItemInDB = (update) => {
 }
 
-module.exports = {User, Users, getUserFromDB, getUserByOAuthFromDB, createUserInDB, updateUserInDB, userLoginDB, getPlansFromDB, createPlanInDB, updatePlanInDB, getItemsFromDB, createItemInDB, updateItemInDB}
+module.exports = {User, Users, getUserFromDB, getUserByOAuthFromDB, createUserInDB, createUserInDBByOAuth, updateUserInDB, userLoginDB, getPlansFromDB, createPlanInDB, updatePlanInDB, getItemsFromDB, createItemInDB, updateItemInDB}
