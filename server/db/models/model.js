@@ -2,7 +2,7 @@ const db = require('../connection')
 
 
 var User = db.bookshelf.Model.extend({
-    tablename: 'users',
+    tableName: 'users',
     hasTimeStamps: true,
     // verifyPassword: function(password) {
     //     return this.get('password') === password;
@@ -10,15 +10,34 @@ var User = db.bookshelf.Model.extend({
     // byEmail: function(email) {
     //     return this.forge().query({where:{ email: email }}).fetch();
     // }
+    plan: function() {
+        return this.hasMany(Plan);
+    },
+    item: function() {
+        return this.hasOne(Item);
+    }
 
 })
+var Plan = db.bookshelf.Model.extend({
+    tableName: 'plans',
+    user: function() {
+      return this.belongsTo(User);
+    }
+  });
 
+var Item = db.bookshelf.Model.extend({
+    tableName: 'items',
+    user: function() {
+      return this.belongsTo(User);
+    }
+});
+  
 var Users = db.bookshelf.Collection.extend({  
     model: User
 });
 
-var getUserFromDB = (username) => {
-    db.knex('users').where({username: username}).fetch()
+var getUserFromDB = (username, password) => {
+    return new User({username: username, password: password}).fetch()
     .then(user => {
         return user;
     })
@@ -27,16 +46,48 @@ var getUserFromDB = (username) => {
     })
 }
 
-var createUserInDB = (username, fullName, password, email) => {
-    if(!getUserFromDB(username)){
-        db.knex('users').insert({username: username}, {fullName: fullName}, {password: password}, {email: email})
-        .then(newUser => {
-            console.log(newUser, " was created in the database model.")
-        })
-        .catch(err => {
-            console.log("this error occurred in createUserInDB ", err);
-        })
-    }
+var getUserByOAuthFromDB = (OAuthId) => {
+    return new User({oAuthId: OAuthId}).fetch()
+    .then(user => {
+        return user;
+    })
+    .catch(err => {
+        console.log("this error occurred in getUserByOAuthFromDB ", err);
+    })
+}
+
+var createUserInDB = (username, fullname, password, email) => {
+    return new User({ username: username }).fetch().then(function(found, err) {
+        if(!found){
+            return db.knex('users').insert({username: username, fullname: fullname, password: password, email: email})
+            .then(newUser => {
+                console.log(newUser, " was created in the database model.")
+                return newUser;
+            })
+            .catch(err => {
+                console.log("this error occurred in createUserInDB ", err);
+            })
+        }
+    })
+}
+
+var createUserInDBByOAuth = (oAuthId, fullname, email) => {
+    console.log("this is token ", oAuthId)
+    return (new User({ oAuthId: oAuthId })).fetch().then(function(found) {
+        if(!found){
+            return db.knex('users').insert({oAuthId: oAuthId, fullname: fullname, email: email})
+            .then(newUser => {
+                console.log(newUser, " was created in the database model.")
+                return newUser;
+            })
+            .catch(err => {
+                console.log("this error occurred in createUserInDBByOAuth ", err);
+            })
+        }
+    })
+    .catch(err => {
+        console.log("this is error occurred in createUSerin DB ", err)
+    })
 }
 
 var updateUserInDB = (update) => {
@@ -46,4 +97,57 @@ var userLoginDB = (req, res) => {
 
 }
 
-module.exports = {User, Users, getUserFromDB, createUserInDB, updateUserInDB, userLoginDB}
+var getPlansFromDB = (userId) => {
+    return new Plan({userId: userId}).fetch()    
+    .then(plan => {
+        return plan;
+    })
+    .catch(err => {
+        console.log("this error occurred in getPlansFromDB ", err);
+    })
+}
+var createPlanInDB = (userId, retireAge, retireGoal, currentAge, currentSavings, monthlySavings, monthlySpending) => {
+    return new Plan({ userId: userId }).fetch().then(function(found) {
+        if(!found){
+            return db.knex('plans').insert({userId: userId, retirementAge: retireAge, retireGoal: retireGoal, currentAge: currentAge, currentSavings: currentSavings, monthlySavings: monthlySavings, monthlySpending: monthlySpending})
+            .then(newPlan => {
+                console.log(newPlan, " was created in the database model.")
+                return newPlan;
+            })
+            .catch(err => {
+                console.log("this error occurred in createPlanInDB ", err);
+            })
+        }
+    })
+}
+var updatePlanInDB = (update) => {
+}
+
+var getItemsFromDB = (userId) => {
+    return new Item({userId: userId}).fetch() 
+    .then(user => {
+        return user;
+    })
+    .catch(err => {
+        console.log("this error occurred in getItemsFromDB ", err);
+    })
+}
+
+var createItemInDB = (userId, item, itemToken, institutionName, institutionId, linkSessionId) => {
+    return new Item({ userId: userId }).fetch().then(function(found, err) {
+        if(!found){
+            return db.knex('items').insert({userId: userId, item: item, itemToken: itemToken, institutionName: institutionName, institutionId: institutionId, linkSessionId: linkSessionId})
+            .then(newItem => {
+                console.log(newItem, " was created in the database model.")
+                return newItem;
+            })
+            .catch(err => {
+                console.log("this error occurred in createItemInDB ", err);
+            })
+        }
+    })
+}
+var updateItemInDB = (update) => {
+}
+
+module.exports = {User, Users, getUserFromDB, getUserByOAuthFromDB, createUserInDB, createUserInDBByOAuth, updateUserInDB, userLoginDB, getPlansFromDB, createPlanInDB, updatePlanInDB, getItemsFromDB, createItemInDB, updateItemInDB}

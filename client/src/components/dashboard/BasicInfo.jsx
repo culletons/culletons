@@ -25,17 +25,6 @@ class BasicInfo extends React.Component {
 
   //window.localStorage.setItem('key', 'value')
   componentDidMount() {
-    this.setState({
-      retireAge: 85,
-      retireGoal: 3,
-      currentAge: 0,
-      currentSavings: 0,
-      monthlySavings: 0,
-      monthlySpending: 0,
-      currentSlide: 0,
-      chartToggle: false,
-      chartPoints: []
-    })
   }
 
   nextSlide() {
