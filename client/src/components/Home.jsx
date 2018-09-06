@@ -9,7 +9,7 @@ const Home = (props) => (
       <div className="container">
         <h1 className="display-4">Culletons Planner</h1>
         <p className="lead">Kenni, come up with a motto.</p>
-        <Signup onSignUp={props.onSignUp}/>
+        <Signup onSignUp={props.onSignUp} authenticate={props.authenticate}/>
       </div>
     </div>
     <div className="card-deck">
