@@ -7,7 +7,8 @@ const knex = require('knex')({
         user: 'Culletons',
         password: 'culletons',
         database: 'Culletons'
-    }
+    },
+    useNullAsDefault: true
 })
 
 const bookshelf = require('bookshelf')(knex);
@@ -17,10 +18,10 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
       bookshelf.knex.schema.createTable('users', function (user) {
         user.increments('userId').primary();
         user.string('username', 255)
-        user.string('fullName', 255)
+        user.string('fullname', 255)
         user.string('password', 255)
         user.string("email", 255)
-        user.string('OAuthToken', 255)
+        user.string('oAuthToken', 255)
         user.timestamps();
       }).then(function (table) {
         console.log('Created Table', table);
@@ -31,13 +32,13 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
   bookshelf.knex.schema.hasTable('plans').then(function(exists) {
     if (!exists) {
       bookshelf.knex.schema.createTable('plans', function (plan) {
-        plan.foreign('userId').references('userId').inTable('users');
+        plan.integer('userId')
         plan.increments('planId').primary();
         plan.integer('retirementAge').notNullable();
-        plan.integer('retirementSavingsGoal').notNullable();
-        plan.integer('dob').notNullable();
+        plan.integer('retireGoal').notNullable();
+        plan.integer('currentAge').notNullable();
         plan.integer('currentSavings').notNullable();
-        plan.integer('savingsPerMonth').notNullable();
+        plan.integer('monthlySavings').notNullable();
         plan.integer('monthlySpending').notNullable();
         plan.integer('familySize');
         plan.integer('numberOfKids');
@@ -52,7 +53,7 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
     if (!exists) {
       bookshelf.knex.schema.createTable('items', function (item) {
         item.increments('itemId').primary();
-        item.foreign('userId').references('userId').inTable('users');
+        item.integer('userId')
         item.string('item', 255);
         item.string('itemToken', 255);
         item.string('institutionName', 255);
