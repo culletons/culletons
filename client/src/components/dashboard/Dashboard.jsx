@@ -1,6 +1,7 @@
 import React from 'react';
 
 import BasicInfo from './BasicInfo.jsx';
+import SideRail from './SideRail.jsx';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -17,12 +18,9 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div className="container">
-        NavBar
-        <br/>
-        <br/>
         <div className="row">
           <div className="col-md-3">
-            Dashboard
+            <SideRail />
           </div>
           <div className="col-md-9">
             <BasicInfo />

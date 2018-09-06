@@ -19,9 +19,18 @@ class Nav extends React.Component {
         <nav className="navbar navbar-toggleable-md navbar-inverse bg-inverse navbar-toggle collapsed ">
           <div className="container-fluid">
             <div className="navbar-header">
-              <a className="navbar-brand" href="#"><h3>WebSiteName</h3></a>
+              <a className="navbar-brand" href="#"><h3>Culletons</h3></a>
             </div>
-              {!this.props.isLoggedIn && <Login onLogin={this.props.onLogin}/>}
+            <div className="nav-item">
+              <a className="nav-link active" onClick={this.props.onGetStarted} href="#">Get started!</a>
+             </div>
+            <div className="nav-item">
+              <a className="nav-link" href="#">About us</a>
+            </div>
+            <div className="nav-item">
+              <a className="nav-link" href="#">Resources</a>
+            </div>
+            {!this.props.isLoggedIn && <Login onLogin={this.props.onLogin}/>}
               {/* {!this.props.isLoggedIn && <Signup onSignUp={this.props.onSignUp}/>} */}
               {this.props.isLoggedIn && <button className="btn btn-outline-success mb-4" onClick={this.clickHandler}>Logout</button>}
             </div>
