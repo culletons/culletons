@@ -46,8 +46,8 @@ var getUserFromDB = (username, password) => {
     })
 }
 
-var getUserByOAuthFromDB = (OAuthToken) => {
-    return new User({oAuthToken: OAuthToken}).fetch()
+var getUserByOAuthFromDB = (OAuthId) => {
+    return new User({oAuthId: OAuthId}).fetch()
     .then(user => {
         return user;
     })
@@ -71,11 +71,11 @@ var createUserInDB = (username, fullname, password, email) => {
     })
 }
 
-var createUserInDBByOAuth = (oAuthToken, fullname, email) => {
-    console.log("this is token ", oAuthToken)
-    return (new User({ oAuthToken: oAuthToken })).fetch().then(function(found) {
+var createUserInDBByOAuth = (oAuthId, fullname, email) => {
+    console.log("this is token ", oAuthId)
+    return (new User({ oAuthId: oAuthId })).fetch().then(function(found) {
         if(!found){
-            return db.knex('users').insert({oAuthToken: oAuthToken, fullname: fullname, email: email})
+            return db.knex('users').insert({oAuthId: oAuthId, fullname: fullname, email: email})
             .then(newUser => {
                 console.log(newUser, " was created in the database model.")
                 return newUser;

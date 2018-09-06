@@ -4,8 +4,8 @@ module.exports = {
 
   getUser: (req, res) => {
     console.log("this is req.query in getUser ", req.query)
-    if (req.query.oAuthToken !== null){
-      model.getUserByOAuthFromDB(req.query.oAuthToken)
+    if (req.query.oAuthId !== null){
+      model.getUserByOAuthFromDB(req.query.oAuthId)
       .then(user => {
         console.log("this is returned from getUser get by OAuth ", user)
         res.status(200).send(user)
@@ -30,8 +30,13 @@ module.exports = {
 
   createUser: (req, res) => {
     console.log("this is req.body in createUser ", req.body)
+<<<<<<< HEAD
     if (req.body.oAuthToken !== null){
       model.createUserInDBByOAuth(req.body.oAuthToken, req.body.username, req.body.email)
+=======
+    if (req.body.oAuthId !== null){
+      model.createUserInDBByOAuth(req.body.oAuthId, req.body.fullname, req.body.email)
+>>>>>>> ef3446c03166c7dcfa37e07e66a27041e2036727
       .then(user => {
         console.log(user, "this user was created in the database controller by OAuth.")
         res.sendStatus(200);
