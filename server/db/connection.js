@@ -21,7 +21,7 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
         user.string('fullname', 255)
         user.string('password', 255)
         user.string("email", 255)
-        user.string('oAuthToken', 255)
+        user.string('oAuthId', 255)
         user.timestamps();
       }).then(function (table) {
         console.log('Created Table', table);
