@@ -26,13 +26,10 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-<<<<<<< HEAD
       username: "",
       isLoggedIn: false,
       user: null
-=======
-      isLoggedIn: false
->>>>>>> dev
+
     }
 
     this.onLogin = this.onLogin.bind(this);

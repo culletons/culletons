@@ -20,6 +20,10 @@ var User = db.bookshelf.Model.extend({
 })
 var Plan = db.bookshelf.Model.extend({
     tableName: 'plans',
+<<<<<<< HEAD
+=======
+    hasTimeStamps: true,
+>>>>>>> dev
     user: function() {
       return this.belongsTo(User);
     }
@@ -27,6 +31,10 @@ var Plan = db.bookshelf.Model.extend({
 
 var Item = db.bookshelf.Model.extend({
     tableName: 'items',
+<<<<<<< HEAD
+=======
+    hasTimeStamps: true,
+>>>>>>> dev
     user: function() {
       return this.belongsTo(User);
     }
