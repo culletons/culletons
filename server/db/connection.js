@@ -14,12 +14,12 @@ const bookshelf = require('bookshelf')(knex);
 
 bookshelf.knex.schema.hasTable('users').then(function(exists) {
     if (!exists) {
-      db.knex.schema.createTable('users', function (user) {
-        user.increments('id').primary();
-        user.string('username', 255);
-        user.string('full name', 255);
-        user.string('password', 255);
-        user.string("email", 255);
+      bookshelf.knex.schema.createTable('users', function (user) {
+        user.increments('userId').primary();
+        user.string('username', 255).notNullable();
+        user.string('full name', 255).notNullable();
+        user.string('password', 255).notNullable();
+        user.string("email", 255).notNullable();
         user.integer('retirement age', 255);
         user.integer('retirement savings goal', 255);
         user.integer('dob', 255);

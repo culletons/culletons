@@ -27,16 +27,18 @@ var getUserFromDB = (username) => {
     })
 }
 
-var createUserInDB = (username, fullName, password, email) => {
-    if(!getUserFromDB(username)){
-        db.knex('users').insert({username: username}, {fullName: fullName}, {password: password}, {email: email})
-        .then(newUser => {
-            console.log(newUser, " was created in the database model.")
-        })
-        .catch(err => {
-            console.log("this error occurred in createUserInDB ", err);
-        })
-    }
+var createUserInDB = (username, fullName, password, email, retireAge, retireGoal, currentAge, currentSavings, monthlySavings, monthlySpending) => {
+    new User({ username: username }).fetch().then(function(found, err) {
+        if(!found){
+            db.knex('users').insert({username: username}, {fullName: fullName}, {password: password}, {email: email}, {retireAge: retireAge}, {retireGoal: retireGoal}, {currentAge: currentAge}, {currentSavings: currentSavings}, {monthlySavings: monthlySavings}, {monthlySpending: monthlySpending})
+            .then(newUser => {
+                console.log(newUser, " was created in the database model.")
+            })
+            .catch(err => {
+                console.log("this error occurred in createUserInDB ", err);
+            })
+        }
+    })
 }
 
 var updateUserInDB = (update) => {

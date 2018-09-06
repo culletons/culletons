@@ -6,9 +6,10 @@ const Home = (props) => (
     <br/>
     <br/>
     <div className="jumbotron jumbotron-fluid" id="home-jumbo">
-      <div className="container">
-        <h1 className="display-4">Culletons Planner</h1>
-        <p className="lead">Kenni, come up with a motto.</p>
+      <div className="container" style={{marginLeft: 50, marginRight: 25}}>
+        <h1 className="display-4">Culletons</h1>
+        <p className="lead">If you fail to plan, you plan to fail.</p>
+        <p className="lead">Let's plan for <em>SUCCESS</em>.</p>
         <Signup onSignUp={props.onSignUp}/>
       </div>
     </div>
