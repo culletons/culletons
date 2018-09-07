@@ -7,7 +7,8 @@ import Dashboard from './components/dashboard/Dashboard.jsx';
 import Nav from './components/header/Nav.jsx';
 import firebase from 'firebase';
 import Rebase from 're-base';
-import config from './components/header/googleKey.js'
+import config from './components/header/googleKey.js';
+
 
 const app = firebase.initializeApp(config);
 const base = Rebase.createClass(app.database())
