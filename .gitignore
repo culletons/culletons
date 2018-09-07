@@ -4,3 +4,4 @@ build/
 server/config.js
 package-lock.json
 .DS_Store
+client/src/components/header/googleKey.js

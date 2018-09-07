@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios'
 import BasicInfo from './BasicInfo.jsx';
 
-class Dashboard extends React.Component {
+class SideRail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,21 +70,30 @@ class Dashboard extends React.Component {
           <button id="link-btn" className="btn btn-success" onClick={this.launchPlaidLink}>Link Account</button>
           <br/></div>
           <div className="card-body border-bottom">
-          <div className="panel-default">
-            <div className="panel-heading">
-              <h3 className="panel-title" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Plan name<button type="button panel" className="close" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-              </button></h3>
-            
-              {/* todo create pop-up asking for delete confirmation */}
-            </div>
-            <div className="panel-body collapse" id="collapseExample" >
-              <div>Current savings: {this.props.plans.currentSavings}</div>
-              <div>Monthly savings: {this.props.plans.monthlySavings}</div>
-              <div>Retirement age: {this.props.plans.retireAge}</div>
 
-            </div>
-          </div>
+           { this.props.plans.map((plan) => (
+
+<div key={plan.planId} className="panel-default">
+<div className="panel-heading">
+  <h3 className="panel-title" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Plan name<button type="button panel" className="close" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+  </button></h3>
+
+  {/* todo create pop-up asking for delete confirmation */}
+</div>
+<div className="panel-body collapse" id="collapseExample" >
+  <div>Current savings: {plan.currentSavings}</div>
+  <div>Monthly savings: {plan.monthlySavings}</div>
+  <div>Retirement age: {plan.retireAge}</div>
+
+</div>
+</div>
+              
+            ))}
+
+
+
+
           </div>
           <div className="card-body">
             <button className="btn btn-primary" type="submit" onClick={this.props.onAddPlan}>+</button> New plan
@@ -96,4 +105,4 @@ class Dashboard extends React.Component {
 
 }
 
-export default Dashboard;
+export default SideRail;

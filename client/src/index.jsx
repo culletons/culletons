@@ -7,20 +7,10 @@ import Dashboard from './components/dashboard/Dashboard.jsx';
 import Nav from './components/header/Nav.jsx';
 import firebase from 'firebase';
 import Rebase from 're-base';
-
-const config = {
-  apiKey: "AIzaSyAEzRpVoxoH3JYhRYLZLSz17HAwA7D8cXA",
-  authDomain: "retirement-plan-b108e.firebaseapp.com",
-  databaseURL: "https://retirement-plan-b108e.firebaseio.com",
-  projectId: "retirement-plan-b108e",
-  storageBucket: "retirement-plan-b108e.appspot.com",
-  messagingSenderId: "279041770365"
-  };
+import config from './components/header/googleKey.js'
 
 const app = firebase.initializeApp(config);
 const base = Rebase.createClass(app.database())
-
-
 
 class App extends React.Component {
   constructor(props) {
@@ -28,7 +18,8 @@ class App extends React.Component {
     this.state = {
       username: "",
       isLoggedIn: false,
-      user: { fullname: 'culleton', userId: 1}
+      userData: { fullname: 'culleton', userId: 1},
+      currentUserId: 0
 
     }
 
@@ -44,9 +35,11 @@ class App extends React.Component {
     firebase.auth().signInWithPopup(provider)
       .then((authData) => {
         axios.get('/retire/login', { oAuthToken: authData.credential.accessToken })
-        .then(() => {
+        .then((user) => {
           this.setState({
-            isLoggedIn: true
+            isLoggedIn: true,
+            userData: authData,
+            currentUserId: user.data[0]
           })
         })
         .catch((err) => console.error(err))
@@ -56,12 +49,19 @@ class App extends React.Component {
   
   //for local login
   onLogin (userName, passWord) {
-    axios.get('/retire/users', { 
-      params: {username: userName, password: passWord }})
-    .then((res) => {
+    // axios.get('/retire/users', {
+    //   params: {username: userName, password: passWord }})
+    // .then((res) => {
+    //   this.setState({
+    //     // user: res.data.user,
+    //   })
+    // }).catch(err => console.log(err))
+
+    axios.post('/retire/login', { username: userName, password: passWord })
+    .then((user) => {
       this.setState({
-        // user: res.data.user,
-        isLoggedIn: true
+        isLoggedIn: true,
+        currentUserId: user.data[0]
       })
     })
     .catch((err) => console.error(err))
@@ -70,7 +70,7 @@ class App extends React.Component {
   //for local signup
   signUp(username, password, fullname, email) {
     axios.post('/retire/users', { username: username, password: password, fullname: fullname, email: email })
-    .then(() => {
+    .then((user) => {
       this.setState({
         isLoggedIn: true
       })
@@ -83,14 +83,16 @@ class App extends React.Component {
   oAuthSignUp (provider) {
     firebase.auth().signInWithPopup(provider)
       .then((authData) => {
-        console.log(authData)
         axios.post('/retire/users', { 
           fullname: authData.additionalUserInfo.profile.name, 
           email: authData.additionalUserInfo.profile.email, 
           providerId: authData.additionalUserInfo.providerId, 
-          oAuthId: authData.additionalUserInfo.profile.id })
-        .then(() => {
+          oAuthId: authData.additionalUserInfo.profile.id 
+        })
+        .then((user) => {
           this.setState({
+            currentUserId: user.data.userId,
+            userData: authData,
             isLoggedIn: true
           })
         })
@@ -121,7 +123,7 @@ class App extends React.Component {
       <div className="container-fluid">
         <div id="cont"></div>
         <Nav onGetStarted={this.onGetStarted} onLogin={this.onLogin} onSignUp={this.signUp} isLoggedIn={this.state.isLoggedIn} logOut={this.logOut}  authenticate={this.oAuthLogin}/>
-        {this.state.isLoggedIn && <Dashboard user={this.state.user} />}
+        {this.state.isLoggedIn && <Dashboard user={this.state.userData} currentUserId={this.state.currentUserId}/>}
         {!this.state.isLoggedIn && <Home onSignUp={this.signUp} authenticate={this.oAuthSignUp}/>}
       </div>
     )
