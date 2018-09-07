@@ -7,20 +7,10 @@ import Dashboard from './components/dashboard/Dashboard.jsx';
 import Nav from './components/header/Nav.jsx';
 import firebase from 'firebase';
 import Rebase from 're-base';
-
-const config = {
-  apiKey: "AIzaSyAEzRpVoxoH3JYhRYLZLSz17HAwA7D8cXA",
-  authDomain: "retirement-plan-b108e.firebaseapp.com",
-  databaseURL: "https://retirement-plan-b108e.firebaseio.com",
-  projectId: "retirement-plan-b108e",
-  storageBucket: "retirement-plan-b108e.appspot.com",
-  messagingSenderId: "279041770365"
-  };
+import config from './components/header/googleKey.js'
 
 const app = firebase.initializeApp(config);
 const base = Rebase.createClass(app.database())
-
-
 
 class App extends React.Component {
   constructor(props) {

@@ -71,11 +71,11 @@ var createUserInDB = (username, fullname, password, email) => {
     })
 }
 
-var createUserInDBByOAuth = (oAuthId, fullname, email) => {
+var createUserInDBByOAuth = (oAuthId, fullname, email, providerId) => {
     console.log("this is token ", oAuthId)
     return (new User({ oAuthId: oAuthId })).fetch().then(function(found) {
         if(!found){
-            return db.knex('users').insert({oAuthId: oAuthId, fullname: fullname, email: email})
+            return db.knex('users').insert({oAuthId: oAuthId, fullname: fullname, email: email, providerId: providerId})
             .then(newUser => {
                 console.log(newUser, " was created in the database model.")
                 return newUser;

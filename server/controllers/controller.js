@@ -31,7 +31,7 @@ module.exports = {
   createUser: (req, res) => {
     console.log("this is req.body in createUser ", req.body)
     if (req.body.oAuthId !== null){
-      model.createUserInDBByOAuth(req.body.oAuthId, req.body.fullname, req.body.email)
+      model.createUserInDBByOAuth(req.body.oAuthId, req.body.fullname, req.body.email, req.body.providerId)
       .then(user => {
         console.log(user, "this user was created in the database controller by OAuth.")
         res.sendStatus(200);
