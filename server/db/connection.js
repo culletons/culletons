@@ -22,7 +22,7 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
         user.string('password', 255)
         user.string("email", 255)
         user.string('oAuthId', 255)
-        user.timestamps();
+        user.timestamps(true, true);
       }).then(function (table) {
         console.log('Created Table', table);
       });
@@ -42,7 +42,7 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
         plan.integer('monthlySpending').notNullable();
         plan.integer('familySize');
         plan.integer('numberOfKids');
-        plan.timestamps();
+        plan.timestamps(true, true);
       }).then(function (table) {
         console.log('Created Table', table);
       })
@@ -59,7 +59,7 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
         item.string('institutionName', 255);
         item.string('institutionId', 255);
         item.string('linkSessionId', 255);
-        item.timestamps();
+        item.timestamps(true, true);
       }).then(function (table) {
         console.log('Created Table', table);
       });
