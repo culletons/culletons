@@ -99,8 +99,9 @@ var userLoginDB = (req, res) => {
 
 var getPlansFromDB = (userIdToSearch) => {
   console.log(userIdToSearch);
-  return new Plan({userId: userIdToSearch}).query({where: {userId: userIdToSearch}}).fetchAll()    
+  return new Plan({userId: userIdToSearch}).query({where: {userId: 3}}).fetchAll()    
   .then(plan => {
+      console.log('plan?:', plan)
     return plan;
   })
   .catch(err => {

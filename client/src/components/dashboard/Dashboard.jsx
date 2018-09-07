@@ -1,8 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import Accounts from './Accounts.jsx'
-import BasicInfo from './BasicInfo.jsx';
 import SideRail from './SideRail.jsx';
+import Forms from './Forms.jsx'
+import Overview from './Overview.jsx'
 
 
 
@@ -11,18 +12,38 @@ class Dashboard extends React.Component {
     super(props);
     this.state = {
       // todo add state for designated main plan, allow user to set main plan
-      plans: [{ currentSavings: 0 }],
-      formBasicToggle: true,
-      overviewToggle: false,
+      plans: [],
+      activePlan: [],
+      formToggle: false,
+      overviewToggle: true,
+      accountToggle: true,
       items: null
     }
-    this.onAddPlan = this.onAddPlan.bind(this)
+    this.createPlan = this.createPlan.bind(this)
+    this.viewPlan = this.viewPlan.bind(this)
     this.updatePlans = this.updatePlans.bind(this);
+    this.setActivePlan = this.setActivePlan.bind(this)
   }
 
-  onAddPlan() {
-    // render form
-    this.setState({ formBasicToggle: true})
+  createPlan() {
+    this.setState({ 
+      formToggle: true
+    })
+  }
+
+  viewPlan(plan) {
+    this.setState({activePlan: plan})
+  }
+
+  deletePlan(id) {
+
+  }
+
+  setActivePlan(plan) {
+    console.log(plan)
+    this.setState({
+      activePlan: plan
+    })
   }
 
   updatePlans() {
@@ -44,15 +65,15 @@ class Dashboard extends React.Component {
       }
     }).then(res => {
       this.setState({
-        plans: res.data
+        plans: res.data,
+        activePlan:res.data[0]
       })
     }).catch(err => {console.log(err)})
-
-    if(this.state.plans.length > 0) {
-      // if plans already exist, render overview. clicking add plan will rerender the forms
-      this.setState({ formBasicToggle: false})
-    }
-    this.updatePlans();
+    // if plans already exist, render overview. clicking add plan will rerender the forms
+    // if(this.state.plans.length > 0) {
+    //   this.setState({ formToggle: false})
+    // }
+    // this.updatePlans();
   }
 
 
@@ -61,13 +82,13 @@ class Dashboard extends React.Component {
     return (
         <div className="row">
           <div className="col-md-3">
-            <SideRail user={this.props.user}  currentUserId={this.props.currentUserId} plans={this.state.plans}/>
+            <SideRail user={this.props.user} setActivePlan={this.setActivePlan} currentUserId={this.props.currentUserId} plans={this.state.plans} createPlan={this.createPlan}/>
           </div>
           {/* only render if user has no plan yet or if addPlan is clicked */}
           <div className="col-md-9">
-          {this.state.overviewToggle && <Overview plans={this.state.plans} />}
-            {this.state.formBasicToggle && <BasicInfo user={this.props.user} />}
-            <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>
+          {this.state.overviewToggle && <Overview activePlan={this.state.activePlan} plans={this.state.plans} />}
+            {this.state.formToggle && <Forms user={this.props.user} />}
+            {this.state.accountToggle && <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>}
           </div>
         </div>
     );

@@ -72,9 +72,8 @@ module.exports = {
 
   getPlans: (req, res) => {
     console.log("this is req.query in getPlan ", req.query)
-    model.getPlansFromDB(req.query.userId)
+    model.getPlansFromDB(3)
     .then(plan => {
-      console.log("this is returned from getPlan ", plan)
       res.status(200).send(plan);
     })
     .catch(err => {

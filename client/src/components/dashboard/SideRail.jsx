@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios'
-import BasicInfo from './BasicInfo.jsx';
 
 class SideRail extends React.Component {
   constructor(props) {
@@ -71,32 +70,28 @@ class SideRail extends React.Component {
           <br/></div>
           <div className="card-body border-bottom">
 
-           { this.props.plans.map((plan) => (
+           { this.props.plans.map((plan, i) => (
 
 <div key={plan.planId} className="panel-default">
 <div className="panel-heading">
-  <h3 className="panel-title" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Plan name<button type="button panel" className="close" aria-label="Close">
+  <h3 className="panel-title" data-toggle="collapse" onClick={() => this.props.setActivePlan(plan)} data-target={`#collapseExample${i}`} aria-expanded="false" aria-controls={`collapseExample${i}`}>Plan name<button type="button panel" className="close" aria-label="Close">
   <span aria-hidden="true">&times;</span>
   </button></h3>
 
   {/* todo create pop-up asking for delete confirmation */}
 </div>
-<div className="panel-body collapse" id="collapseExample" >
+<div className="panel-body collapse" id={`collapseExample${i}`} >
   <div>Current savings: {plan.currentSavings}</div>
   <div>Monthly savings: {plan.monthlySavings}</div>
-  <div>Retirement age: {plan.retireAge}</div>
+  <div>Retirement age: {plan.retirementAge}</div>
 
 </div>
 </div>
               
             ))}
-
-
-
-
-          </div>
+</div>
           <div className="card-body">
-            <button className="btn btn-primary" type="submit" onClick={this.props.onAddPlan}>+</button> New plan
+            <button className="btn btn-primary" type="submit" onClick={this.props.createPlan}>+</button> New plan
         </div>
         </div>
       </div>

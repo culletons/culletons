@@ -1,5 +1,5 @@
 import React from 'react';
-import LineChart from './LineChart.jsx'
+import LineChart from '../charts/LineChart.jsx'
 import axios from 'axios'
 
 class BasicInfo extends React.Component {
@@ -98,7 +98,6 @@ class BasicInfo extends React.Component {
   }
 
   render () {
-
 
     const options = {
       title: {

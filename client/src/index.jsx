@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import LineChart from './components/dashboard/LineChart.jsx'
+import LineChart from './components/charts/LineChart.jsx'
 import Home from './components/Home.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
 import Nav from './components/header/Nav.jsx';
@@ -18,8 +18,8 @@ class App extends React.Component {
     this.state = {
       username: "",
       isLoggedIn: false,
-      userData: { fullname: 'culleton', userId: 1},
-      currentUserId: 0
+      userData: { fullname: 'culleton', userId: 3 },
+      currentUserId: 3
 
     }
 
@@ -53,7 +53,7 @@ class App extends React.Component {
     //   params: {username: userName, password: passWord }})
     // .then((res) => {
     //   this.setState({
-    //     // user: res.data.user,
+    //     // user: res.data,
     //   })
     // }).catch(err => console.log(err))
 
