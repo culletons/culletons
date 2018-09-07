@@ -23,7 +23,7 @@ class SideRail extends React.Component {
           </ul>
           <h3 className="card-title">Your Plans:</h3>
           <ul>
-            { this.props.plans.map((plan) => (
+            { this.props.plans && this.props.plans.map((plan) => (
               <li key={plan.planId}>Plan to Retire at {plan.retirementAge}</li>
             ))}
           </ul>

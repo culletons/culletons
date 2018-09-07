@@ -58,10 +58,10 @@ var getUserByOAuthFromDB = (OAuthId) => {
     })
 }
 
-var createUserInDB = (username, fullname, password, email) => {
+var createUserInDB = (username, password, fullname, email) => {
     return new User({ username: username }).fetch().then(function(found, err) {
         if(!found){
-            return db.knex('users').insert({username: username, fullname: fullname, password: password, email: email})
+            return db.knex('users').insert({username: username, password: password, fullname: fullname, email: email})
             .then(newUser => {
                 console.log(newUser, " was created in the database model.")
                 return newUser;
@@ -124,7 +124,7 @@ var updatePlanInDB = (update) => {
 }
 
 var getItemsFromDB = (userId) => {
-    return new Item({userId: userId}).fetchAll() 
+    return new Item({userId: userId}).query({where: {userId: userId}}).fetchAll() 
     .then(items => {
         return items;
     })

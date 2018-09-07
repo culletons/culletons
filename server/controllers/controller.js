@@ -30,7 +30,7 @@ module.exports = {
 
   createUser: (req, res) => {
     console.log("this is req.body in createUser ", req.body)
-    if (req.body.oAuthId !== null){
+    if (req.body.oAuthId){
       model.getUserByOAuthFromDB(req.body.oAuthId)
       .then(userFound => {
         console.log("this is returned from getUser get by OAuth ", userFound)
@@ -50,10 +50,10 @@ module.exports = {
       })
     }
     else {
-      model.createUserInDB(req.body.userId, req.body.username, req.body.fullName, req.body.password, req.body.email)
+      model.createUserInDB(req.body.username, req.body.password, req.body.fullname, req.body.email)
       .then(user => {
         console.log(user, "this user was created in the database controller.")
-        res.sendStatus(200).send(user);
+        res.status(200).send(user);
       })
       .catch(err => {
         console.log("this error occurred in createUser ", err)

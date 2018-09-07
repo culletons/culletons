@@ -72,7 +72,7 @@ class Accounts extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.items.map((item, i) => (
+            {this.state.items && this.state.items.map((item, i) => (
             <tr key={item.itemId}>
               <th scope="row">{i + 1}</th>
               <td>{item.institutionName}</td>

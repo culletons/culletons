@@ -32,7 +32,7 @@ class App extends React.Component {
   oAuthLogin (provider) {
     firebase.auth().signInWithPopup(provider)
       .then((authData) => {
-        axios.get('/retire/login', { oAuthToken: authData.credential.accessToken })
+        axios.get('/retire/login', { oAuthId: authData.additionalUserInfo.profile.id })
         .then((user) => {
           this.setState({
             isLoggedIn: true,
