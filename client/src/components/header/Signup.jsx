@@ -1,28 +1,36 @@
-import React from 'react'
+import React from 'react';
+import firebase from 'firebase';
 
 class Signup extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      fullname: '',
+      email: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
+    this.authHandler = this.authHandler.bind(this);
+  }
+
+  authHandler(provider) {
+    this.props.authenticate(provider)
   }
 
   clickHandler() {
-    this.props.onSignUp(this.state.username, this.state.password);
+    this.props.onSignUp(this.state.username, this.state.password, this.state.fullname, this.state.email);
   }
 
   handleChange(evt) {
     this.setState({
       [evt.target.name]: evt.target.value,
-      [evt.target.password]: evt.target.value
+      [evt.target.name]: evt.target.value,
+      [evt.target.name]: evt.target.value,
+      [evt.target.name]: evt.target.value,
     })
   }
-
-  
 
   render() {
     return (
@@ -56,18 +64,33 @@ class Signup extends React.Component {
                     <input type="password" id="Form-pass-signup" className="form-control validate" name="password" onChange={this.handleChange}/>
                     <label data-error="wrong" data-success="right" htmlFor="Form-pass-signup">Your password</label>
                 </div>
+
+                <div className="md-form mb-5">
+                  <input type="username" id="Form-fullname-signup" className="form-control validate" name="fullname" onChange={this.handleChange}/>
+                  <label data-error="wrong" data-success="right" htmlFor="Form-username-signup">Your fullname</label>
+                </div>
+
+                <div className="md-form mb-5">
+                  <input type="username" id="Form-email-signup" className="form-control validate" name="email" onChange={this.handleChange}/>
+                  <label data-error="wrong" data-success="right" htmlFor="Form-username-signup">Your email</label>
+                </div>
     
                 <div className="text-center mb-3">
                     {/* Button to make post request */}
-                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" onClick={this.clickHandler}>Register</button>
-                </div>
-                <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2"> or Register with:</p>
-    
-                <div className="row my-3 d-flex justify-content-center">
-                    {/* Button to Login with  */}
-                    <button type="button" className="btn btn-white btn-rounded z-depth-1a"><i className="fa fa-google-plus"></i></button>
+                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" onClick={this.clickHandler} 
+                            data-dismiss="modal"
+                    >Register</button>
                 </div>
               </div>
+
+               <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2"> or Register with:</p>
+    
+               <div className="row my-3 d-flex justify-content-center">
+                   {/* Button to Login with google*/}
+                   <button type="button" className="btn btn-white btn-rounded z-depth-1a" data-dismiss="modal" aria-hidden="true" onClick={this.authHandler.bind(this, new firebase.auth.GoogleAuthProvider())}>
+                     <i className="fa fa-google-plus"></i>
+                   </button>
+               </div>
 
               <div className="modal-footer mx-5 pt-3 mb-1">
                 <p className="font-small grey-text d-flex justify-content-end">Already a member? <a href="#" className="blue-text ml-1"> Log in</a></p>
