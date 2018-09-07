@@ -11,7 +11,7 @@ const knex = require('knex')({
     useNullAsDefault: true,
     pool: { 
       min: 0, 
-      max: 9,
+      max: 12,
     },
     acquireConnectionTimeout: 10000
 })
@@ -29,9 +29,13 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
         user.string('oAuthId', 255)
         user.timestamps();
         user.timestamps(true, true);
-      }).then(function (table) {
+      })
+      .then(function (table) {
         console.log('Created Table', table);
-      });
+      })
+      .then(()=>{
+        db.knex.destroy();
+    })
     }
   });
 
@@ -49,9 +53,13 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
         plan.integer('familySize');
         plan.integer('numberOfKids');
         plan.timestamps(true, true);
-      }).then(function (table) {
+      })
+      .then(function (table) {
         console.log('Created Table', table);
       })
+      .then(()=>{
+        db.knex.destroy();
+    })
     }
   });
 
@@ -66,9 +74,13 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
         item.string('institutionId', 255);
         item.string('linkSessionId', 255);
         item.timestamps(true, true);
-      }).then(function (table) {
+      })
+      .then(function (table) {
         console.log('Created Table', table);
-      });
+      })
+      .then(()=>{
+        db.knex.destroy();
+    })
     }
   });
 

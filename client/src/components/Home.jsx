@@ -51,7 +51,7 @@ const Home = (props) => {
       <img className="card-img-top" style={{height: 200}} src="https://img01-olxro.akamaized.net/img-olxro/192183283_1_1000x700_servicii-contabilitate-bucuresti.jpg" / >
         <div className="card-body">
         <h5 className="card-title">Financial Planning</h5>
-        Planning is bringing the futuree into the present, so that you can do something about it now.
+        Planning is bringing the future into the present, so that you can do something about it now.
         </div>
       </div>
       <div className="card">
@@ -59,20 +59,20 @@ const Home = (props) => {
 
         <div className="card-body">
         <h5 className="card-title">Retirement</h5>
-        According to Time, 1 in 3 Americans have $0 saved for retirement
+        According to <em>Time Magazine</em>, 1 in 3 Americans have $0 saved for retirement because most Americans live paycheck to paycheck.
         </div>
       </div>
       <div className="card">
       <img className="card-img-top" style={{height: 200}} src="https://www.entrepreneurshiplife.com/wp-content/uploads/2016/01/70-Financial-Planning.jpg" / >
         <div className="card-body">
         <h5 className="card-title">Budgets</h5>
-          Is Easy
+        “When money realizes that it is in good hands, it wants to stay and multiply in those hands.” ― <em>Idowu Koyenikan</em>
         </div>
       </div>
     </div>
     <div className="row">
-      <div className="col-md=12" >
-      In 2016 the average household earned $74,664. Average expenditures were $57,311, leaving $17,353 in free cash flow
+      <div className="col-md=12" style={{padding:50}}>
+      In 2016 the average household earned $74,664. Average expenditures were $57,311, leaving $17,353 in free cash flow.
 
       <ul>Here’s how some of the budget categories that you see breakdown:
         <li>33% of housing costs go to rent and mortgage payments</li>
@@ -80,8 +80,8 @@ const Home = (props) => {
         <li>40% of transportation costs go to the vehicle, such as paying off an auto loan; 21% goes to gas and oil, with the remaining 32% spent on other costs, such as repairs</li>
         <li>For health care costs, 69% covers insurance</li>
       </ul>
+      Plan for success with Culletons: <Signup onSignUp={props.onSignUp}/>
 
-      Plan for success with Culleton, <Signup onSignUp={props.onSignUp}/>
       </div>
     </div>
     </div>

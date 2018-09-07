@@ -7,7 +7,7 @@ import Dashboard from './components/dashboard/Dashboard.jsx';
 import Nav from './components/header/Nav.jsx';
 import firebase from 'firebase';
 import Rebase from 're-base';
-import config from './components/header/googleKey.js'
+import config from './components/header/googleKey.js';
 
 
 const app = firebase.initializeApp(config);
@@ -123,17 +123,9 @@ class App extends React.Component {
     return (
       <div className="container-fluid">
         <div id="cont"></div>
-<<<<<<< HEAD
-        <Nav onGetStarted={this.onGetStarted} onLogin={this.onLogin} onSignUp={this.signUp} isLoggedIn={this.state.isLoggedIn} logOut={this.logOut}/>
-        {this.state.isLoggedIn && <Dashboard/>}
-        {!this.state.isLoggedIn && <Home onSignUp={this.signUp}/>}
-        <LineChart options={options} />
-        
-=======
         <Nav onGetStarted={this.onGetStarted} onLogin={this.onLogin} onSignUp={this.signUp} isLoggedIn={this.state.isLoggedIn} logOut={this.logOut}  authenticate={this.oAuthLogin}/>
         {this.state.isLoggedIn && <Dashboard user={this.state.userData} currentUserId={this.state.currentUserId}/>}
         {!this.state.isLoggedIn && <Home onSignUp={this.signUp} authenticate={this.oAuthSignUp}/>}
->>>>>>> dev
       </div>
     )
   }
