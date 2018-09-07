@@ -74,7 +74,12 @@
 
 .side-rail {
   height: 90vh;
-  background-color: lightgreen;
+  /* background-color: lightgreen; */
+}
+
+.panel {
+  border-radius: 2px;
+  border-color: black;
 }
 
 .login .social .google{
