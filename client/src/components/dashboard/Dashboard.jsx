@@ -1,18 +1,34 @@
 import React from 'react';
+import axios from 'axios';
 
 import BasicInfo from './BasicInfo.jsx';
 import SideRail from './SideRail.jsx';
+import Accounts from './Accounts.jsx';
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null
+      plans: []
     }
+
+    this.updatePlans = this.updatePlans.bind(this);
   }
 
   componentDidMount() {
-    // GET USER INFO NOW
+    this.updatePlans();
+  }
+
+  updatePlans() {
+    axios.get('/retire/plans', { params: {userId: this.props.currentUserId } })
+         .then(({data}) => {
+           this.setState({
+           plans: data
+           })
+         })
+         .catch((err) => {
+           console.log(err);
+         })
   }
 
   render() {
@@ -20,10 +36,12 @@ class Dashboard extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col-md-3">
-            <SideRail />
+            <SideRail user={this.props.user} currentUserId={this.props.currentUserId} plans={this.state.plans}/>
           </div>
           <div className="col-md-9">
             <BasicInfo />
+            <br/>
+            <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>
           </div>
         </div>
       </div>
