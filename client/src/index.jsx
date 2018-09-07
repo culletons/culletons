@@ -16,9 +16,11 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      username: "",
       isLoggedIn: false,
-      userData: null,
+      userData: { fullname: 'culleton', userId: 1},
       currentUserId: 0
+
     }
 
     this.onLogin = this.onLogin.bind(this);
@@ -47,6 +49,14 @@ class App extends React.Component {
   
   //for local login
   onLogin (userName, passWord) {
+    // axios.get('/retire/users', {
+    //   params: {username: userName, password: passWord }})
+    // .then((res) => {
+    //   this.setState({
+    //     // user: res.data.user,
+    //   })
+    // }).catch(err => console.log(err))
+
     axios.post('/retire/login', { username: userName, password: passWord })
     .then((user) => {
       this.setState({
@@ -108,39 +118,6 @@ class App extends React.Component {
   }
 
   render() {
-    const options = {
-      title: {
-        text: 'Retirement at a glance',
-      },
-      xAxis: {
-        tickInterval: 5,
-        labels: {
-          enabled: true
-        }
-      },
-      yAxis: {
-        title: {
-          text: '$ thousand',
-        },
-      },
-      chart: {
-        type: 'line',
-      },
-      series: [
-        {
-          name: 'Jane',
-          data: [1, 0, 4, 0, 3],
-        },
-        {
-          name: 'John',
-          data: [5, 7, 3, 2, 4],
-        },
-        {
-          name: 'Doe',
-          data: [0, 0, 0, 1, 0],
-        },
-      ],
-    };
 
     return (
       <div className="container-fluid">
@@ -148,7 +125,6 @@ class App extends React.Component {
         <Nav onGetStarted={this.onGetStarted} onLogin={this.onLogin} onSignUp={this.signUp} isLoggedIn={this.state.isLoggedIn} logOut={this.logOut}  authenticate={this.oAuthLogin}/>
         {this.state.isLoggedIn && <Dashboard user={this.state.userData} currentUserId={this.state.currentUserId}/>}
         {!this.state.isLoggedIn && <Home onSignUp={this.signUp} authenticate={this.oAuthSignUp}/>}
-        <LineChart options={options} />
       </div>
     )
   }

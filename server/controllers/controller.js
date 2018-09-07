@@ -19,7 +19,7 @@ module.exports = {
       model.getUserFromDB(req.query.username, req.query.password)
       .then(user => {
         console.log("this is returned from getUser ", user)
-        res.sendStatus(200).send(user);
+        res.status(200).send(user);
       })
       .catch(err => {
         console.log("this error occurred in getUser ", err)

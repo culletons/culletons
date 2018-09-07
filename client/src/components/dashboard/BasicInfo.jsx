@@ -1,5 +1,6 @@
 import React from 'react';
 import LineChart from './LineChart.jsx'
+import axios from 'axios'
 
 class BasicInfo extends React.Component {
   constructor(props) {
@@ -11,16 +12,31 @@ class BasicInfo extends React.Component {
       currentSavings: 0,
       monthlySavings: 0,
       monthlySpending: 0,
-      currentSlide: 0
+      currentSlide: 0,
+      chartToggle: false,
+      chartPoints: []
     }
     
     this.submitInfo = this.submitInfo.bind(this);
     this.nextSlide = this.nextSlide.bind(this);
     this.previousSlide = this.previousSlide.bind(this);
+    this.test = this.test.bind(this)
   }
 
-
   //window.localStorage.setItem('key', 'value')
+  componentDidMount() {
+    this.setState({
+      retireAge: 85,
+      retireGoal: 3,
+      currentAge: 0,
+      currentSavings: 0,
+      monthlySavings: 0,
+      monthlySpending: 0,
+      currentSlide: 0,
+      chartToggle: false,
+      chartPoints: []
+    })
+  }
 
   nextSlide() {
     let next = this.state.currentSlide + 1
@@ -35,8 +51,13 @@ class BasicInfo extends React.Component {
     })
   }
 
+
+
   submitInfo() {
+    this.test()
+    this.setState({ chartToggle: true})
     let userInfoToSubmit = {
+      userId: this.props.user.userId,
       retireAge: this.state.retireAge,
       retireGoal: this.state.retireGoal,
       currentAge: this.state.currentAge,
@@ -44,11 +65,71 @@ class BasicInfo extends React.Component {
       monthlySavings: this.state.monthlySavings,
       monthlySpending: this.state.monthlySpending,
     }
+    axios.post('/retire/plans', userInfoToSubmit
+    ).then(res => {
+      // this.setState({ chartToggle: true})
+    }).catch(err => {console.log(err)})
     console.log('Trying to submit');
+  }
+
+  test() {
+    var diff = this.state.retireAge - this.state.currentAge
+    var arr = []
+    for (var i = 0; i < diff; i++) {
+      arr.push(i)
+    }
     
+    this.setState((state) => {
+      return {chartPoints: arr}
+    })
+
+    // var calculateRetirement = function(currentAge, retirementAge, comfort, savings, perMonthSavings, perMonthExpense) {
+    //   var perYearSavings = {}
+    //   var yearsSaving = retirementAge - currentAge
+    //   var yearsRetired = 95 - retirementAge
+    //   var annualSaved = perMonthSavings * 12
+    //   var annualExp = perMonthExpense * 12
+    //   var income = 60000
+    //   var saveRate = annualSaved / income
+    
+    //   return perYearSavings;
+    
+    // }
   }
 
   render () {
+
+
+    const options = {
+      title: {
+        text: 'Your projection',
+      },
+      xAxis: {
+        tickInterval: 1,
+        labels: {
+          enabled: true
+        }
+      },
+      yAxis: {
+        title: {
+          text: '$ thousand',
+        },
+      },
+      chart: {
+        type: 'line',
+      },
+      series: [
+        {
+          name: 'Jane',
+          data: this.state.chartPoints,
+        }
+      ],
+    };
+
+
+
+
+
     // Create the text which will be displayed to the user dynamically based on inputs while answering questions
     let retireDescriptions = ['Planning on pinching pennies', 'Going to take it easy', 'Would like to be comfortable', 'Want to live well', 'Plan on balling out'];
     let retireDesire = retireDescriptions[this.state.retireGoal - 1];
@@ -100,8 +181,20 @@ class BasicInfo extends React.Component {
     ]
 
     return (
-      <div className="card module">
+      <div>
+        {this.state.chartToggle && 
+        <div>
+          <h3>Here's a look at your potential retirement path:</h3>
+          
+        <LineChart options={options} />
+        </div>}
+
+
+
+        {!this.state.chartToggle && 
+          <div className="card module">
         <div className="card-body">
+        <div>
           <h3 className="card-title">Basic Info:</h3>
           <br/>
           <form id="basic-info-form">
@@ -121,8 +214,12 @@ class BasicInfo extends React.Component {
               )}
             </div>
           </form>
-        </div>
-      </div>
+          </div>
+          </div>
+          </div>}
+          </div>
+
+        
     );
   }
 }
