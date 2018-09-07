@@ -97,46 +97,44 @@ var userLoginDB = (req, res) => {
 
 }
 
-var getPlansFromDB = (userId) => {
-    return new Plan({userId: userId}).fetch()    
-    .then(plan => {
-        return plan;
-    })
-    .catch(err => {
-        console.log("this error occurred in getPlansFromDB ", err);
-    })
+var getPlansFromDB = (userIdToSearch) => {
+  console.log(userIdToSearch);
+  return new Plan({userId: userIdToSearch}).query({where: {userId: userIdToSearch}}).fetchAll()    
+  .then(plan => {
+    return plan;
+  })
+  .catch(err => {
+    console.log("this error occurred in getPlansFromDB ", err);
+  })
 }
+
 var createPlanInDB = (userId, retireAge, retireGoal, currentAge, currentSavings, monthlySavings, monthlySpending) => {
-    return new Plan({ userId: userId }).fetch().then(function(found) {
-        if(!found){
-            return db.knex('plans').insert({userId: userId, retirementAge: retireAge, retireGoal: retireGoal, currentAge: currentAge, currentSavings: currentSavings, monthlySavings: monthlySavings, monthlySpending: monthlySpending})
-            .then(newPlan => {
-                console.log(newPlan, " was created in the database model.")
-                return newPlan;
-            })
-            .catch(err => {
-                console.log("this error occurred in createPlanInDB ", err);
-            })
-        }
-    })
+  return db.knex('plans').insert({userId: userId, retirementAge: retireAge, retireGoal: retireGoal, currentAge: currentAge, currentSavings: currentSavings, monthlySavings: monthlySavings, monthlySpending: monthlySpending})
+  .then(newPlan => {
+      console.log(newPlan, " was created in the database model.")
+      return newPlan;
+  })
+  .catch(err => {
+      console.log("this error occurred in createPlanInDB ", err);
+  })
 }
 var updatePlanInDB = (update) => {
 }
 
 var getItemsFromDB = (userId) => {
-    return new Item({userId: userId}).fetch() 
-    .then(user => {
-        return user;
+    return new Item({userId: userId}).fetchAll() 
+    .then(items => {
+        return items;
     })
     .catch(err => {
         console.log("this error occurred in getItemsFromDB ", err);
     })
 }
 
-var createItemInDB = (userId, item, itemToken, institutionName, institutionId, linkSessionId) => {
-    return new Item({ userId: userId }).fetch().then(function(found, err) {
+var createItemInDB = (userId, accessToken, institutionName, institutionId, linkSessionId) => {
+    return new Item({ userId: userId, institutionId: institutionId }).fetch().then(function(found, err) {
         if(!found){
-            return db.knex('items').insert({userId: userId, item: item, itemToken: itemToken, institutionName: institutionName, institutionId: institutionId, linkSessionId: linkSessionId})
+            return db.knex('items').insert({userId: userId, itemToken: accessToken, institutionName: institutionName, institutionId: institutionId, linkSessionId: linkSessionId})
             .then(newItem => {
                 console.log(newItem, " was created in the database model.")
                 return newItem;

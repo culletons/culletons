@@ -26,7 +26,9 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isLoggedIn: false
+      isLoggedIn: false,
+      userData: null,
+      currentUserId: 0
     }
 
     this.onLogin = this.onLogin.bind(this);
@@ -41,9 +43,11 @@ class App extends React.Component {
     firebase.auth().signInWithPopup(provider)
       .then((authData) => {
         axios.get('/retire/login', { oAuthToken: authData.credential.accessToken })
-        .then(() => {
+        .then((user) => {
           this.setState({
-            isLoggedIn: true
+            isLoggedIn: true,
+            userData: authData,
+            currentUserId: user.data[0]
           })
         })
         .catch((err) => console.error(err))
@@ -54,11 +58,11 @@ class App extends React.Component {
   //for local login
   onLogin (userName, passWord) {
     axios.post('/retire/login', { username: userName, password: passWord })
-    .then(() => {
+    .then((user) => {
       this.setState({
-        isLoggedIn: true
+        isLoggedIn: true,
+        currentUserId: user.data[0]
       })
-    .catch((err) => console.error(err))
     })
     .catch((err) => console.error(err))
   }
@@ -66,7 +70,7 @@ class App extends React.Component {
   //for local signup
   signUp(username, password, fullname, email) {
     axios.post('/retire/users', { username: username, password: password, fullname: fullname, email: email })
-    .then(() => {
+    .then((user) => {
       this.setState({
         isLoggedIn: true
       })
@@ -79,14 +83,16 @@ class App extends React.Component {
   oAuthSignUp (provider) {
     firebase.auth().signInWithPopup(provider)
       .then((authData) => {
-        console.log(authData)
         axios.post('/retire/users', { 
           fullname: authData.additionalUserInfo.profile.name, 
           email: authData.additionalUserInfo.profile.email, 
           providerId: authData.additionalUserInfo.providerId, 
-          oAuthId: authData.additionalUserInfo.profile.id })
-        .then(() => {
+          oAuthId: authData.additionalUserInfo.profile.id 
+        })
+        .then((user) => {
           this.setState({
+            currentUserId: user.data.userId,
+            userData: authData,
             isLoggedIn: true
           })
         })
@@ -150,7 +156,7 @@ class App extends React.Component {
       <div className="container-fluid">
         <div id="cont"></div>
         <Nav onGetStarted={this.onGetStarted} onLogin={this.onLogin} onSignUp={this.signUp} isLoggedIn={this.state.isLoggedIn} logOut={this.logOut}  authenticate={this.oAuthLogin}/>
-        {this.state.isLoggedIn && <Dashboard/>}
+        {this.state.isLoggedIn && <Dashboard user={this.state.userData} currentUserId={this.state.currentUserId}/>}
         {!this.state.isLoggedIn && <Home onSignUp={this.signUp} authenticate={this.oAuthSignUp}/>}
         <LineChart options={options} />
       </div>
