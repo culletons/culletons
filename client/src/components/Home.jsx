@@ -14,14 +14,14 @@ const Home = (props) => (
     <div className="container-fluid">
     <div className="card-deck">
       <div className="card">
-      <img className="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS87XTXx8HmTPqdOQ_xeEf_Kp2vO2zflrfCAG_Fpb9MKGWBVry02Q" / >
+      <img className="card-img-top" style={{height: 200}} src="https://img01-olxro.akamaized.net/img-olxro/192183283_1_1000x700_servicii-contabilitate-bucuresti.jpg" / >
         <div className="card-body">
         <h5 className="card-title">Financial Planning</h5>
-        Hi
+        Planning is bringing the futuree into the present, so that you can do something about it now.
         </div>
       </div>
       <div className="card">
-      <img className="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS87XTXx8HmTPqdOQ_xeEf_Kp2vO2zflrfCAG_Fpb9MKGWBVry02Q" / >
+      <img className="card-img-top" style={{height: 200}} src="https://www.kiplinger.com/kipimages/pages/18206.jpg" / >
 
         <div className="card-body">
         <h5 className="card-title">Retirement</h5>
@@ -29,7 +29,7 @@ const Home = (props) => (
         </div>
       </div>
       <div className="card">
-      <img className="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS87XTXx8HmTPqdOQ_xeEf_Kp2vO2zflrfCAG_Fpb9MKGWBVry02Q" / >
+      <img className="card-img-top" style={{height: 200}} src="https://www.entrepreneurshiplife.com/wp-content/uploads/2016/01/70-Financial-Planning.jpg" / >
         <div className="card-body">
         <h5 className="card-title">Budgets</h5>
           Is Easy
@@ -38,8 +38,16 @@ const Home = (props) => (
     </div>
     <div className="row">
       <div className="col-md=12" >
-        This page is pretty much completely static, but you might be easily convinced that it was hard to build!
+      In 2016 the average household earned $74,664. Average expenditures were $57,311, leaving $17,353 in free cash flow
 
+      <ul>Here’s how some of the budget categories that you see breakdown:
+        <li>33% of housing costs go to rent and mortgage payments</li>
+        <li>The average household spends 56% of their food budget on groceries and 44% on dining out</li>
+        <li>40% of transportation costs go to the vehicle, such as paying off an auto loan; 21% goes to gas and oil, with the remaining 32% spent on other costs, such as repairs</li>
+        <li>For health care costs, 69% covers insurance</li>
+      </ul>
+
+      Plan for success with Culleton, <Signup onSignUp={props.onSignUp}/>
       </div>
     </div>
     </div>

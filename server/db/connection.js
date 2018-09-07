@@ -8,7 +8,12 @@ const knex = require('knex')({
         password: 'culletons',
         database: 'Culletons'
     },
-    useNullAsDefault: true
+    useNullAsDefault: true,
+    pool: { 
+      min: 0, 
+      max: 9,
+    },
+    acquireConnectionTimeout: 10000
 })
 
 const bookshelf = require('bookshelf')(knex);

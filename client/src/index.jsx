@@ -5,6 +5,7 @@ import LineChart from './components/dashboard/LineChart.jsx'
 import Home from './components/Home.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
 import Nav from './components/header/Nav.jsx';
+import Signup from './components/header/Signup';
 
 
 
@@ -106,6 +107,7 @@ class App extends React.Component {
         {this.state.isLoggedIn && <Dashboard/>}
         {!this.state.isLoggedIn && <Home onSignUp={this.signUp}/>}
         <LineChart options={options} />
+        
       </div>
     )
   }
