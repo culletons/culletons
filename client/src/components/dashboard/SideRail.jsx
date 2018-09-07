@@ -7,7 +7,6 @@ class Dashboard extends React.Component {
     super(props);
     this.state = {
       user: null,
-      plan: [{ currentSavings: 20000}]
     }
 
     this.launchPlaidLink = this.launchPlaidLink.bind(this);
@@ -63,42 +62,34 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-
-
       <div className="card side-rail">
-          <h3 className="card-title">Your Profile:</h3>
-        <div className="card-body">
-          <br/>
+      <div className="card-block">
+      <img className="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKkYg7YWw9mG3zsEI5lCHeTz30oLSjMXXxm5irxjnGTj5deUKOPA" />
+        <div className="card-body border-bottom">
+          <h3 className="card-title">Welcome {this.props.user.fullname}</h3>
           <button id="link-btn" className="btn btn-success" onClick={this.launchPlaidLink}>Link Account</button>
+          <br/></div>
+          <div className="card-body border-bottom">
+          <div className="panel-default">
+            <div className="panel-heading">
+              <h3 className="panel-title" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Plan name<button type="button panel" className="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button></h3>
+            
+              {/* todo create pop-up asking for delete confirmation */}
+            </div>
+            <div className="panel-body collapse" id="collapseExample" >
+              <div>Current savings: {this.props.plans.currentSavings}</div>
+              <div>Monthly savings: {this.props.plans.monthlySavings}</div>
+              <div>Retirement age: {this.props.plans.retireAge}</div>
 
-
-
-<div className = "panel panel-primary">
-   <div className = "panel-heading">
-      <h3 className = "panel-title">Plan name</h3>
-   </div>
-   
-   <div className = "panel-body">
-      Current savings: {this.state.plan.currentSavings}
-   </div>
-</div>
-
-<button className="btn btn-primary" type="submit">+</button> Add a new plan
- {/* <ul className="list-group">
-  <li className="list-group-item">Basic Info</li>
-  <li className="list-group-item">Monthly Budget</li>
-  <li className="list-group-item">..</li>
-  <li className="list-group-item">..</li>
-</ul>  */}
-
-          <ul className="list-group">
-            <li className="list-group-item">Basic Info</li>
-            <li className="list-group-item">Monthly Budget</li>
-            <li className="list-group-item">..</li>
-            <li className="list-group-item">..</li>
-          </ul>
-          
-         </div>
+            </div>
+          </div>
+          </div>
+          <div className="card-body">
+            <button className="btn btn-primary" type="submit" onClick={this.props.onAddPlan}>+</button> New plan
+        </div>
+        </div>
       </div>
     );
   }

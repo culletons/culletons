@@ -19,7 +19,7 @@ module.exports = {
       model.getUserFromDB(req.query.username, req.query.password)
       .then(user => {
         console.log("this is returned from getUser ", user)
-        res.sendStatus(200).send(user);
+        res.status(200).send(user);
       })
       .catch(err => {
         console.log("this error occurred in getUser ", err)
@@ -35,6 +35,7 @@ module.exports = {
       .then(user => {
         console.log(user, "this user was created in the database controller by OAuth.")
         res.sendStatus(200);
+        res.end()
       })
       .catch(err => {
         console.log("this error occurred in createUser create by OAuth ", err)
@@ -67,7 +68,7 @@ module.exports = {
     model.getPlansFromDB(req.query.userId)
     .then(plan => {
       console.log("this is returned from getPlan ", plan)
-      res.sendStatus(200).send(plan);
+      res.status(200).send(plan);
     })
     .catch(err => {
       console.log("this error occurred in getPlan ", err)

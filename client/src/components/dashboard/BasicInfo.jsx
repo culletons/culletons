@@ -1,5 +1,6 @@
 import React from 'react';
 import LineChart from './LineChart.jsx'
+import axios from 'axios'
 
 class BasicInfo extends React.Component {
   constructor(props) {
@@ -22,9 +23,19 @@ class BasicInfo extends React.Component {
     this.test = this.test.bind(this)
   }
 
-
   //window.localStorage.setItem('key', 'value')
   componentDidMount() {
+    this.setState({
+      retireAge: 85,
+      retireGoal: 3,
+      currentAge: 0,
+      currentSavings: 0,
+      monthlySavings: 0,
+      monthlySpending: 0,
+      currentSlide: 0,
+      chartToggle: false,
+      chartPoints: []
+    })
   }
 
   nextSlide() {
@@ -46,6 +57,7 @@ class BasicInfo extends React.Component {
     this.test()
     this.setState({ chartToggle: true})
     let userInfoToSubmit = {
+      userId: this.props.user.userId,
       retireAge: this.state.retireAge,
       retireGoal: this.state.retireGoal,
       currentAge: this.state.currentAge,
@@ -53,11 +65,11 @@ class BasicInfo extends React.Component {
       monthlySavings: this.state.monthlySavings,
       monthlySpending: this.state.monthlySpending,
     }
+    axios.post('/retire/plans', userInfoToSubmit
+    ).then(res => {
+      // this.setState({ chartToggle: true})
+    }).catch(err => {console.log(err)})
     console.log('Trying to submit');
-
-    //post request
-
-    //clear form, clear state
   }
 
   test() {
