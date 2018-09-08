@@ -58,39 +58,39 @@ var getUserByOAuthFromDB = (OAuthId) => {
     })
 }
 
-var createUserInDB = (username, fullname, password, email) => {
-    return new User({ username: username }).fetch().then(function(found, err) {
-        if(!found){
-            return db.knex('users').insert({username: username, fullname: fullname, password: password, email: email})
-            .then(newUser => {
-                console.log(newUser, " was created in the database model.")
-                return newUser;
-            })
-            .catch(err => {
-                console.log("this error occurred in createUserInDB ", err);
-            })
-        }
-    })
-}
-
-var createUserInDBByOAuth = (oAuthId, fullname, email, username) => {
-    console.log("this is token ", oAuthId)
-    return (new User({ oAuthId: oAuthId })).fetch().then(function(found) {
-        if(!found){
-            return db.knex('users').insert({oAuthId: oAuthId, fullname: fullname, email: email, username: username})
-            .then(newUser => {
-                console.log(newUser, " was created in the database model.")
-                return newUser;
-            })
-            .catch(err => {
-                console.log("this error occurred in createUserInDBByOAuth ", err);
-            })
-        }
-    })
-    .catch(err => {
-        console.log("this is error occurred in createUSerin DB ", err)
-    })
-}
+var createUserInDB = (username, fullname, password, email) => {  //x
+    return new User({ username: username }).fetch().then(function(found, err) {  //x
+        if(!found){  //x
+            return db.knex('users').insert({username: username, fullname: fullname, password: password, email: email})  //x
+            .then(newUser => {  //x
+                console.log(newUser, " was created in the database model.")  //x
+                return newUser;  //x
+            })  //x
+            .catch(err => {  //x
+                console.log("this error occurred in createUserInDB ", err);  //x
+            })  //x
+        }  //x
+    })  //x
+}  //x
+  //x
+var createUserInDBByOAuth = (oAuthId, fullname, email, username) => {  //x
+    console.log("this is token ", oAuthId)  //x
+    return (new User({ oAuthId: oAuthId })).fetch().then(function(found) {  //x
+        if(!found){  //x
+            return db.knex('users').insert({oAuthId: oAuthId, fullname: fullname, email: email, username: username})  //x
+            .then(newUser => {  //x
+                console.log(newUser, " was created in the database model.")  //x
+                return newUser;  //x
+            })  //x
+            .catch(err => {  //x
+                console.log("this error occurred in createUserInDBByOAuth ", err);  //x
+            })  //x
+        }  //x
+    })  //x
+    .catch(err => {  //x
+        console.log("this is error occurred in createUSerin DB ", err)  //x
+    })  //x
+}  //x
 
 var updateUserInDB = (update) => {
 }
