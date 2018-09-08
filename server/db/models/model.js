@@ -73,11 +73,11 @@ var createUserInDB = (username, fullname, password, email) => {
     })
 }
 
-var createUserInDBByOAuth = (oAuthId, fullname, email, providerId) => {
+var createUserInDBByOAuth = (oAuthId, fullname, email, username) => {
     console.log("this is token ", oAuthId)
     return (new User({ oAuthId: oAuthId })).fetch().then(function(found) {
         if(!found){
-            return db.knex('users').insert({oAuthId: oAuthId, fullname: fullname, email: email, providerId: providerId})
+            return db.knex('users').insert({oAuthId: oAuthId, fullname: fullname, email: email, username: username})
             .then(newUser => {
                 console.log(newUser, " was created in the database model.")
                 return newUser;
@@ -124,7 +124,7 @@ var updatePlanInDB = (update) => {
 }
 
 var getItemsFromDB = (userId) => {
-    return new Item({userId: userId}).fetchAll() 
+    return new Item({userId: userId}).query({where: {userId: userId}}).fetchAll() 
     .then(items => {
         return items;
     })

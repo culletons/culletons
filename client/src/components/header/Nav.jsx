@@ -29,8 +29,11 @@ class Nav extends React.Component {
             <div className="nav-item">
               <a className="nav-link" href="#">Resources</a>
             </div>
-              {!this.props.isLoggedIn && <Login onLogin={this.props.onLogin} authenticate={this.props.authenticate}/>}
-              {this.props.isLoggedIn && <button className="btn btn-outline-success mb-4" onClick={this.clickHandler}>Logout</button>}
+            <div className="nav-item">
+              <p className="nav-item">{this.props.userData && "Welcome " +this.props.userData.fullname}</p>
+            </div>
+            {!this.props.isLoggedIn && <Login onLogin={this.props.onLogin} oAuthLogin={this.props.oAuthLogin}/>}
+            {this.props.isLoggedIn && <button className="btn btn-outline-success mb-4" onClick={this.clickHandler}>Logout</button>}
             </div>
         </nav>
       </div>

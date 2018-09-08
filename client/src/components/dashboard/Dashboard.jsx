@@ -20,7 +20,7 @@ class Dashboard extends React.Component {
   }
 
   updatePlans() {
-    axios.get('/retire/plans', { params: {userId: this.props.currentUserId } })
+    axios.get('/retire/plans', { params: {userId: this.props.userData.userId } })
          .then(({data}) => {
            this.setState({
            plans: data
@@ -36,12 +36,12 @@ class Dashboard extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col-md-3">
-            <SideRail user={this.props.user} currentUserId={this.props.currentUserId} plans={this.state.plans}/>
+            <SideRail user={this.props.user} currentUserId={this.props.userData.userId} plans={this.state.plans}/>
           </div>
           <div className="col-md-9">
             <BasicInfo />
             <br/>
-            <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>
+            <Accounts user={this.props.user} currentUserId={this.props.userData.userId}/>
           </div>
         </div>
       </div>
