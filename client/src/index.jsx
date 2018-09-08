@@ -7,7 +7,8 @@ import Dashboard from './components/dashboard/Dashboard.jsx';
 import Nav from './components/header/Nav.jsx';
 import firebase from 'firebase';
 import Rebase from 're-base';
-import config from './components/header/googleKey.js'
+import config from './components/header/googleKey.js';
+
 
 const app = firebase.initializeApp(config);
 const base = Rebase.createClass(app.database())
@@ -16,8 +17,11 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      username: "",
       isLoggedIn: false,
-      userData: null
+      userData: null,
+      currentUserId: 0
+
     }
 
     this.possibleToMount = true;
@@ -150,39 +154,6 @@ class App extends React.Component {
   }
 
   render() {
-    const options = {
-      title: {
-        text: 'Retirement at a glance',
-      },
-      xAxis: {
-        tickInterval: 5,
-        labels: {
-          enabled: true
-        }
-      },
-      yAxis: {
-        title: {
-          text: '$ thousand',
-        },
-      },
-      chart: {
-        type: 'line',
-      },
-      series: [
-        {
-          name: 'Jane',
-          data: [1, 0, 4, 0, 3],
-        },
-        {
-          name: 'John',
-          data: [5, 7, 3, 2, 4],
-        },
-        {
-          name: 'Doe',
-          data: [0, 0, 0, 1, 0],
-        },
-      ],
-    };
 
     return (
       <div className="container-fluid">
@@ -199,7 +170,10 @@ class App extends React.Component {
         />
         {this.state.isLoggedIn && <Dashboard userData={this.state.userData} />}
         {!this.state.isLoggedIn && <Home onSignUp={this.signUp} emailAndPassSignUp={this.signUp} googleSignUp={this.oAuthSignUp}/>}
-        <LineChart options={options} />
+        {/* <LineChart options={options} /> */}
+        {/* <Nav onGetStarted={this.onGetStarted} onLogin={this.onLogin} onSignUp={this.signUp} isLoggedIn={this.state.isLoggedIn} logOut={this.logOut}  authenticate={this.oAuthLogin}/>
+        {this.state.isLoggedIn && <Dashboard user={this.state.userData} currentUserId={this.state.currentUserId}/>}
+        {!this.state.isLoggedIn && <Home onSignUp={this.signUp} authenticate={this.oAuthSignUp}/>} */}
       </div>
     )
   }
