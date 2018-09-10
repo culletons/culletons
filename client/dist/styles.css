@@ -81,3 +81,36 @@
   border-radius: 2px;
   border-color: black;
 }
+
+.login .social .google{
+  background-color: #F74933;
+}
+
+.login .google:hover{
+  background-color: #FF7566;
+}
+
+.login .box .social {
+  float: none;
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
+.login .social .circle{
+  background-color: #EEEEEE;
+  color: #FFFFFF;
+  border-radius: 100px;
+  display: inline-block;
+  margin: 0 17px;
+  padding: 15px;
+}
+.login .social .circle .fa{
+  font-size: 16px;
+}
+
+.fa-google-plus-square:before {
+  content: "\f0d4";
+}
+.fa-google-plus:before {
+  content: "\f0d5";
+}

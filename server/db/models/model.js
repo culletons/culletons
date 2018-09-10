@@ -15,8 +15,10 @@ var User = db.bookshelf.Model.extend({
     },
     item: function() {
         return this.hasOne(Item);
+    },
+    goal: function() {
+        return this.hasOne(Goal);
     }
-
 })
 var Plan = db.bookshelf.Model.extend({
     tableName: 'plans',
@@ -33,6 +35,14 @@ var Item = db.bookshelf.Model.extend({
       return this.belongsTo(User);
     }
 });
+
+var Goal = db.bookshelf.Model.extend({
+    tableName: 'goals',
+    hasTimeStamps: true,
+    user: function() {
+      return this.belongsTo(User);
+    }
+})
   
 var Users = db.bookshelf.Collection.extend({  
     model: User
@@ -58,10 +68,10 @@ var getUserByOAuthFromDB = (OAuthId) => {
     })
 }
 
-var createUserInDB = (username, fullname, password, email) => {
+var createUserInDB = (username, password, fullname, email) => {
     return new User({ username: username }).fetch().then(function(found, err) {
         if(!found){
-            return db.knex('users').insert({username: username, fullname: fullname, password: password, email: email})
+            return db.knex('users').insert({username: username, password: password, fullname: fullname, email: email})
             .then(newUser => {
                 console.log(newUser, " was created in the database model.")
                 return newUser;
@@ -147,7 +157,44 @@ var createItemInDB = (userId, accessToken, institutionName, institutionId, linkS
         }
     })
 }
+
 var updateItemInDB = (update) => {
 }
 
-module.exports = {User, Users, getUserFromDB, getUserByOAuthFromDB, createUserInDB, createUserInDBByOAuth, updateUserInDB, userLoginDB, getPlansFromDB, createPlanInDB, updatePlanInDB, getItemsFromDB, createItemInDB, updateItemInDB}
+var getGoalsFromDB = (userId) => {
+  return new Goal({userId: userId}).query({where: {userId: userId}}).fetchAll()
+  .then(goals => goals)
+  .catch(err => console.log('this error occured in getGoalsFromDB', err))
+}
+
+var createGoalInDB = (userId, familySize, numberOfKids, travel, hobbySpending, luxurySpending) => {
+  return new Goal({ userId: userId }).fetch().then((found, err) => {
+    if(!found) {
+      return db.knex('goals').insert({
+        userId: userId, 
+        familySize: familySize, 
+        numberOfKids: numberOfKids, 
+        travel: travel, 
+        hobbySpending: hobbySpending, 
+        luxurySpending: luxurySpending
+      })
+      .then(newGoal => {
+        console.log(newGoal, "was created in the database model.")
+        return newGoal
+      })
+      .catch((err) => console.log("this error occured in createGoalInDB", err))
+    }
+  })
+}
+
+var updateGoalInDB = (update) => {
+
+}
+
+module.exports = {
+  User, Users, getUserFromDB, getUserByOAuthFromDB, createUserInDB, 
+  createUserInDBByOAuth, updateUserInDB, userLoginDB, 
+  getPlansFromDB, createPlanInDB, updatePlanInDB, 
+  getItemsFromDB, createItemInDB, updateItemInDB,
+  getGoalsFromDB, createGoalInDB, updateGoalInDB
+}

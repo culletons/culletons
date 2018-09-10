@@ -71,9 +71,8 @@ class SideRail extends React.Component {
             <br/></div>
             <div className="card-body border-bottom">
 
-            { this.props.plans && this.props.plans.map((plan) => (
-
-            <div key={plan._id} className="panel-default">
+            { this.props.plans && this.props.plans.map((plan, idx) => (
+            <div key={idx} className="panel-default">
               <div className="panel-heading">
                 <h3 className="panel-title" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Plan name<button type="button panel" className="close" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -84,7 +83,7 @@ class SideRail extends React.Component {
               <div className="panel-body collapse" id="collapseExample" >
                 <div>Current savings: {plan.currentSavings}</div>
                 <div>Monthly savings: {plan.monthlySavings}</div>
-                <div>Retirement age: {plan.retireAge}</div>
+                <div>Retirement age: {plan.retirementAge}</div>
               </div>
             </div>
               

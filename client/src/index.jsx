@@ -21,7 +21,6 @@ class App extends React.Component {
       isLoggedIn: false,
       userData: null,
       currentUserId: 0
-
     }
 
     this.possibleToMount = true;
@@ -154,7 +153,6 @@ class App extends React.Component {
   }
 
   render() {
-
     return (
       <div className="container-fluid">
         <div id="cont"></div>
