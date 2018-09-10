@@ -6,7 +6,7 @@ class SideRail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null,
+      Data: null,
     }
 
     this.launchPlaidLink = this.launchPlaidLink.bind(this);
@@ -66,14 +66,14 @@ class SideRail extends React.Component {
         <div className="card-block">
         <img className="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKkYg7YWw9mG3zsEI5lCHeTz30oLSjMXXxm5irxjnGTj5deUKOPA" />
           <div className="card-body border-bottom">
-            <h3 className="card-title">Welcome {this.props.user.fullname}</h3>
+            <h3 className="card-title">Welcome {this.props.userData && this.props.userData.fullname}</h3>
             <button id="link-btn" className="btn btn-success" onClick={this.launchPlaidLink}>Link Account</button>
             <br/></div>
             <div className="card-body border-bottom">
 
-            { this.props.plans.map((plan) => (
+            { this.props.plans && this.props.plans.map((plan) => (
 
-            <div key={plan.planId} className="panel-default">
+            <div key={plan._id} className="panel-default">
               <div className="panel-heading">
                 <h3 className="panel-title" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Plan name<button type="button panel" className="close" aria-label="Close">
                 <span aria-hidden="true">&times;</span>

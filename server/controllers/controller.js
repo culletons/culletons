@@ -79,6 +79,7 @@ module.exports = {
   },
 
   getPlans: (req, res) => {
+    console.log(req.query.userId);
     model.getPlansFromDB(req.query.userId)
     .then(plan => {
       res.status(200).send(plan);
