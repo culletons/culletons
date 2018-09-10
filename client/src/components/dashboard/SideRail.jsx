@@ -71,7 +71,7 @@ class SideRail extends React.Component {
           <br/></div>
           <div className="card-body border-bottom">
 
-           { this.props.plans.map((plan) => (
+           { this.props.plans && this.props.plans.map((plan) => (
              
              <div key={plan.planId} className="panel-default">
              <div className="panel-heading">
