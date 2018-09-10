@@ -26,11 +26,16 @@ class Dashboard extends React.Component {
   }
 
   updatePlans() {
-    axios.get('/retire/plans', { params: {userId: this.props.currentUserId } })
+    console.log(this.props.userData.userId)
+    axios.get('/retire/plans', { params: {userId: this.props.userData.userId } })
          .then(({data}) => {
-           this.setState({
-           plans: data
-           })
+            this.setState({
+             plans: data
+            })
+            if(this.state.plans && this.state.plans.length > 0) {
+            // if plans already exist, render overview. clicking add plan will rerender the forms
+              this.setState({ formBasicToggle: false})
+            }
          })
          .catch((err) => {
            console.log(err);
@@ -38,21 +43,24 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('retire/plans', {
-      params: {
-        userId: this.props.user.userId
-      }
-    }).then(res => {
-      this.setState({
-        plans: res.data
-      })
-    }).catch(err => {console.log(err)})
-
-    if(this.state.plans.length > 0) {
-      // if plans already exist, render overview. clicking add plan will rerender the forms
-      this.setState({ formBasicToggle: false})
+    // axios.get('retire/plans', {
+    //   params: {
+    //     userId: this.props.user && this.props.user.userId
+    //   }
+    // }).then(res => {
+    //   this.setState({
+    //     plans: res.data
+    //   })
+    // }).catch(err => {console.log(err)})
+    if (this.props.userData.userId) {
+      this.updatePlans();
     }
-    this.updatePlans();
+
+    // if(this.state.plans && this.state.plans.length > 0) {
+    //   // if plans already exist, render overview. clicking add plan will rerender the forms
+    //   this.setState({ formBasicToggle: false})
+    // }
+    // this.updatePlans();
   }
 
 
@@ -61,13 +69,13 @@ class Dashboard extends React.Component {
     return (
         <div className="row">
           <div className="col-md-3">
-            <SideRail user={this.props.user}  currentUserId={this.props.currentUserId} plans={this.state.plans}/>
+            <SideRail user={this.props.user} currentUserId={this.props.userData && this.props.userData.userId} plans={this.state.plans}/>
           </div>
           {/* only render if user has no plan yet or if addPlan is clicked */}
           <div className="col-md-9">
           {this.state.overviewToggle && <Overview plans={this.state.plans} />}
             {this.state.formBasicToggle && <BasicInfo user={this.props.user} />}
-            <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>
+            <Accounts user={this.props.user} currentUserId={this.props.userData.userId}/>
           </div>
         </div>
     );
