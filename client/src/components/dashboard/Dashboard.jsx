@@ -3,6 +3,7 @@ import axios from 'axios';
 import Accounts from './Accounts.jsx'
 import BasicInfo from './BasicInfo.jsx';
 import SideRail from './SideRail.jsx';
+import GoalInfo from './goalInfo.jsx';
 
 
 
@@ -12,7 +13,9 @@ class Dashboard extends React.Component {
     this.state = {
       // todo add state for designated main plan, allow user to set main plan
       plans: [{ currentSavings: 0 }],
+      goals: null,
       formBasicToggle: true,
+      formGoalsToggle: true,
       overviewToggle: false,
       items: null
     }
@@ -26,7 +29,6 @@ class Dashboard extends React.Component {
   }
 
   updatePlans() {
-    console.log(this.props.userData.userId)
     axios.get('/retire/plans', { params: {userId: this.props.userData.userId } })
          .then(({data}) => {
             this.setState({
@@ -42,6 +44,17 @@ class Dashboard extends React.Component {
          })
   }
 
+  updateGoals() {
+    axios.get('retire/goals', {params:{ userId:this.props.userData.userId }})
+    .then(({data}) => {
+      this.setState({goals: data})
+      if (this.state.goals) {
+        this.setState({ formGoalsToggle: false })
+      }
+    })
+    .catch((err) => console.log(err));
+  }
+
   componentDidMount() {
     // axios.get('retire/plans', {
     //   params: {
@@ -54,6 +67,7 @@ class Dashboard extends React.Component {
     // }).catch(err => {console.log(err)})
     if (this.props.userData.userId) {
       this.updatePlans();
+      this.updateGoals();
     }
 
     // if(this.state.plans && this.state.plans.length > 0) {
@@ -69,12 +83,13 @@ class Dashboard extends React.Component {
     return (
         <div className="row">
           <div className="col-md-3">
-            <SideRail user={this.props.user} currentUserId={this.props.userData && this.props.userData.userId} plans={this.state.plans}/>
+            <SideRail user={this.props.user} currentUserId={this.props.userData && this.props.userData.userId} plans={this.state.plans} goals={this.state.goals}/>
           </div>
           {/* only render if user has no plan yet or if addPlan is clicked */}
           <div className="col-md-9">
-          {this.state.overviewToggle && <Overview plans={this.state.plans} />}
-            {this.state.formBasicToggle && <BasicInfo user={this.props.user} />}
+            {this.state.overviewToggle && <Overview plans={this.state.plans} />}
+            {this.state.formBasicToggle && <BasicInfo user={this.props.userData} />}
+            {this.state.formGoalsToggle && <GoalInfo user={this.props.userData}/>}
             <Accounts user={this.props.user} currentUserId={this.props.userData.userId}/>
           </div>
         </div>

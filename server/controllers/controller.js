@@ -134,4 +134,32 @@ module.exports = {
   updateItem: (req, res) => {
     res.sendStatus(500);
   },
+
+  getGoals: (req, res) => {
+    model.getGoalsFromDB(req.query.userId)
+    .then(goal => {
+      console.log("this is returned from getGoals ", goal)
+      res.send(goal);
+    })
+    .catch(err => {
+      console.log("this error occured in getGoals ", err)
+      res.sendStatus(500);
+    })
+  },
+
+  createGoal: (req, res) => {
+    model.createGoalInDB(req.body.userId, req.body.familySize, req.body.numberOfKids, req.body.travel, req.body.hobbySpending, req.body.luxurySpending)
+    .then(goal => {
+      console.log(goal, "this goal was created in the database controller");
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.log("this error occured in createGoal ", err)
+      res.sendStatus(500);
+    })
+  },
+
+  updateGoal: (req, res) => {
+    res.sendStatus(500);
+  }
 }
