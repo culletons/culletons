@@ -20,6 +20,7 @@ var User = db.bookshelf.Model.extend({
 })
 var Plan = db.bookshelf.Model.extend({
     tableName: 'plans',
+    hasTimeStamps: true,
     user: function() {
       return this.belongsTo(User);
     }
@@ -27,6 +28,7 @@ var Plan = db.bookshelf.Model.extend({
 
 var Item = db.bookshelf.Model.extend({
     tableName: 'items',
+    hasTimeStamps: true,
     user: function() {
       return this.belongsTo(User);
     }
@@ -44,9 +46,6 @@ var getUserFromDB = (username, password) => {
     .catch(err => {
         console.log("this error occurred in getUserFromDB ", err);
     })
-    .then(()=>{
-        db.knex.destroy();
-    })
 }
 
 var getUserByOAuthFromDB = (OAuthId) => {
@@ -56,9 +55,6 @@ var getUserByOAuthFromDB = (OAuthId) => {
     })
     .catch(err => {
         console.log("this error occurred in getUserByOAuthFromDB ", err);
-    })
-    .then(()=>{
-        db.knex.destroy();
     })
 }
 
@@ -73,27 +69,21 @@ var createUserInDB = (username, password, fullname, email) => {
             .catch(err => {
                 console.log("this error occurred in createUserInDB ", err);
             })
-            .then(()=>{
-                db.knex.destroy();
-            })
         }
     })
 }
 
-var createUserInDBByOAuth = (oAuthId, fullname, email, providerId) => {
+var createUserInDBByOAuth = (oAuthId, fullname, email, username) => {
     console.log("this is token ", oAuthId)
     return (new User({ oAuthId: oAuthId })).fetch().then(function(found) {
         if(!found){
-            return db.knex('users').insert({oAuthId: oAuthId, fullname: fullname, email: email, providerId: providerId})
+            return db.knex('users').insert({oAuthId: oAuthId, fullname: fullname, email: email, username: username})
             .then(newUser => {
                 console.log(newUser, " was created in the database model.")
                 return newUser;
             })
             .catch(err => {
                 console.log("this error occurred in createUserInDBByOAuth ", err);
-            })
-            .then(()=>{
-                db.knex.destroy();
             })
         }
     })
@@ -111,16 +101,13 @@ var userLoginDB = (req, res) => {
 
 var getPlansFromDB = (userIdToSearch) => {
   console.log(userIdToSearch);
-  return new Plan({userId: userIdToSearch}).query({where: {userId: userIdToSearch}}).fetchAll()    
+  return new Plan().query({where: {userId: userIdToSearch}}).fetchAll()    
   .then(plan => {
     return plan;
   })
   .catch(err => {
     console.log("this error occurred in getPlansFromDB ", err);
   })
-  .then(()=>{
-    db.knex.destroy();
-})
 }
 
 var createPlanInDB = (userId, retireAge, retireGoal, currentAge, currentSavings, monthlySavings, monthlySpending) => {
@@ -132,9 +119,6 @@ var createPlanInDB = (userId, retireAge, retireGoal, currentAge, currentSavings,
   .catch(err => {
       console.log("this error occurred in createPlanInDB ", err);
   })
-  .then(()=>{
-    db.knex.destroy();
-})
 }
 var updatePlanInDB = (update) => {
 }
@@ -146,9 +130,6 @@ var getItemsFromDB = (userId) => {
     })
     .catch(err => {
         console.log("this error occurred in getItemsFromDB ", err);
-    })
-    .then(()=>{
-        db.knex.destroy();
     })
 }
 
@@ -162,9 +143,6 @@ var createItemInDB = (userId, accessToken, institutionName, institutionId, linkS
             })
             .catch(err => {
                 console.log("this error occurred in createItemInDB ", err);
-            })
-            .then(()=>{
-                db.knex.destroy();
             })
         }
     })

@@ -14,11 +14,11 @@ class Login extends React.Component {
   }
 
   authHandler(provider) {
-    this.props.authenticate(provider)
+    this.props.oAuthLogin(provider)
   }
 
-  clickHandler(username, password, uid) {
-    this.props.onLogin(username, password, uid);
+  clickHandler(email, password, uid) {
+    this.props.onLogin(email, password, uid);
   }
 
   handleChange(evt) {
@@ -55,8 +55,8 @@ class Login extends React.Component {
 
                 </form>
                 <div className="md-form mb-5">
-                  <input type="text" id="Form-email-login" className="form-control validate" name="username" onChange={this.handleChange}/>
-                  <label data-error="wrong" data-success="right" htmlFor="Form-email-login">Your username</label>
+                  <input type="text" id="Form-email-login" className="form-control validate" name="email" onChange={this.handleChange}/>
+                  <label data-error="wrong" data-success="right" htmlFor="Form-email-login">Your Email</label>
                 </div>
     
                 <div className="md-form pb-3">
@@ -67,7 +67,7 @@ class Login extends React.Component {
                 <div className="text-center mb-3">
                     {/* Button to make post request */}
                     <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" 
-                      onClick={this.clickHandler.bind(this, this.state.username, this.state.password)} data-dismiss="modal" aria-hidden="true">Sign in
+                      onClick={this.clickHandler.bind(this, this.state.email, this.state.password)} data-dismiss="modal" aria-hidden="true">Sign in
                     </button>
                 </div>
 

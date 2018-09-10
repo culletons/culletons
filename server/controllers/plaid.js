@@ -1,6 +1,6 @@
 const plaid = require('plaid');
 const keys = require('../config.js');
-const model = require('../db/models/model.js')
+const model = require('../db/models/model.js');
 
 var client = new plaid.Client(
   process.env.PLAID_CLIENT_ID || keys.PLAID_CLIENT_ID,
@@ -28,11 +28,11 @@ module.exports = {
       model.createItemInDB(request.body.userId, ACCESS_TOKEN, metadata.institution.name, metadata.institution.institution_id, metadata.linkSessionId)
       .then(item => {
         console.log(`Item for ${request.body.userId} at ${metadata.institution.name} was created in the database.`)
-        response.status(200);
+        response.sendStatus(200);
       })
       .catch(err => {
         console.log("this error occurred in createItem ", err)
-        response.status(500);
+        response.sendStatus(500);
       });
     });
   },
