@@ -14,11 +14,11 @@ class Login extends React.Component {
   }
 
   authHandler(provider) {
-    this.props.authenticate(provider)
+    this.props.oAuthLogin(provider)
   }
 
-  clickHandler(username, password, uid) {
-    this.props.onLogin(username, password, uid);
+  clickHandler(email, password, uid) {
+    this.props.onLogin(email, password, uid);
   }
 
   handleChange(evt) {
@@ -34,7 +34,7 @@ class Login extends React.Component {
       <div className="wrapper">
         {/* Creates button for Login */}
         <div className="container">
-          <a className=" btn-outline-success mb-4 " data-toggle="modal" data-target="#elegantModalForm" >Log in</a>
+          <a className="loginbtn" id="loginbtn" data-toggle="modal" data-target="#elegantModalForm" >Log in</a>
         </div>
 
         {/* MODAL: Creates popup for Login */}
@@ -54,20 +54,20 @@ class Login extends React.Component {
                 <form>
 
                 </form>
-                <div className="md-form mb-5">
-                  <input type="text" id="Form-email-login" className="form-control validate" name="username" onChange={this.handleChange}/>
-                  <label data-error="wrong" data-success="right" htmlFor="Form-email-login">Your username</label>
+                <div className="input-group md-form  mb-3">
+                <span className="input-group-addon"><i className="fa fa-envelope-o fa-fw"></i></span><input type="text" id="Form-email-login" className="form-control validate" placeholder="Email address" name="email" onChange={this.handleChange}/>
+                  <label data-error="wrong" data-success="right" placeholder="Email address" htmlFor="Form-email-login"></label>
                 </div>
     
-                <div className="md-form pb-3">
-                    <input type="password" id="Form-pass-login" className="form-control validate" name="password" onChange={this.handleChange}/>
-                    <label data-error="wrong" data-success="right" htmlFor="Form-pass-login">Your password</label>
+                <div className="input-group md-form pb-3">
+                <span className="input-group-addon"><i className="fa fa-key fa-fw"></i></span><input type="password" id="Form-pass-login" className="form-control validate" placeholder="Password" name="password" onChange={this.handleChange}/>
+                    <label data-error="wrong" data-success="right" htmlFor="Form-pass-login"></label>
                 </div>
     
                 <div className="text-center mb-3">
                     {/* Button to make post request */}
-                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" 
-                      onClick={this.clickHandler.bind(this, this.state.username, this.state.password)} data-dismiss="modal" aria-hidden="true">Sign in
+                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a hoverable" 
+                      onClick={this.clickHandler.bind(this, this.state.email, this.state.password)} data-dismiss="modal" aria-hidden="true">Sign in
                     </button>
                 </div>
 
@@ -80,11 +80,6 @@ class Login extends React.Component {
                     </button>
                 </div>
               </div>
-
-              <div className="modal-footer mx-5 pt-3 mb-1">
-                <p className="font-small grey-text d-flex justify-content-end">Not a member? <a href="#" className="blue-text ml-1"> Sign Up</a></p>
-              </div>
-
             </div>
           </div>
         </div>

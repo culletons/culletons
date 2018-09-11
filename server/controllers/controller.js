@@ -1,68 +1,77 @@
-const model = require('../db/models/model.js')
+const model = require('../db/models/model.js');
+var admin = require('firebase-admin');
+
+var serviceAccount = require('../config.js').FIREBASE_credential;
+var database = require('../config.js').FIREBASE_databaseURL;
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: database
+});
 
 module.exports = {
 
   getUser: (req, res) => {
-    console.log("this is req.query in getUser ", req.query)
-    if (req.query.oAuthId !== null){
-      model.getUserByOAuthFromDB(req.query.oAuthId)
-      .then(user => {
-        console.log("this is returned from getUser get by OAuth ", user)
-        res.status(200).send(user)
-      })
-      .catch(err => {
-        console.log("this error occurred in getUser get by OAuth ", err)
-        res.sendStatus(500);
-      })
-    }
-    else {
-      model.getUserFromDB(req.query.username, req.query.password)
-      .then(user => {
-        console.log("this is returned from getUser ", user)
-        res.status(200).send(user);
-      })
-      .catch(err => {
-        console.log("this error occurred in getUser ", err)
-        res.sendStatus(500);
-      })
-    }
+    let idToken = req.query.idToken;
+    admin.auth().verifyIdToken(idToken)
+          .then((decodedToken) => {
+            var uid = decodedToken.uid;
+            model.getUserByOAuthFromDB(uid)
+                  .then(user => {
+                    if (user) {
+                      res.status(200).send(user)
+                    } else {
+                      setTimeout(() => {
+                        console.log('user not found in DB');
+                        res.sendStatus(500);
+                        // FIND A WAY TO END THE SESSION!!
+                      }, 2000);
+                    }
+                  })
+                  .catch(err => {
+                    console.log('user not found in DB');
+                    res.sendStatus(500);
+                  })
+          }).catch(function(error) {
+            console.log(error);
+            res.sendStatus(500);
+          });
   },
 
   createUser: (req, res) => {
-    console.log("this is req.body in createUser ", req.body)
-    if (req.body.oAuthId !== null){
-      model.getUserByOAuthFromDB(req.body.oAuthId)
-      .then(userFound => {
-        console.log("this is returned from getUser get by OAuth ", userFound)
-        if (userFound === undefined) {
-          model.createUserInDBByOAuth(req.body.oAuthId, req.body.fullname, req.body.email)
-          .then(user => {
-            console.log(user, "this user was created in the database controller by OAuth.")
-            res.status(200).send(user);
-          })
-          .catch(err => {
-            console.log("this error occurred in createUser create by OAuth ", err)
+    let idToken = req.body.idToken;
+    admin.auth().verifyIdToken(idToken)
+          .then((decodedToken) => {
+            var uid = decodedToken.uid;
+            model.getUserByOAuthFromDB(uid)
+                  .then(user => {
+                    if (user) {
+                      console.log('USER ALREADY EXISTS IN DB');
+                      res.sendStatus(500);
+                    } else {
+                      model.createUserInDBByOAuth(uid, req.body.fullname, req.body.email, req.body.username)
+                            .then(user => {
+                              console.log(user, "this user was created in the database");
+                              res.status(200).send(user);
+                            })
+                            .catch(err => {
+                              console.log("this error occurred in createUser in DB ", err)
+                              res.sendStatus(500);
+                            })
+                    }
+                  })
+                  .catch(err => {
+                    console.log('user could not be looked up in DB' + err);
+                    res.sendStatus(500);
+                  })
+          }).catch(function(error) {
+            console.log(error);
             res.sendStatus(500);
-          })
-        } else {
-          res.status(200).send(userFound)
-        }
-      })
-    }
-    else {
-      model.createUserInDB(req.body.userId, req.body.username, req.body.fullName, req.body.password, req.body.email)
-      .then(user => {
-        console.log(user, "this user was created in the database controller.")
-        res.sendStatus(200).send(user);
-      })
-      .catch(err => {
-        console.log("this error occurred in createUser ", err)
-        res.sendStatus(500);
-      })
-    }
+          });
   },
 
   updateUser: (req, res) => {
+    console.log('req', req)
     res.sendStatus(500);
   },
 
@@ -71,8 +80,7 @@ module.exports = {
   },
 
   getPlans: (req, res) => {
-    console.log("this is req.query in getPlan ", req.query)
-    model.getPlansFromDB(3)
+    model.getPlansFromDB(req.query.userId)
     .then(plan => {
       res.status(200).send(plan);
     })
@@ -82,11 +90,14 @@ module.exports = {
     })
   },
 
+  deletePlan: (req, res) => {
+    model.deletePlan(req.query.planId)
+    res.sendStatus(202)
+  },
+
   createPlan: (req, res) => {
-    console.log("this is req.body in createPlan ", req.body)
-    model.createPlanInDB(req.body.userId, req.body.retireAge, req.body.retireGoal, req.body.currentAge, req.body.currentSavings, req.body.monthlySavings, req.body.monthlySpending)
+    model.createPlanInDB(req.body.userId, req.body.retireAge, req.body.retireGoal, req.body.currentAge, req.body.annualIncome, req.body.currentSavings, req.body.monthlySavings, req.body.monthlySpending)
     .then(plan => {
-      console.log(plan, "this plan was created in the database controller.")
       res.sendStatus(200);
     })
     .catch(err => {
@@ -96,14 +107,15 @@ module.exports = {
   },
 
   updatePlan: (req, res) => {
-    res.sendStatus(500);
+    model.updatePlan(req.body.name, req.body.planId)
+    res.sendStatus(204);
   },
 
   getItems: (req, res) => {
-    console.log("this is req.query in getItem ", req.query)
+    // console.log("this is req.query in getItem ", req.query)
     model.getItemsFromDB(req.query.userId)
     .then(item => {
-      console.log("this is returned from getItem ", item)
+      // console.log("this is returned from getItem ", item)
       res.status(200).send(item);
     })
     .catch(err => {
@@ -113,10 +125,10 @@ module.exports = {
   },
 
   createItem: (req, res) => {
-    console.log("this is req.body in createItem ", req.body)
+    // console.log("this is req.body in createItem ", req.body)
     model.createItemInDB(req.body.userId, req.body.item, req.body.itemToken, req.body.institutionName, req.body.institutionId, req.body.linkSessionId)
     .then(item => {
-      console.log(item, "this item was created in the database controller.")
+      // console.log(item, "this item was created in the database controller.")
       res.sendStatus(200);
     })
     .catch(err => {
@@ -128,4 +140,32 @@ module.exports = {
   updateItem: (req, res) => {
     res.sendStatus(500);
   },
+
+  getGoals: (req, res) => {
+    model.getGoalsFromDB(req.query.userId)
+    .then(goal => {
+      // console.log("this is returned from getGoals ", goal)
+      res.send(goal);
+    })
+    .catch(err => {
+      console.log("this error occured in getGoals ", err)
+      res.sendStatus(500);
+    })
+  },
+
+  createGoal: (req, res) => {
+    model.createGoalInDB(req.body.userId, req.body.familySize, req.body.numberOfKids, req.body.travel, req.body.hobbySpending, req.body.luxurySpending)
+    .then(goal => {
+      // console.log(goal, "this goal was created in the database controller");
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.log("this error occured in createGoal ", err)
+      res.sendStatus(500);
+    })
+  },
+
+  updateGoal: (req, res) => {
+    res.sendStatus(500);
+  }
 }

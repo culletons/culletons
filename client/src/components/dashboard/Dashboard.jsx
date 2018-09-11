@@ -2,8 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import Accounts from './Accounts.jsx'
 import SideRail from './SideRail.jsx';
-import Forms from './Forms.jsx'
 import Overview from './Overview.jsx'
+import GoalInfo from './goalInfo.jsx';
+import BasicInfo from './BasicInfo.jsx'
 
 
 
@@ -11,86 +12,127 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // todo add state for designated main plan, allow user to set main plan
       plans: [],
-      activePlan: [],
+      activePlan: null,
+      goals: null,
       formToggle: false,
       overviewToggle: true,
       accountToggle: true,
       items: null
+
     }
     this.createPlan = this.createPlan.bind(this)
-    this.viewPlan = this.viewPlan.bind(this)
     this.updatePlans = this.updatePlans.bind(this);
     this.setActivePlan = this.setActivePlan.bind(this)
+    this.setOverview = this.setOverview.bind(this)
+    this.deletePlan = this.deletePlan.bind(this)
+    this.editPlanName = this.editPlanName.bind(this)
+    this.submitBasic = this.submitBasic.bind(this)
   }
 
   createPlan() {
     this.setState({ 
-      formToggle: true
+      formToggle: true,
+      overviewToggle: false
     })
   }
 
-  viewPlan(plan) {
-    this.setState({activePlan: plan})
+  deletePlan(id) {
+    axios.delete('/retire/plans', {
+      params: {planId: id}})
+      .then(res => {
+        this.updatePlans()
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }
 
-  deletePlan(id) {
-
+  editPlanName(name, id) {
+    axios.put('/retire/plans', {name: name, planId: id})
+    .then(res => {
+      this.updatePlans()
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }
 
   setActivePlan(plan) {
-    console.log(plan)
     this.setState({
       activePlan: plan
     })
   }
 
+  submitBasic(info) {
+    axios.post('/retire/plans', info
+    ).then(res => {
+      this.updatePlans()
+    }).catch(err => {console.log(err)})
+    console.log('Trying to submit');
+  }
+
   updatePlans() {
-    axios.get('/retire/plans', { params: {userId: this.props.currentUserId } })
-         .then(({data}) => {
-           this.setState({
-           plans: data
-           })
-         })
-         .catch((err) => {
-           console.log(err);
-         })
+    axios.get('/retire/plans', { params: {userId: this.props.userData.userId } })
+      .then(({data}) => {
+        this.setState({
+          plans: data
+        })
+        if(this.state.plans && this.state.plans.length > 0) {
+          this.setState({ formBasicToggle: false})
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
+  updateGoals() {
+    axios.get('retire/goals', {params:{ userId:this.props.userData.userId }})
+    .then(({data}) => {
+      this.setState({goals: data})
+      if (this.state.goals) {
+        this.setState({ formGoalsToggle: false })
+      }
+    })
+    .catch(err => {console.log(err)})
+  }
+
+  setOverview() {
+    this.setState({
+      overviewToggle: true,
+      formToggle: false
+    })
   }
 
   componentDidMount() {
-    axios.get('retire/plans', {
-      params: {
-        userId: this.props.user.userId
-      }
-    }).then(res => {
-      this.setState({
-        plans: res.data,
-        activePlan:res.data[0]
-      })
-    }).catch(err => {console.log(err)})
-    // if plans already exist, render overview. clicking add plan will rerender the forms
-    // if(this.state.plans.length > 0) {
-    //   this.setState({ formToggle: false})
-    // }
-    // this.updatePlans();
+    if (this.props.userData.userId) {
+      this.updatePlans();
+      this.updateGoals();
+    }
   }
 
 
 
   render() {
     return (
-        <div className="row">
-          <div className="col-md-3">
-            <SideRail user={this.props.user} setActivePlan={this.setActivePlan} currentUserId={this.props.currentUserId} plans={this.state.plans} createPlan={this.createPlan}/>
-          </div>
-          {/* only render if user has no plan yet or if addPlan is clicked */}
-          <div className="col-md-9">
-          {this.state.overviewToggle && <Overview activePlan={this.state.activePlan} plans={this.state.plans} />}
-            {this.state.formToggle && <Forms user={this.props.user} />}
-            {this.state.accountToggle && <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>}
-          </div>
+      <div className="row">
+
+        <div className="col-md-2">
+          <SideRail editPlanName={this.editPlanName} deletePlan={this.deletePlan} setOverview={this.setOverview} user={this.props.user} setActivePlan={this.setActivePlan} currentUserId={this.props.userData && this.props.userData.userId} plans={this.state.plans} createPlan={this.createPlan} goals={this.state.goals} />
         </div>
+        <div className="col-md-10">
+          {this.state.formToggle && <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />}
+          {this.state.formToggle && <GoalInfo user={this.props.userData} />}
+
+          <div className="row">
+            <div className="col-md-6">
+              {this.state.overviewToggle && <Overview activePlan={this.state.activePlan} plans={this.state.plans} />}</div>
+            {/* {this.state.accountToggle && <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>} */}
+            <div className="col-md-auto"><Accounts user={this.props.user} currentUserId={this.props.userData.userId} /></div>
+          </div></div>
+
+      </div>
     );
   }
 

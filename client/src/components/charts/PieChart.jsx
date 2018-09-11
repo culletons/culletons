@@ -14,7 +14,7 @@ class PieChart extends React.Component {
   }
 
   componentWillUnmount() {
-    this.chart.destroy();
+    // this.chart.destroy();
   }
 
   render() {

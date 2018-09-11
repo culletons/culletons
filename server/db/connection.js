@@ -11,7 +11,7 @@ const knex = require('knex')({
     useNullAsDefault: true,
     pool: { 
       min: 0, 
-      max: 12,
+      max: 200,
     },
     acquireConnectionTimeout: 10000
 })
@@ -44,14 +44,14 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
       bookshelf.knex.schema.createTable('plans', function (plan) {
         plan.integer('userId')
         plan.increments('planId').primary();
+        plan.string('name', 255)
         plan.integer('retirementAge').notNullable();
         plan.integer('retireGoal').notNullable();
         plan.integer('currentAge').notNullable();
+        plan.integer('annualIncome').notNullable();
         plan.integer('currentSavings').notNullable();
         plan.integer('monthlySavings').notNullable();
         plan.integer('monthlySpending').notNullable();
-        plan.integer('familySize');
-        plan.integer('numberOfKids');
         plan.timestamps(true, true);
       })
       .then(function (table) {
@@ -83,6 +83,27 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
     })
     }
   });
+
+  bookshelf.knex.schema.hasTable('goals').then(function(exists) {
+    if(!exists) {
+      bookshelf.knex.schema.createTable('goals', function(goal) {
+        goal.increments('goalId').primary();
+        goal.integer('userId')
+        goal.integer('familySize');
+        goal.integer('numberOfKids');
+        goal.integer('travel');
+        goal.integer('hobbySpending');
+        goal.integer('luxurySpending');
+        goal.timestamps(true, true);
+      })
+      .then(function (table) {
+        console.log("Created Table goals", table)
+      })
+      .then(() => {
+        db.knex.destroy();
+      })
+    }
+  })
 
   module.exports = {bookshelf, knex}
 

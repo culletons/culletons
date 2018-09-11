@@ -11,16 +11,18 @@ class Signup extends React.Component {
       email: ''
     }
     this.handleChange = this.handleChange.bind(this);
-    this.clickHandler = this.clickHandler.bind(this);
-    this.authHandler = this.authHandler.bind(this);
+    this.emailAndPassAuth = this.emailAndPassAuth.bind(this);
+    this.googleAuth = this.googleAuth.bind(this);
   }
 
-  authHandler(provider) {
-    this.props.authenticate(provider)
+  googleAuth(provider) {
+    this.props.googleSignUp(provider)
   }
 
-  clickHandler() {
-    this.props.onSignUp(this.state.username, this.state.password, this.state.fullname, this.state.email);
+  emailAndPassAuth(e) {
+    e.preventDefault();
+    this.props.emailAndPassSignUp(this.state.username, this.state.password, this.state.fullname, this.state.email);
+    // this.props.onSignUp(this.state.username, this.state.password, this.state.fullname, this.state.email);
   }
 
   handleChange(evt) {
@@ -38,7 +40,7 @@ class Signup extends React.Component {
       <div className="wrapper">
         {/* Creates button for Login */}
         <div className="container">
-          <a className="btn btn-success" data-toggle="modal" data-target="#signUp" >Sign Up</a>
+          <a className="btn btn-primary" id="bttn" data-toggle="modal" data-target="#signUp" >Sign Up</a>
         </div>
 
         {/* MODAL: Creates popup for Login */}
@@ -77,7 +79,7 @@ class Signup extends React.Component {
     
                 <div className="text-center mb-3">
                     {/* Button to make post request */}
-                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" onClick={this.clickHandler} 
+                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" onClick={(e) => {this.emailAndPassAuth(e)}} 
                             data-dismiss="modal"
                     >Register</button>
                 </div>
@@ -85,17 +87,12 @@ class Signup extends React.Component {
 
                <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2"> or Register with:</p>
     
-               <div className="row my-3 d-flex justify-content-center">
+               <div className="row my-3 d-flex justify-content-center social">
                    {/* Button to Login with google*/}
-                   <button type="button" className="btn btn-white btn-rounded z-depth-1a" data-dismiss="modal" aria-hidden="true" onClick={this.authHandler.bind(this, new firebase.auth.GoogleAuthProvider())}>
+                   <button type="button" className="btn btn-white btn-rounded z-depth-1a" data-dismiss="modal" aria-hidden="true" onClick={this.googleAuth.bind(this, new firebase.auth.GoogleAuthProvider())}>
                      <i className="fa fa-google-plus"></i>
                    </button>
                </div>
-
-              <div className="modal-footer mx-5 pt-3 mb-1">
-                <p className="font-small grey-text d-flex justify-content-end">Already a member? <a href="#" className="blue-text ml-1"> Log in</a></p>
-              </div>
-
             </div>
           </div>
         </div>
