@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import LineChart from './components/dashboard/LineChart.jsx'
+import LineChart from './components/charts/LineChart.jsx'
 import Home from './components/Home.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
 import Nav from './components/header/Nav.jsx';
@@ -137,7 +137,8 @@ class App extends React.Component {
     
   onGetStarted() {
     this.setState({
-      isLoggedIn: true
+      isLoggedIn: true,
+      userData: {userId: 3}
     })
   }
   
@@ -154,8 +155,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="container-fluid">
-        <div id="cont"></div>
+      <div>
         <Nav 
           onGetStarted={this.onGetStarted} 
           onLogin={this.onLogin} 
@@ -166,12 +166,15 @@ class App extends React.Component {
           googleSignUp={this.oAuthSignUp}
           userData={this.state.userData}
         />
-        {this.state.isLoggedIn && <Dashboard userData={this.state.userData} />}
         {!this.state.isLoggedIn && <Home onSignUp={this.signUp} emailAndPassSignUp={this.signUp} googleSignUp={this.oAuthSignUp}/>}
+      <div className="container-fluid">
+        <div id="cont"></div>
+        {this.state.isLoggedIn && <Dashboard userData={this.state.userData} />}
         {/* <LineChart options={options} /> */}
         {/* <Nav onGetStarted={this.onGetStarted} onLogin={this.onLogin} onSignUp={this.signUp} isLoggedIn={this.state.isLoggedIn} logOut={this.logOut}  authenticate={this.oAuthLogin}/>
         {this.state.isLoggedIn && <Dashboard user={this.state.userData} currentUserId={this.state.currentUserId}/>}
         {!this.state.isLoggedIn && <Home onSignUp={this.signUp} authenticate={this.oAuthSignUp}/>} */}
+      </div>
       </div>
     )
   }

@@ -8,6 +8,7 @@ router.put('/users', usersController.updateUser);
 
 router.get('/plans', usersController.getPlans)
 router.post('/plans', usersController.createPlan);
+router.delete('/plans', usersController.deletePlan);
 router.put('/plans', usersController.updatePlan);
 
 router.get('/items', usersController.getItems)

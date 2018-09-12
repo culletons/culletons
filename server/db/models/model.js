@@ -73,7 +73,7 @@ var createUserInDB = (username, password, fullname, email) => {
         if(!found){
             return db.knex('users').insert({username: username, password: password, fullname: fullname, email: email})
             .then(newUser => {
-                console.log(newUser, " was created in the database model.")
+                // console.log(newUser, " was created in the database model.")
                 return newUser;
             })
             .catch(err => {
@@ -89,7 +89,7 @@ var createUserInDBByOAuth = (oAuthId, fullname, email, username) => {
         if(!found){
             return db.knex('users').insert({oAuthId: oAuthId, fullname: fullname, email: email, username: username})
             .then(newUser => {
-                console.log(newUser, " was created in the database model.")
+                // console.log(newUser, " was created in the database model.")
                 return newUser;
             })
             .catch(err => {
@@ -120,17 +120,34 @@ var getPlansFromDB = (userIdToSearch) => {
   })
 }
 
-var createPlanInDB = (userId, retireAge, retireGoal, currentAge, currentSavings, monthlySavings, monthlySpending) => {
-  return db.knex('plans').insert({userId: userId, retirementAge: retireAge, retireGoal: retireGoal, currentAge: currentAge, currentSavings: currentSavings, monthlySavings: monthlySavings, monthlySpending: monthlySpending})
+var createPlanInDB = (userId, retireAge, retireGoal, currentAge, annualIncome, currentSavings, monthlySavings, monthlySpending) => {
+  return db.knex('plans').insert({userId: userId, retirementAge: retireAge, retireGoal: retireGoal, currentAge: currentAge, annualIncome: annualIncome, currentSavings: currentSavings, monthlySavings: monthlySavings, monthlySpending: monthlySpending})
   .then(newPlan => {
-      console.log(newPlan, " was created in the database model.")
+    //   console.log(newPlan, " was created in the database model.")
       return newPlan;
   })
   .catch(err => {
       console.log("this error occurred in createPlanInDB ", err);
   })
 }
-var updatePlanInDB = (update) => {
+var updatePlan = (name, id) => {
+    db.knex('plans').where('planId', id).update({name: name})
+    .then(model => {
+        return model
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
+var deletePlan = (planId) => {
+    new Plan().query({where: {planId: planId}}).destroy()
+    .then(model => {
+        console.log('model deleted', model)
+    })
+    .catch(err => {
+        console.log('err', err)
+    })
 }
 
 var getItemsFromDB = (userId) => {
@@ -148,7 +165,7 @@ var createItemInDB = (userId, accessToken, institutionName, institutionId, linkS
         if(!found){
             return db.knex('items').insert({userId: userId, itemToken: accessToken, institutionName: institutionName, institutionId: institutionId, linkSessionId: linkSessionId})
             .then(newItem => {
-                console.log(newItem, " was created in the database model.")
+                // console.log(newItem, " was created in the database model.")
                 return newItem;
             })
             .catch(err => {
@@ -179,7 +196,7 @@ var createGoalInDB = (userId, familySize, numberOfKids, travel, hobbySpending, l
         luxurySpending: luxurySpending
       })
       .then(newGoal => {
-        console.log(newGoal, "was created in the database model.")
+        // console.log(newGoal, "was created in the database model.")
         return newGoal
       })
       .catch((err) => console.log("this error occured in createGoalInDB", err))
@@ -194,7 +211,7 @@ var updateGoalInDB = (update) => {
 module.exports = {
   User, Users, getUserFromDB, getUserByOAuthFromDB, createUserInDB, 
   createUserInDBByOAuth, updateUserInDB, userLoginDB, 
-  getPlansFromDB, createPlanInDB, updatePlanInDB, 
+  getPlansFromDB, createPlanInDB, updatePlan, deletePlan,
   getItemsFromDB, createItemInDB, updateItemInDB,
   getGoalsFromDB, createGoalInDB, updateGoalInDB
 }

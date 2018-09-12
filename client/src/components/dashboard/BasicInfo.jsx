@@ -1,5 +1,5 @@
 import React from 'react';
-import LineChart from './LineChart.jsx'
+import LineChart from '../charts/LineChart.jsx'
 import axios from 'axios'
 
 class BasicInfo extends React.Component {
@@ -12,6 +12,7 @@ class BasicInfo extends React.Component {
       currentSavings: 0,
       monthlySavings: 0,
       monthlySpending: 0,
+      annualIncome: 0,
       currentSlide: 0,
       chartToggle: false,
       chartPoints: []
@@ -32,6 +33,7 @@ class BasicInfo extends React.Component {
       currentSavings: 0,
       monthlySavings: 0,
       monthlySpending: 0,
+      annualIncome: 0,
       currentSlide: 0,
       chartToggle: false,
       chartPoints: []
@@ -61,15 +63,12 @@ class BasicInfo extends React.Component {
       retireAge: this.state.retireAge,
       retireGoal: this.state.retireGoal,
       currentAge: this.state.currentAge,
+      annualIncome: this.state.annualIncome,
       currentSavings: this.state.currentSavings,
       monthlySavings: this.state.monthlySavings,
       monthlySpending: this.state.monthlySpending,
     }
-    axios.post('/retire/plans', userInfoToSubmit
-    ).then(res => {
-      // this.setState({ chartToggle: true})
-    }).catch(err => {console.log(err)})
-    console.log('Trying to submit');
+    this.props.submitBasic(userInfoToSubmit)
   }
 
   test() {
@@ -98,7 +97,6 @@ class BasicInfo extends React.Component {
   }
 
   render () {
-
 
     const options = {
       title: {
@@ -174,6 +172,12 @@ class BasicInfo extends React.Component {
       ),
       (
         <div className="tab tab5 form-group">
+        What's your annual income?
+        <p><input type="number" className="form-control" value={this.state.annualIncome} min="0" onChange={(event)=>{this.setState({annualIncome: event.target.value})}} /></p>
+      </div>
+      ),
+      (
+        <div className="tab tab6 form-group">
           Last question, how costly is your current lifestyle? How much do you spend per month?
           <p><input type="number" className="form-control" value={this.state.monthlySpending} min="0" onChange={(event)=>{this.setState({monthlySpending: event.target.value})}} /></p>
         </div>

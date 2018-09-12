@@ -71,6 +71,7 @@ module.exports = {
   },
 
   updateUser: (req, res) => {
+    console.log('req', req)
     res.sendStatus(500);
   },
 
@@ -79,7 +80,6 @@ module.exports = {
   },
 
   getPlans: (req, res) => {
-    console.log(req.query.userId);
     model.getPlansFromDB(req.query.userId)
     .then(plan => {
       res.status(200).send(plan);
@@ -90,8 +90,13 @@ module.exports = {
     })
   },
 
+  deletePlan: (req, res) => {
+    model.deletePlan(req.query.planId)
+    res.sendStatus(202)
+  },
+
   createPlan: (req, res) => {
-    model.createPlanInDB(req.body.userId, req.body.retireAge, req.body.retireGoal, req.body.currentAge, req.body.currentSavings, req.body.monthlySavings, req.body.monthlySpending)
+    model.createPlanInDB(req.body.userId, req.body.retireAge, req.body.retireGoal, req.body.currentAge, req.body.annualIncome, req.body.currentSavings, req.body.monthlySavings, req.body.monthlySpending)
     .then(plan => {
       res.sendStatus(200);
     })
@@ -102,14 +107,15 @@ module.exports = {
   },
 
   updatePlan: (req, res) => {
-    res.sendStatus(500);
+    model.updatePlan(req.body.name, req.body.planId)
+    res.sendStatus(204);
   },
 
   getItems: (req, res) => {
-    console.log("this is req.query in getItem ", req.query)
+    // console.log("this is req.query in getItem ", req.query)
     model.getItemsFromDB(req.query.userId)
     .then(item => {
-      console.log("this is returned from getItem ", item)
+      // console.log("this is returned from getItem ", item)
       res.status(200).send(item);
     })
     .catch(err => {
@@ -119,10 +125,10 @@ module.exports = {
   },
 
   createItem: (req, res) => {
-    console.log("this is req.body in createItem ", req.body)
+    // console.log("this is req.body in createItem ", req.body)
     model.createItemInDB(req.body.userId, req.body.item, req.body.itemToken, req.body.institutionName, req.body.institutionId, req.body.linkSessionId)
     .then(item => {
-      console.log(item, "this item was created in the database controller.")
+      // console.log(item, "this item was created in the database controller.")
       res.sendStatus(200);
     })
     .catch(err => {
@@ -138,7 +144,7 @@ module.exports = {
   getGoals: (req, res) => {
     model.getGoalsFromDB(req.query.userId)
     .then(goal => {
-      console.log("this is returned from getGoals ", goal)
+      // console.log("this is returned from getGoals ", goal)
       res.send(goal);
     })
     .catch(err => {
@@ -150,7 +156,7 @@ module.exports = {
   createGoal: (req, res) => {
     model.createGoalInDB(req.body.userId, req.body.familySize, req.body.numberOfKids, req.body.travel, req.body.hobbySpending, req.body.luxurySpending)
     .then(goal => {
-      console.log(goal, "this goal was created in the database controller");
+      // console.log(goal, "this goal was created in the database controller");
       res.sendStatus(200);
     })
     .catch(err => {

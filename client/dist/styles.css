@@ -114,3 +114,31 @@
 .fa-google-plus:before {
   content: "\f0d5";
 }
+
+.hidden {
+  display: none;
+}
+
+input:focus { 
+  outline: none; 
+}
+
+button:focus { 
+  outline: none; 
+}
+
+#loginbtn {
+  border-width: 2px;
+  border-radius: 7px;
+  color: white;
+  background-color: #2196f3;
+  padding: 10px;
+}
+
+#bttn {
+  border-width: 1px;
+  border-radius: 7px;
+  color: white;
+  background-color: #2196f3;
+  padding: 0 5 0 5;
+}
