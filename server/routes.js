@@ -14,10 +14,13 @@ router.get('/items', usersController.getItems)
 router.post('/items', usersController.createItem);
 router.put('/items', usersController.updateItem); //optional?
 
+
 router.get('/goals', usersController.getGoals);
 router.post('/goals', usersController.createGoal);
 router.put('/goals', usersController.updateGoal);
 
 router.post('/get_access_token', plaidController.getAccessToken);
+router.get('/accounts', plaidController.getAccounts);
+router.put('/history', plaidController.updateHistory);
 
 module.exports = router;
