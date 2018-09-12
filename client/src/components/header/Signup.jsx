@@ -40,7 +40,7 @@ class Signup extends React.Component {
       <div className="wrapper">
         {/* Creates button for Login */}
         <div className="container">
-          <a className="btn btn-success" data-toggle="modal" data-target="#signUp" >Sign Up</a>
+          <a className="btn btn-primary" id="bttn" data-toggle="modal" data-target="#signUp" >Sign Up</a>
         </div>
 
         {/* MODAL: Creates popup for Login */}

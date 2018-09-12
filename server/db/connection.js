@@ -44,9 +44,11 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
       bookshelf.knex.schema.createTable('plans', function (plan) {
         plan.integer('userId')
         plan.increments('planId').primary();
+        plan.string('name', 255)
         plan.integer('retirementAge').notNullable();
         plan.integer('retireGoal').notNullable();
         plan.integer('currentAge').notNullable();
+        plan.integer('annualIncome').notNullable();
         plan.integer('currentSavings').notNullable();
         plan.integer('monthlySavings').notNullable();
         plan.integer('monthlySpending').notNullable();

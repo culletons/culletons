@@ -12,28 +12,36 @@ class Accounts extends React.Component {
 
 
   render () {
-    if (this.props.items) {
+    if (this.props.accounts.accountList) {
       return (
         <div className="card module">
           <div className="card-body">
             <h3 className="card-title">Budget with Linked Accounts:</h3>
-            <button id="link-btn" className="btn btn-success" onClick={this.launchPlaidLink}>Link a New Account</button>
+            <button id="link-btn" className="btn btn-success" onClick={this.props.launchPlaidLink}>Link a New Account</button>
             <table className="table">
             <thead>
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Institution</th>
                 <th scope="col">Accounts</th>
+                <th scope="col">Total</th>
               </tr>
             </thead>
             <tbody>
-              {this.props.items && this.props.items.map((item, i) => (
-              <tr key={item.itemId}>
-                <th scope="row">{i + 1}</th>
-                <td>{item.institutionName}</td>
-                <td>NEED ACCT DATA</td>
-              </tr>
+              {Object.entries(this.props.accounts.accountList).map((account, i) => (
+                <tr key={account[1].account_id}>
+                  <th scope="row">{i + 1}</th>
+                  <td>{account[1].institutionName}</td>
+                  <td>{account[1].name}</td>
+                  <td>{account[1].balances.current}</td>
+                </tr>
               ))}
+              <tr>
+                <th scope="row"></th>
+                <td></td>
+                <td><b>Total</b></td>
+                <td><b>{this.props.accounts.userTotal.currentTotal}</b></td>
+              </tr>
             </tbody>
           </table>
           </div>
@@ -44,7 +52,7 @@ class Accounts extends React.Component {
         <div className="card module">
           <div className="card-body">
             <h3 className="card-title">Budget with Linked Accounts:</h3>
-            <button id="link-btn" className="btn btn-success" onClick={this.launchPlaidLink}>Link a New Account</button>
+            <button id="link-btn" className="btn btn-success" onClick={this.props.launchPlaidLink}>Link a New Account</button>
           </div>
         </div>
       )
