@@ -81,10 +81,10 @@ class Overview extends React.Component {
           <div className="card-title plan-title border-bottom">
             {this.props.activePlan.name}</div>
             <div>
-              <div>Annual income: ${this.props.activePlan.annualIncome}</div>
-              <div>Monthly spending: ${this.props.activePlan.monthlySpending}</div>
-              <div>Monthly saving: ${this.props.activePlan.monthlySavings}</div>
-              <div>Monthly expense: ${this.props.activePlan.annualIncome}</div>
+              <div>Annual income: ${this.props.activePlan.annualIncome.toLocaleString()}</div>
+              <div>Monthly spending: ${this.props.activePlan.monthlySpending.toLocaleString()}</div>
+              <div>Monthly saving: ${this.props.activePlan.monthlySavings.toLocaleString()}</div>
+              <div>Monthly expense: ${this.props.activePlan.annualIncome.toLocaleString()}</div>
               <div>Retire by: {this.props.activePlan.retirementAge}</div>
             </div>
           </div>

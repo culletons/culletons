@@ -83,8 +83,8 @@ class SideRail extends React.Component {
                 </div>
                 <div className="panel-body collapse" id={`collapseExample${idx}`} >
                   <div>Created: {plan['created_at'].slice(0, 10)}</div>
-                  <div>Current savings: ${plan.currentSavings}</div>
-                  <div>Monthly savings: ${plan.monthlySavings}</div>
+                  <div>Current savings: ${plan.currentSavings.toLocaleString()}</div>
+                  <div>Monthly savings: ${plan.monthlySavings.toLocaleString()}</div>
                   <div>Retirement age: {plan.retirementAge}</div>
                   <br></br>
                 </div>
