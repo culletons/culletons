@@ -33,14 +33,14 @@ class Accounts extends React.Component {
                   <th scope="row">{i + 1}</th>
                   <td>{account[1].institutionName}</td>
                   <td>{account[1].name}</td>
-                  <td>{account[1].balances.current}</td>
+                  <td>${account[1].balances.current.toLocaleString()}</td>
                 </tr>
               ))}
               <tr>
                 <th scope="row"></th>
                 <td></td>
                 <td><b>Total</b></td>
-                <td><b>{this.props.accounts.userTotal.currentTotal}</b></td>
+                <td><b>${this.props.accounts.userTotal.currentTotal.toLocaleString()}</b></td>
               </tr>
             </tbody>
           </table>
