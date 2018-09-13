@@ -5,6 +5,7 @@ import SideRail from './SideRail.jsx';
 import Overview from './Overview.jsx'
 import GoalInfo from './goalInfo.jsx';
 import BasicInfo from './BasicInfo.jsx'
+import LineChart from '../charts/LineChart.jsx';
 
 
 
@@ -239,7 +240,9 @@ class Dashboard extends React.Component {
 
 
             <div className="col-md-6">
-              {(this.state.overviewToggle && this.state.activePlan) && <Overview activePlan={this.state.activePlan} plans={this.state.plans} />}</div>
+              {(this.state.overviewToggle && this.state.activePlan) && <LineChart activePlan={this.state.activePlan} goals={this.state.goals}/>}
+              {(this.state.overviewToggle && this.state.activePlan) && <Overview activePlan={this.state.activePlan} plans={this.state.plans} />}
+            </div>
             {/* {this.state.accountToggle && <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>} */}
             <div className="col-md-4">{this.state.accountToggle && <Accounts user={this.props.user} 
             currentUserId={this.props.currentUserId}

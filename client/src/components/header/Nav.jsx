@@ -18,7 +18,7 @@ class Nav extends React.Component {
         <nav className="navbar navbar-toggleable-md navbar-inverse bg-inverse navbar-toggle collapsed ">
           <div className="container-fluid">
             <div className="navbar-header">
-              <a className="navbar-brand" href="#"><h3>Culletons</h3></a>
+              <a className="navbar-brand" href=""><h3>Culletons</h3></a>
             </div>
             <div className="nav-item">
               <a className="nav-link active" onClick={this.props.onGetStarted} href="#">Get started!</a>
