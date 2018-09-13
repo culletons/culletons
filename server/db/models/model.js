@@ -1,5 +1,5 @@
 const db = require('../connection')
-
+const moment = require('moment');
 
 var User = db.bookshelf.Model.extend({
     tableName: 'users',
@@ -42,6 +42,14 @@ var Goal = db.bookshelf.Model.extend({
     user: function() {
       return this.belongsTo(User);
     }
+})
+
+var SavingsHistory = db.bookshelf.Model.extend({
+  tableName: 'savingsHistory',
+  hasTimeStamps: true,
+  user: function() {
+    return this.belongsTo(User);
+  }
 })
   
 var Users = db.bookshelf.Collection.extend({  
@@ -160,6 +168,16 @@ var getItemsFromDB = (userId) => {
     })
 }
 
+var getItemByID = (id) => {
+  return new Item({itemId: id}).query({where: {itemId: id}}).fetch() 
+  .then(item => {
+      return item;
+  })
+  .catch(err => {
+      console.log("this error occurred in getItemsFromDB ", err);
+  })
+}
+
 var createItemInDB = (userId, accessToken, institutionName, institutionId, linkSessionId) => {
     return new Item({ userId: userId, institutionId: institutionId }).fetch().then(function(found, err) {
         if(!found){
@@ -205,7 +223,48 @@ var createGoalInDB = (userId, familySize, numberOfKids, travel, hobbySpending, l
 }
 
 var updateGoalInDB = (update) => {
+  
+}
 
+
+var addSavingHistory = (userId, savingsAmt, availableAmt) => {
+  let today = moment().format('l');
+  return new SavingsHistory({ userId: userId, date: today }).fetch().then((found, err) => {
+    if(!found) {
+      return new SavingsHistory({ userId: userId, balanceAmt: savingsAmt, availableAmt: availableAmt, date: today})
+        .save()
+        .then(function(newSave) {
+          console.log(newSave, " was created in the database model.")
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .then(() => {
+          return new SavingsHistory({userId: userId}).query({where: {userId: userId}}).fetchAll()
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    } else {
+      return new SavingsHistory()
+        .where({ userId: userId, date: today})
+        .save({ userId: userId, balanceAmt: savingsAmt, availableAmt: availableAmt, date: today}, {patch: true})
+        .then(function(newSave) {
+          console.log(newSave, " was created in the database model.")
+        })
+        .catch(err => {
+          console.log("this error occurred in createItemInDB ", err);
+        })
+        .then(() => {
+          return new SavingsHistory({userId: userId}).query({where: {userId: userId}}).fetchAll()
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
+  })
+
+  
 }
 
 module.exports = {
@@ -213,5 +272,6 @@ module.exports = {
   createUserInDBByOAuth, updateUserInDB, userLoginDB, 
   getPlansFromDB, createPlanInDB, updatePlan, deletePlan,
   getItemsFromDB, createItemInDB, updateItemInDB,
-  getGoalsFromDB, createGoalInDB, updateGoalInDB
+  getGoalsFromDB, createGoalInDB, updateGoalInDB,
+  getItemByID, addSavingHistory
 }

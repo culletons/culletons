@@ -34,7 +34,7 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
         console.log('Created Table', table);
       })
       .then(()=>{
-        db.knex.destroy();
+        knex.destroy();
     })
     }
   });
@@ -58,7 +58,7 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
         console.log('Created Table', table);
       })
       .then(()=>{
-        db.knex.destroy();
+        knex.destroy();
     })
     }
   });
@@ -79,7 +79,7 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
         console.log('Created Table', table);
       })
       .then(()=>{
-        db.knex.destroy();
+        knex.destroy();
     })
     }
   });
@@ -100,10 +100,29 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
         console.log("Created Table goals", table)
       })
       .then(() => {
-        db.knex.destroy();
+        knex.destroy();
       })
     }
-  })
+  });
+
+  bookshelf.knex.schema.hasTable('savingsHistory').then(function(exists) {
+    if(!exists) {
+      bookshelf.knex.schema.createTable('savingsHistory', function(savingsCheck) {
+        savingsCheck.increments('savingsCheckId').primary();
+        savingsCheck.integer('userId')
+        savingsCheck.integer('balanceAmt');
+        savingsCheck.string('date');
+        savingsCheck.integer('availableAmt');
+        savingsCheck.timestamps(true, true);
+      })
+      .then(function (table) {
+        console.log("Created Table savingsHistory", table)
+      })
+      .then(() => {
+        knex.destroy();
+      })
+    }
+  });
 
   module.exports = {bookshelf, knex}
 

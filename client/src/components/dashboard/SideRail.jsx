@@ -40,33 +40,6 @@ class SideRail extends React.Component {
 
   }
 
-
-  onClickAddPlan() {
-    // Plaid app needs to initialize it's "Link" feature through which accounts can be added. https://plaid.com/docs/#integrating-with-link
-    this.handler = Plaid.create({
-      apiVersion: 'v2',
-      clientName: 'Plaid Walkthrough Demo',
-      env: 'sandbox',
-      product: ['transactions'],
-      key: '2dec9b90cfcc7a2d76b295ac1b3504',
-      onSuccess: function(public_token, metadata) {   // Defining what should happen upon success of the Plaid 'Link' feature, at minimum, send public_token to our server.
-        console.log("HEY THIS IS THE RESPONSE FROM PLAID: " + public_token);
-        axios.post('/retire/get_access_token', {
-         
-            public_token: public_token,
-            metadata: metadata
-          
-        })
-        .then(() => {
-          // HERE WE MANIPULATE STATE TO SHOW THAT IT WAS SUCCESSFUL
-        })
-        .catch((err) => {
-          console.log('Plaid didnt work!' + err);
-        })
-      },
-    });
-  }
-
   launchPlaidLink() {
     this.handler.open();
   }
@@ -78,7 +51,7 @@ class SideRail extends React.Component {
           <img className="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKkYg7YWw9mG3zsEI5lCHeTz30oLSjMXXxm5irxjnGTj5deUKOPA" />
           <div className="card-body border-bottom">
             <h3 className="card-title">Welcome {this.props.userData && this.props.userData.fullname}</h3>
-            <button id="link-btn" className="btn btn-success" onClick={this.launchPlaidLink}>Link Account</button>
+            <button id="link-btn" className="btn btn-success" onClick={this.props.launchPlaidLink}>Link Account</button>
             <br /></div>
           <div className="card-body border-bottom">
             <a onClick={this.props.setOverview} >Home &nbsp;<i className="fa fa-home fa-fw" aria-hidden="true"></i></a>
@@ -103,7 +76,7 @@ class SideRail extends React.Component {
                   <div>Retirement age: {plan.retirementAge}</div>
                 </div>
 
-<div className="modal fade" id="editModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal fade" id="editModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div className="modal-dialog" role="document">
                     <div className="modal-content">
                       <div className="modal-header">
