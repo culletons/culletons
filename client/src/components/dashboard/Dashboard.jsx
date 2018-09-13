@@ -18,7 +18,7 @@ class Dashboard extends React.Component {
       goals: null,
       formBasicToggle: true,
       formGoalsToggle: true,
-      overviewToggle: false,
+      overviewToggle: true,
       items: [],
       accounts: {
         userTotal: {
@@ -240,8 +240,7 @@ class Dashboard extends React.Component {
 
 
             <div className="col-md-6">
-              {(this.state.overviewToggle && this.state.activePlan) && <LineChart activePlan={this.state.activePlan} goals={this.state.goals}/>}
-              {(this.state.overviewToggle && this.state.activePlan) && <Overview activePlan={this.state.activePlan} plans={this.state.plans} />}
+              {(this.state.overviewToggle && this.state.activePlan) && <Overview activePlan={this.state.activePlan} plans={this.state.plans} goals={this.state.goals}/>}
             </div>
             {/* {this.state.accountToggle && <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>} */}
             <div className="col-md-4">{this.state.accountToggle && <Accounts user={this.props.user} 
