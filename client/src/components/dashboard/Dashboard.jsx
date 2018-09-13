@@ -5,6 +5,7 @@ import SideRail from './SideRail.jsx';
 import Overview from './Overview.jsx'
 import GoalInfo from './goalInfo.jsx';
 import BasicInfo from './BasicInfo.jsx'
+import LineChart from '../charts/LineChart.jsx';
 
 
 
@@ -119,7 +120,16 @@ class Dashboard extends React.Component {
       <div className="row">
 
         <div className="col-md-2">
-          <SideRail editPlanName={this.editPlanName} deletePlan={this.deletePlan} setOverview={this.setOverview} user={this.props.user} setActivePlan={this.setActivePlan} currentUserId={this.props.userData && this.props.userData.userId} plans={this.state.plans} createPlan={this.createPlan} goals={this.state.goals} />
+          <SideRail 
+          editPlanName={this.editPlanName} 
+          deletePlan={this.deletePlan} 
+          setOverview={this.setOverview} 
+          user={this.props.user} 
+          setActivePlan={this.setActivePlan} 
+          currentUserId={this.props.userData && this.props.userData.userId} 
+          plans={this.state.plans} 
+          createPlan={this.createPlan} 
+          goals={this.state.goals} />
         </div>
         <div className="col-md-10">
           {this.state.formToggle && <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />}
@@ -127,7 +137,9 @@ class Dashboard extends React.Component {
 
           <div className="row">
             <div className="col-md-6">
-              {this.state.overviewToggle && <Overview activePlan={this.state.activePlan} plans={this.state.plans} />}</div>
+              {this.state.overviewToggle && <LineChart activePlan={this.state.activePlan} goals={this.state.goals}/>}
+              {this.state.overviewToggle && <Overview activePlan={this.state.activePlan} plans={this.state.plans} />}
+            </div>
             {/* {this.state.accountToggle && <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>} */}
             <div className="col-md-auto"><Accounts user={this.props.user} currentUserId={this.props.userData.userId} /></div>
           </div></div>

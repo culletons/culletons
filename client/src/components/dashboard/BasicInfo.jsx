@@ -96,38 +96,7 @@ class BasicInfo extends React.Component {
     // }
   }
 
-  render () {
-
-    const options = {
-      title: {
-        text: 'Your projection',
-      },
-      xAxis: {
-        tickInterval: 1,
-        labels: {
-          enabled: true
-        }
-      },
-      yAxis: {
-        title: {
-          text: '$ thousand',
-        },
-      },
-      chart: {
-        type: 'line',
-      },
-      series: [
-        {
-          name: 'Jane',
-          data: this.state.chartPoints,
-        }
-      ],
-    };
-
-
-
-
-
+  render () { 
     // Create the text which will be displayed to the user dynamically based on inputs while answering questions
     let retireDescriptions = ['Planning on pinching pennies', 'Going to take it easy', 'Would like to be comfortable', 'Want to live well', 'Plan on balling out'];
     let retireDesire = retireDescriptions[this.state.retireGoal - 1];
@@ -186,12 +155,12 @@ class BasicInfo extends React.Component {
 
     return (
       <div>
-        {this.state.chartToggle && 
+        {/* {this.state.chartToggle && 
         <div>
           <h3>Here's a look at your potential retirement path:</h3>
           
-        <LineChart options={options} />
-        </div>}
+        <LineChart user={this.props.user}/>
+        </div>} */}
 
 
 
