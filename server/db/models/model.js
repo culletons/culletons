@@ -120,8 +120,8 @@ var getPlansFromDB = (userIdToSearch) => {
   })
 }
 
-var createPlanInDB = (userId, retireAge, retireGoal, currentAge, annualIncome, currentSavings, monthlySavings, monthlySpending) => {
-  return db.knex('plans').insert({userId: userId, retirementAge: retireAge, retireGoal: retireGoal, currentAge: currentAge, annualIncome: annualIncome, currentSavings: currentSavings, monthlySavings: monthlySavings, monthlySpending: monthlySpending})
+var createPlanInDB = (name, userId, retireAge, retireGoal, currentAge, annualIncome, currentSavings, monthlySavings, monthlySpending) => {
+  return db.knex('plans').insert({name: name, userId: userId, retirementAge: retireAge, retireGoal: retireGoal, currentAge: currentAge, annualIncome: annualIncome, currentSavings: currentSavings, monthlySavings: monthlySavings, monthlySpending: monthlySpending})
   .then(newPlan => {
     //   console.log(newPlan, " was created in the database model.")
       return newPlan;

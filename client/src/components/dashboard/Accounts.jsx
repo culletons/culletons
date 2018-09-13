@@ -62,7 +62,7 @@ class Accounts extends React.Component {
         <div className="card module">
           <div className="card-body">
             <h3 className="card-title">Budget with Linked Accounts:</h3>
-            <button id="link-btn" className="btn btn-success" onClick={this.launchPlaidLink}>Link a New Account</button>
+            <button id="link-btn" className="btn theme-btn" onClick={this.launchPlaidLink}>Link a New Account</button>
             <table className="table">
             <thead>
               <tr>

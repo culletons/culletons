@@ -37,10 +37,10 @@ class Signup extends React.Component {
   render() {
     return (
       // button for Login and Register
-      <div className="wrapper">
+      <div className="wrapper pt-2">
         {/* Creates button for Login */}
+          <a className="btn clr py-2" id="auth-btn" data-toggle="modal" data-target="#signUp" >Sign Up</a>
         <div className="container">
-          <a className="btn btn-primary" id="bttn" data-toggle="modal" data-target="#signUp" >Sign Up</a>
         </div>
 
         {/* MODAL: Creates popup for Login */}
