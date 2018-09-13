@@ -16,14 +16,29 @@ class Dashboard extends React.Component {
       plans: [],
       activePlan: null,
       goals: null,
+      formBasicToggle: true,
+      formGoalsToggle: true,
+      overviewToggle: false,
+      items: [],
+      accounts: {
+        userTotal: {
+          currentTotal: 0,
+          currentAvailable: 0,
+          history: {}
+        },
+        accountList: []
+      },
       formToggle: false,
-      overviewToggle: true,
       accountToggle: true,
       items: null
 
     }
     this.createPlan = this.createPlan.bind(this)
     this.updatePlans = this.updatePlans.bind(this);
+    this.launchPlaidLink = this.launchPlaidLink.bind(this);
+    this.updateItems = this.updateItems.bind(this);
+    this.updateAccounts = this.updateAccounts.bind(this);
+    this.getUserTotalHistory = this.getUserTotalHistory.bind(this);
     this.setActivePlan = this.setActivePlan.bind(this)
     this.setOverview = this.setOverview.bind(this)
     this.deletePlan = this.deletePlan.bind(this)
@@ -73,11 +88,31 @@ class Dashboard extends React.Component {
     console.log('Trying to submit');
   }
 
+  updateItems() {
+    axios.get('/retire/items',{ params: {userId: this.props.userData.userId } })
+         .then(({data}) => {
+           this.setState({
+           items: data
+           })
+           data.forEach((item) => {
+             this.updateAccounts(item);
+           });
+         })
+         .catch((err) => {
+           console.log(err);
+         })
+  }
+
+  launchPlaidLink() {
+    this.handler.open();
+  }
+
   updatePlans() {
     axios.get('/retire/plans', { params: {userId: this.props.userData.userId } })
       .then(({data}) => {
         this.setState({
-          plans: data
+          plans: data,
+          activePlan: data[0]
         })
         if(this.state.plans && this.state.plans.length > 0) {
           this.setState({ formBasicToggle: false})
@@ -89,7 +124,7 @@ class Dashboard extends React.Component {
   }
 
   updateGoals() {
-    axios.get('retire/goals', {params:{ userId:this.props.userData.userId }})
+    axios.get('retire/goals', { params:{ userId:this.props.userData.userId }})
     .then(({data}) => {
       this.setState({goals: data})
       if (this.state.goals) {
@@ -106,11 +141,73 @@ class Dashboard extends React.Component {
     })
   }
 
+  updateAccounts(item) {
+    axios.get('retire/accounts', { params: { itemId: item.itemId }})
+      .then(({data}) => {
+        let currentAccounts = Object.assign({}, this.state.accounts);
+        data.accounts.forEach((account) => {
+          currentAccounts.accountList.push(Object.assign(account, data.item, {institutionName: item.institutionName}));
+          currentAccounts.userTotal.currentTotal += account.balances.current;
+          currentAccounts.userTotal.currentAvailable += account.balances.available;
+        });
+        this.setState({
+          accounts: currentAccounts
+        });
+        this.getUserTotalHistory()
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  getUserTotalHistory(currentBalance, currentAvailable) {
+    axios.put('retire/history', {
+      userId: this.props.userData.userId,
+      currentBalance: currentBalance,
+      currentAvailable: currentAvailable
+    })
+      .then(({data}) => {
+        let newAccounts = Object.assign({}, this.state.accounts);
+        newAccounts.userTotal.history = data;
+        this.setState({
+          accounts: newAccounts
+        })
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   componentDidMount() {
+    // Plaid app needs to initialize it's "Link" feature through which accounts can be added. https://plaid.com/docs/#integrating-with-link
+    this.handler = Plaid.create({
+      apiVersion: 'v2',
+      clientName: 'Plaid Walkthrough Demo',
+      env: 'sandbox',
+      product: ['transactions'],
+      key: '2dec9b90cfcc7a2d76b295ac1b3504',
+      onSuccess: (public_token, metadata) => {   // Defining what should happen upon success of the Plaid 'Link' feature, at minimum, send public_token to our server.
+        axios.post('/retire/get_access_token', {
+          public_token: public_token,
+          metadata: metadata,
+          userId: this.props.currentUserId
+        })
+        .then(() => {
+          console.log('Post Successful');
+          this.updateItems();
+        })
+        .catch((err) => {
+          console.log('Plaid didnt work!' + err);
+        })
+      },
+    });
+
     if (this.props.userData.userId) {
       this.updatePlans();
       this.updateGoals();
+      this.updateItems();
     }
+
   }
 
 
@@ -120,31 +217,41 @@ class Dashboard extends React.Component {
       <div className="row">
 
         <div className="col-md-2">
-          <SideRail 
-          editPlanName={this.editPlanName} 
-          deletePlan={this.deletePlan} 
-          setOverview={this.setOverview} 
-          user={this.props.user} 
-          setActivePlan={this.setActivePlan} 
-          currentUserId={this.props.userData && this.props.userData.userId} 
-          plans={this.state.plans} 
-          createPlan={this.createPlan} 
-          goals={this.state.goals} />
+          <SideRail
+            activePlan={this.state.activePlan}
+            user={this.props.user} 
+            currentUserId={this.props.userData && this.props.userData.userId} 
+            plans={this.state.plans} 
+            createPlan={this.createPlan} 
+            editPlanName={this.editPlanName} 
+            deletePlan={this.deletePlan} 
+            setActivePlan={this.setActivePlan}
+            setOverview={this.setOverview} 
+            goals={this.state.goals} 
+            launchPlaidLink={this.launchPlaidLink}
+          />
         </div>
-        <div className="col-md-10">
-          {this.state.formToggle && <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />}
-          {this.state.formToggle && <GoalInfo user={this.props.userData} />}
 
-          <div className="row">
+          {this.state.formToggle && 
+          <div className="col-md-10">
+          <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
+          <GoalInfo user={this.props.userData} />
+          </div>}
+
+
             <div className="col-md-6">
-              {this.state.overviewToggle && <LineChart activePlan={this.state.activePlan} goals={this.state.goals}/>}
-              {this.state.overviewToggle && <Overview activePlan={this.state.activePlan} plans={this.state.plans} />}
+              {(this.state.overviewToggle && this.state.activePlan) && <LineChart activePlan={this.state.activePlan} goals={this.state.goals}/>}
+              {(this.state.overviewToggle && this.state.activePlan) && <Overview activePlan={this.state.activePlan} plans={this.state.plans} />}
             </div>
             {/* {this.state.accountToggle && <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>} */}
-            <div className="col-md-auto"><Accounts user={this.props.user} currentUserId={this.props.userData.userId} /></div>
-          </div></div>
-
-      </div>
+            <div className="col-md-4">{this.state.accountToggle && <Accounts user={this.props.user} 
+            currentUserId={this.props.currentUserId}
+            launchPlaidLink={this.launchPlaidLink}
+            accounts={this.state.accounts}
+  />}
+                    
+          </div>
+</div>
     );
   }
 

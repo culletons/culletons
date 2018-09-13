@@ -23,7 +23,7 @@ module.exports = {
       ACCESS_TOKEN = tokenResponse.access_token;
       ITEM_ID = tokenResponse.item_id;
       console.log('Access Token: ' + ACCESS_TOKEN);
-      console.log('Item ID: ' + ITEM_ID);
+      console.log('Item ID: ' + ITEM_ID); 
       console.log('Metadata: ' + metadata);
       model.createItemInDB(request.body.userId, ACCESS_TOKEN, metadata.institution.name, metadata.institution.institution_id, metadata.linkSessionId)
       .then(item => {
@@ -36,5 +36,37 @@ module.exports = {
       });
     });
   },
+
+  getAccounts: (req, res) => {
+    console.log("this is req.query in getItem ", req.query)
+    model.getItemByID(req.query.itemId)
+    .then(item => {
+      console.log("this is returned from getItem ", item)
+      client.getAuth(item.attributes.itemToken, (error, numbersData) => {
+        if(error != null) {
+          var msg = 'Unable to pull accounts from Plaid API.';
+          console.log(msg + '\n' + error);
+          return res.json({error: msg});
+        }
+        console.log(numbersData);
+        res.send(numbersData); 
+      });
+    })
+    .catch(err => {
+      console.log("this error occurred while pulling an Item ", err)
+      res.sendStatus(500);
+    });
+  },
+
+  updateHistory: (req, res) => {
+    model.addSavingHistory(req.body.userId, req.body.currentBalance, req.body.currentSavings)
+      .then((history) => {
+        res.send(history);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.sendStatus(500);
+      });
+  }
 
 }

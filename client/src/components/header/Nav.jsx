@@ -24,7 +24,7 @@ class Nav extends React.Component {
               <a className="nav-link active" onClick={this.props.onGetStarted} href="#">Get started!</a>
              </div>
             <div className="nav-item">
-              <a className="nav-link" href="#">About us</a>
+              <a className="nav-link" href="#">About Us</a>
             </div>
             <div className="nav-item">
               <a className="nav-link" href="#">Resources</a>

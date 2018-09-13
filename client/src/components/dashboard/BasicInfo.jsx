@@ -59,6 +59,7 @@ class BasicInfo extends React.Component {
     this.test()
     this.setState({ chartToggle: true})
     let userInfoToSubmit = {
+      name: 'New Plan',
       userId: this.props.user.userId,
       retireAge: this.state.retireAge,
       retireGoal: this.state.retireGoal,
