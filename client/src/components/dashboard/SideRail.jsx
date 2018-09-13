@@ -18,7 +18,8 @@ class SideRail extends React.Component {
     this.props.deletePlan(id)
   }
 
-  saveName(name, id) {
+  saveName(name, id, e) {
+    console.log('e', e.currentTarget.name)
     this.props.editPlanName(name, id)
   }
 
@@ -50,33 +51,50 @@ class SideRail extends React.Component {
         <div className="card-block">
           <img className="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKkYg7YWw9mG3zsEI5lCHeTz30oLSjMXXxm5irxjnGTj5deUKOPA" />
           <div className="card-body border-bottom">
-            <h3 className="card-title">Welcome {this.props.userData && this.props.userData.fullname}</h3>
-            <button id="link-btn" className="btn btn-success" onClick={this.props.launchPlaidLink}>Link Account</button>
+            <h5 className="card-title">Welcome {this.props.userData && this.props.userData.fullname}</h5>
+            <button id="link-btn" className="btn theme-btn" onClick={this.props.launchPlaidLink}>Link Account</button>
             <br /></div>
           <div className="card-body border-bottom">
-            <a onClick={this.props.setOverview} >Home &nbsp;<i className="fa fa-home fa-fw" aria-hidden="true"></i></a>
+            <i className="fa fa-home fa-fw" aria-hidden="true"></i><a onClick={this.props.setOverview} >&nbsp;Home</a>
           </div>
           <div className="card-body border-bottom">
-            {this.props.plans && this.props.plans.map((plan, idx) => (
+            <i className="fa fa-list-alt " aria-hidden="true"></i><a >&nbsp; Plans </a>
+          </div>
+          {this.props.plans && this.props.plans.map((plan, idx) => (
+            <div className="card-body border-bottom py-1">
               <div key={idx} className="panel-default">
                 <div className="panel-heading">
-                  <h6 className="panel-title" data-toggle="collapse" onClick={() => this.props.setActivePlan(plan)} data-target={`#collapseExample${idx}`} aria-expanded="false" aria-controls="collapseExample">{plan.name || 'Plan name'}
-                  {/* <h6 className="panel-title" data-toggle="collapse" onClick={() => this.props.setActivePlan(plan)} data-target={`#collapseExample${idx}`} aria-expanded="false" aria-controls="collapseExample">Plan name */}
+                  <h6 className="panel-title" data-toggle="collapse" onClick={() => this.props.setActivePlan(plan)} data-target={`#collapseExample${idx}`} aria-expanded="false" aria-controls="collapseExample">
+                    <i className="fa fa-caret-down" aria-hidden="true"></i>
+                    &nbsp; {plan.name || 'Plan'}
+                    {/* <h6 className="panel-title" data-toggle="collapse" onClick={() => this.props.setActivePlan(plan)} data-target={`#collapseExample${idx}`} aria-expanded="false" aria-controls="collapseExample">Plan name */}
                   </h6>
-                  <a data-toggle="modal" data-target="#editModal" className="btn btn-default" aria-label="Settings">
-                    <i className="fa fa-pencil" aria-hidden="true"></i>
-                  </a>
-                    <a data-toggle="modal" data-target="#deleteModal" className="btn btn-default" aria-label="Delete">
-                      <i className="fa fa-trash-o" aria-hidden="true"></i>
+                  <span className="dropdown align-right">
+                    <a className="dropdown-toggle float-right" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i className="fa fa-ellipsis-v " aria-hidden="true"></i>
                     </a>
+
+                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <a className="dropdown-item" data-toggle="modal" data-target="#editModal" aria-label="Edit name" href="#">Edit name</a>
+                      <a className="dropdown-item" data-toggle="modal" data-target="#deleteModal" aria-label="Delete" href="#">Delete plan</a>
+                    </div>
+                  </span>
+
                 </div>
                 <div className="panel-body collapse" id={`collapseExample${idx}`} >
-                  <div>Current savings: {plan.currentSavings}</div>
-                  <div>Monthly savings: {plan.monthlySavings}</div>
+                  <div>Created: {plan['created_at'].slice(0, 10)}</div>
+                  <div>Current savings: ${plan.currentSavings}</div>
+                  <div>Monthly savings: ${plan.monthlySavings}</div>
                   <div>Retirement age: {plan.retirementAge}</div>
+                  <br></br>
                 </div>
-
-                <div className="modal fade" id="editModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+               
+              </div>
+            </div>
+          )
+          )}
+          {/* End map */}
+          <div className="modal fade" id="editModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div className="modal-dialog" role="document">
                     <div className="modal-content">
                       <div className="modal-header">
@@ -86,16 +104,15 @@ class SideRail extends React.Component {
                         </button>
                       </div>
                       <div className="modal-body">
-                      Rename your plan: <input value={this.state.editValue} onChange={this.onEdit}></input>
+                        Rename your plan: <input value={this.state.editValue} onChange={this.onEdit}></input>
                       </div>
                       <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-dismiss="modal">Discard</button>
-                        <button type="button" data-dismiss="modal" onClick={() => this.saveName(this.state.editValue, plan.planId)} className="btn btn-success">Save</button>
+                        <button type="button" data-dismiss="modal" onClick={() => this.saveName(this.state.editValue, this.props.activePlan.planId)} className="btn btn-success">Save</button>
                       </div>
                     </div>
                   </div>
                 </div>
-
                 <div className="modal fade" id="deleteModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div className="modal-dialog" role="document">
                     <div className="modal-content">
@@ -110,19 +127,14 @@ class SideRail extends React.Component {
                       </div>
                       <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" data-dismiss="modal" onClick={() => this.confirmDelete(plan.planId)} className="btn btn-danger">Delete</button>
+                        <button type="button" data-dismiss="modal" onClick={(e) => this.confirmDelete(this.props.activePlan.planId)} className="btn btn-danger">Delete</button>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+          <div className="card-body border-bottom">
+          <a onClick={this.props.createPlan}><i className="fa fa-plus-square" aria-hidden="true"></i>&nbsp; Add new plan </a>
           </div>
-
-          <div className="card-body">
-            <button className="btn btn-primary" type="submit" onClick={this.props.createPlan}>+</button> New plan
-        </div>
-
         </div>
       </div>
     );

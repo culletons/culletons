@@ -44,20 +44,20 @@ class App extends React.Component {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         firebase.auth().currentUser.getIdToken(true)
-                .then((idToken) => {
-                  axios.get('/retire/users', {params: {idToken: idToken }})
-                       .then(({data}) => {
-                         this.setState({
-                           isLoggedIn: true,
-                           userData: data
-                         })
-                       })
-                       .catch((err) => {
-                         console.log(err);
-                       });
-                }).catch((error) => {
-                  console.log(error);
-                });
+          .then((idToken) => {
+            axios.get('/retire/users', { params: { idToken: idToken } })
+              .then(({ data }) => {
+                this.setState({
+                  isLoggedIn: true,
+                  userData: data
+                })
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }).catch((error) => {
+            console.log(error);
+          });
       } else {
         console.log("No user is logged in");
       }
@@ -70,25 +70,25 @@ class App extends React.Component {
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(() => {
         firebase.auth().currentUser.getIdToken(true)
-                .then((idToken) => {
-                  axios.post('/retire/users', {idToken: idToken, fullname: fullname, email: email, username: username })
-                        .then(({data}) => {
-                          this.setState({
-                            isLoggedIn: true,
-                            userData: {
-                              userId: data,
-                              username: username,
-                              fullname: fullname,
-                              email: email
-                            }
-                          })
-                          this.possibleToMount = true;
-                        })
-                        .catch((err) => {console.error(err)})
+          .then((idToken) => {
+            axios.post('/retire/users', { idToken: idToken, fullname: fullname, email: email, username: username })
+              .then(({ data }) => {
+                this.setState({
+                  isLoggedIn: true,
+                  userData: {
+                    userId: data,
+                    username: username,
+                    fullname: fullname,
+                    email: email
+                  }
                 })
-                .catch((err) => {
-                  console.log(err);
-                })
+                this.possibleToMount = true;
+              })
+              .catch((err) => { console.error(err) })
+          })
+          .catch((err) => {
+            console.log(err);
+          })
       })
       .catch((error) => {
         console.log(error);
@@ -100,20 +100,20 @@ class App extends React.Component {
     firebase.auth().signInWithPopup(provider)
       .then((authData) => {
         firebase.auth().currentUser.getIdToken(true)
-                .then((idToken) => {
-                  axios.post('/retire/users', { 
-                    fullname: authData.additionalUserInfo.profile.name, 
-                    email: authData.additionalUserInfo.profile.email, 
-                    username: authData.additionalUserInfo.username, 
-                    idToken: idToken
-                  })
-                  .then((user) => {
-                  })
-                  .catch((err) => console.error(err))
-                })
+          .then((idToken) => {
+            axios.post('/retire/users', {
+              fullname: authData.additionalUserInfo.profile.name,
+              email: authData.additionalUserInfo.profile.email,
+              username: authData.additionalUserInfo.username,
+              idToken: idToken
+            })
+              .then((user) => {
+              })
+              .catch((err) => console.error(err))
+          })
       })
       .catch((err) => console.error(err));
-    }
+  }
 
   //for OAuth login
   oAuthLogin (provider) {
@@ -175,6 +175,23 @@ class App extends React.Component {
         {this.state.isLoggedIn && <Dashboard user={this.state.userData} currentUserId={this.state.currentUserId}/>}
         {!this.state.isLoggedIn && <Home onSignUp={this.signUp} authenticate={this.oAuthSignUp}/>} */}
       </div>
+        <footer className="section footer-dk">
+          <div>
+          <div className="container">
+            <div className="row">
+                <div className="col-sm-6 col-sm-offset-2 text-center p-4">
+                  <h2>Culletons</h2>
+                  <h4>
+                    WOO
+                   </h4>
+                </div>
+                <div className="col-sm-6 text-center p-4">
+                <h4>Contact us: never</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ footer>
       </div>
     )
   }

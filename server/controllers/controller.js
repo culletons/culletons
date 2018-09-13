@@ -96,7 +96,7 @@ module.exports = {
   },
 
   createPlan: (req, res) => {
-    model.createPlanInDB(req.body.userId, req.body.retireAge, req.body.retireGoal, req.body.currentAge, req.body.annualIncome, req.body.currentSavings, req.body.monthlySavings, req.body.monthlySpending)
+    model.createPlanInDB(req.body.name, req.body.userId, req.body.retireAge, req.body.retireGoal, req.body.currentAge, req.body.annualIncome, req.body.currentSavings, req.body.monthlySavings, req.body.monthlySpending)
     .then(plan => {
       res.sendStatus(200);
     })

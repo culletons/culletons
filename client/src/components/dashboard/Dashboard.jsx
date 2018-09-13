@@ -110,7 +110,8 @@ class Dashboard extends React.Component {
     axios.get('/retire/plans', { params: {userId: this.props.userData.userId } })
       .then(({data}) => {
         this.setState({
-          plans: data
+          plans: data,
+          activePlan: data[0]
         })
         if(this.state.plans && this.state.plans.length > 0) {
           this.setState({ formBasicToggle: false})
@@ -215,7 +216,8 @@ class Dashboard extends React.Component {
       <div className="row">
 
         <div className="col-md-2">
-          <SideRail 
+          <SideRail
+            activePlan={this.state.activePlan}
             user={this.props.user} 
             currentUserId={this.props.userData && this.props.userData.userId} 
             plans={this.state.plans} 
@@ -228,21 +230,25 @@ class Dashboard extends React.Component {
             launchPlaidLink={this.launchPlaidLink}
           />
         </div>
-        <div className="col-md-10">
-          {this.state.formToggle && <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />}
-          {this.state.formToggle && <GoalInfo user={this.props.userData} />}
 
-          <div className="row">
+          {this.state.formToggle && 
+          <div className="col-md-10">
+          <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
+          <GoalInfo user={this.props.userData} />
+          </div>}
+
+
             <div className="col-md-6">
-              {this.state.overviewToggle && <Overview activePlan={this.state.activePlan} plans={this.state.plans} />}</div>
-              {this.state.accountToggle && <Accounts user={this.props.user} 
-                                                      currentUserId={this.props.currentUserId}
-                                                      launchPlaidLink={this.launchPlaidLink}
-                                                      accounts={this.state.accounts}
-                                            />}
-            </div>
+              {(this.state.overviewToggle && this.state.activePlan) && <Overview activePlan={this.state.activePlan} plans={this.state.plans} />}</div>
+            {/* {this.state.accountToggle && <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>} */}
+            <div className="col-md-4">{this.state.accountToggle && <Accounts user={this.props.user} 
+            currentUserId={this.props.currentUserId}
+            launchPlaidLink={this.launchPlaidLink}
+            accounts={this.state.accounts}
+  />}
+                    
           </div>
-      </div>
+</div>
     );
   }
 
