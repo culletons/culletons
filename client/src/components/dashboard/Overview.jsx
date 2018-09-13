@@ -1,6 +1,8 @@
 import React from 'react';
 import PieChart from '../charts/PieChart.jsx'
+import LineChart from '../charts/LineChart.jsx'
 import axios from 'axios'
+
 var chart
 class Overview extends React.Component {
   constructor(props) {
@@ -87,10 +89,13 @@ class Overview extends React.Component {
             </div>
           </div>
           <div className="card-body border-bottom">
+            <div className="card-title border-bottom"><h4>Potential retirement path</h4></div>
+            <LineChart activePlan={this.props.activePlan} plans={this.props.plans} goals={this.props.goals}/>
+          </div>
+          <div className="card-body border-bottom">
             <div className="card-title border-bottom"><h4>Monthly breakdown</h4></div>
             <div id="pie"></div>
-            Nonono
-        </div>
+          </div>
           <div className="card-body">
             <div className="card-title border-bottom"><h4>Spending</h4></div>
             Spending on food, utils, rent etc.
