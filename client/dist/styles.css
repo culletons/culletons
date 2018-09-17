@@ -50,7 +50,7 @@
 
 /* Mark the steps that are finished and valid: */
 .step.finish {
-  background-color: #4CAF50;
+  background-color: #547a99;
 }
 
 #basic-info-form {
@@ -215,6 +215,7 @@ a {
 }
 
 #auth-btn:hover {
+  font-size: 14px;
   color: #547a99;
   background-color: white;
   border: 2px solid #547a99;
@@ -222,4 +223,18 @@ a {
 
 .clr:hover {
   color: transparent;
+}
+
+.theme-hover:hover {
+  color: #547a99;
+}
+
+.overview {
+  font-size: 14px
+}
+
+.approved {
+  color: green;
+  font-size: 12px;
+  border-bottom: 1px dotted grey
 }

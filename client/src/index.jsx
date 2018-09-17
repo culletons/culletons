@@ -180,7 +180,7 @@ class App extends React.Component {
           <div className="container">
             <div className="row">
                 <div className="col-sm-6 col-sm-offset-2 text-center p-4">
-                  <h2>Culletons</h2>
+                  <h2>Plan+Life</h2>
                   <h4>
                     WOO
                    </h4>

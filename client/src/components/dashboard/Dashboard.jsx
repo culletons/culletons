@@ -76,7 +76,9 @@ class Dashboard extends React.Component {
 
   setActivePlan(plan) {
     this.setState({
-      activePlan: plan
+      activePlan: plan,
+      overviewToggle: true,
+      formToggle: false
     })
   }
 
@@ -114,8 +116,8 @@ class Dashboard extends React.Component {
           plans: data,
           activePlan: data[0]
         })
-        if(this.state.plans && this.state.plans.length > 0) {
-          this.setState({ formBasicToggle: false})
+        if(!this.state.plans && this.state.plans.length === 0) {
+          this.setState({ formToggle: true})
         }
       })
       .catch((err) => {
@@ -233,17 +235,21 @@ class Dashboard extends React.Component {
         </div>
 
           {this.state.formToggle && 
-          <div className="col-md-10">
+          <span>
+          <div className="col-md-auto mb-4">
           <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
+          </div>
+          <div className="col-md-auto mb-4">
           <GoalInfo user={this.props.userData} />
-          </div>}
+          </div>
+          </span>}
 
 
             <div className="col-md-6">
-              {(this.state.overviewToggle && this.state.activePlan) && <Overview activePlan={this.state.activePlan} plans={this.state.plans} goals={this.state.goals}/>}
+              {(this.state.overviewToggle && this.state.activePlan) && <Overview accounts={this.state.accounts} activePlan={this.state.activePlan} plans={this.state.plans} goals={this.state.goals}/>}
             </div>
             {/* {this.state.accountToggle && <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>} */}
-            <div className="col-md-4">{this.state.accountToggle && <Accounts user={this.props.user} 
+            <div className="col-md-4">{(this.state.accountToggle && this.state.overviewToggle) && <Accounts user={this.props.user} 
             currentUserId={this.props.currentUserId}
             launchPlaidLink={this.launchPlaidLink}
             accounts={this.state.accounts}
