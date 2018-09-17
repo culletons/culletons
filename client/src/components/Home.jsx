@@ -2,15 +2,17 @@ import React from 'react';
 import Signup from './header/Signup.jsx'
 
 const Home = (props) => {
-  // this is just a static home page to display to new users and provide them with short intro to the app
+  // This is just a static home page to display to new users and provide them with short intro to the app
   return (
     <div>
       <div className="jumbotron jumbotron-fluid" id="home-jumbo">
         <div className="container" style={{ marginLeft: 50, marginRight: 25 }}>
           <h1 className="display-4">Plan+Life</h1>
           <p className="lead">If you fail to plan, you plan to fail. </p>
-          <p className="lead">Let's plan for <em>SUCCESS</em>.</p>
+
+          <p className="lead">Let's plan for <em>SUCCESS</em>.  - Kenni Silverio</p>
           <div className="pb-1"></div>
+          {/* renders signup popup */}
           <Signup emailAndPassSignUp={props.emailAndPassSignUp} googleSignUp={props.googleSignUp} />
         </div>
       </div>
@@ -92,6 +94,7 @@ const Home = (props) => {
             <div className="pb-2"></div>
             <i className="fa fa-5x fa-thumbs-o-up" aria-hidden="true"></i>
             <h5> Plan for success with Plan+Life! </h5>
+             {/* renders signup popup */}
             <Signup onSignUp={props.onSignUp} />
           </div>
           <div className="col-md-3"></div>
@@ -101,9 +104,5 @@ const Home = (props) => {
       </div>
     </div>
 )}
-
-
-
-
 
 export default Home;

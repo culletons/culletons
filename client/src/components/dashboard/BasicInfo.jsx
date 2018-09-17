@@ -21,8 +21,7 @@ class BasicInfo extends React.Component {
     this.nextSlide = this.nextSlide.bind(this);
     this.previousSlide = this.previousSlide.bind(this);
   }
-
-  //window.localStorage.setItem('key', 'value')
+  
   componentDidMount() {
     this.setState({
       retireAge: 85,
@@ -68,7 +67,6 @@ class BasicInfo extends React.Component {
     }
     this.props.submitBasic(userInfoToSubmit)
   }
-  
 
   render () { 
     // Create the text which will be displayed to the user dynamically based on inputs while answering questions
@@ -135,9 +133,6 @@ class BasicInfo extends React.Component {
 
     return (
       <div>
-
-
-
         {!this.state.chartToggle && 
           <div className="card module">
         <div className="card-body">
@@ -146,12 +141,18 @@ class BasicInfo extends React.Component {
           <br/>
           <form id="basic-info-form">
             {slideOptions[this.state.currentSlide]}
+            {/* this is the current question the user is on */}
 
             <div style={{"overflow":"auto"}}>
               <div id="form-buttons">
+              {/* This is the button render control for the form */}
                 {this.state.currentSlide !== 0 && <button type="button" id="prevBtn" className="btn btn-secondary" onClick={this.previousSlide}>Previous</button>}
+                {/* Show a "previous" button if the user has answered at least one question and gone on to the next slide */}
+
                 {this.state.currentSlide !== slideOptions.length - 1 && <button type="button" id="nextBtn" className="btn btn-light" onClick={this.nextSlide}>Next</button>}
+
                 {this.state.currentSlide === slideOptions.length - 1 && <button type="button" id="nextBtn" className="btn btn-success" onClick={this.submitInfo}>Submit</button>}
+                {/* If the user is on the final slide, allow them to submit */}
               </div>
             </div>
 
@@ -162,11 +163,9 @@ class BasicInfo extends React.Component {
             </div>
           </form>
           </div>
-          </div>
-          </div>}
-          </div>
-
-        
+        </div>
+        </div>}
+      </div>
     );
   }
 }

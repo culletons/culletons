@@ -1,11 +1,9 @@
 import React from 'React'
 
 var chart;
-
 class ColumnChart extends React.Component {
   constructor(props) {
     super(props)
-
     this.updateChart = this.updateChart.bind(this);
   }
   

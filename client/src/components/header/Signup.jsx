@@ -22,7 +22,6 @@ class Signup extends React.Component {
   emailAndPassAuth(e) {
     e.preventDefault();
     this.props.emailAndPassSignUp(this.state.username, this.state.password, this.state.fullname, this.state.email);
-    // this.props.onSignUp(this.state.username, this.state.password, this.state.fullname, this.state.email);
   }
 
   handleChange(evt) {
@@ -36,14 +35,14 @@ class Signup extends React.Component {
 
   render() {
     return (
-      // button for Login and Register
+      // button for Register
       <div className="wrapper pt-2">
-        {/* Creates button for Login */}
+        {/* Creates button for SignUp */}
           <a className="btn clr py-2" id="auth-btn" data-toggle="modal" data-target="#signUp" >Sign Up</a>
         <div className="container">
         </div>
 
-        {/* MODAL: Creates popup for Login */}
+        {/* MODAL: Creates popup for SignUp */}
         <div className="modal fade" id="signUp" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div className="modal-dialog" role="document">
             <div className="modal-content form-elegant">
@@ -88,7 +87,7 @@ class Signup extends React.Component {
                <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2"> or Register with:</p>
     
                <div className="row my-3 d-flex justify-content-center social">
-                   {/* Button to Login with google*/}
+                   {/* Button to SignUp with google*/}
                    <button type="button" className="btn btn-white btn-rounded z-depth-1a" data-dismiss="modal" aria-hidden="true" onClick={this.googleAuth.bind(this, new firebase.auth.GoogleAuthProvider())}>
                      <i className="fa fa-google-plus"></i>
                    </button>

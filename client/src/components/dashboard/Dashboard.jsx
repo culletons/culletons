@@ -7,8 +7,6 @@ import GoalInfo from './goalInfo.jsx';
 import BasicInfo from './BasicInfo.jsx'
 import LineChart from '../charts/LineChart.jsx';
 
-
-
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -292,7 +290,7 @@ class Dashboard extends React.Component {
         axios.post('/retire/get_access_token', {
           public_token: public_token,
           metadata: metadata,
-          userId: this.props.currentUserId
+          userId: this.props.userData.userId
         })
         .then(() => {
           console.log('Post Successful');
@@ -309,7 +307,6 @@ class Dashboard extends React.Component {
       this.updateGoals();
       this.updateItems();
     }
-
   }
 
 
@@ -338,7 +335,7 @@ class Dashboard extends React.Component {
           {this.state.formToggle && <div className="col-md-12">
           {/* two different forms for the user to fill out */}
             <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
-            <GoalInfo user={this.props.userData} />
+            {/* <GoalInfo user={this.props.userData} /> */}
           </div>}
           <div className="row">
             <div className="col-md-12">
@@ -363,7 +360,6 @@ class Dashboard extends React.Component {
       </div>
     );
   }
-
 }
 
 export default Dashboard;

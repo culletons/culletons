@@ -1,7 +1,11 @@
+// These controller functions work to retireve account information provided by Plaid's API.   At a high level you need to recieve from the front
+// end a public key, and then exchange it for a private token on your backend, which then can securely request data for that user.
 const plaid = require('plaid');
 const keys = require('../config.js');
 const model = require('../db/models/model.js');
 
+// Plaid keys can be gained offline, here they are referenced from a config.js file in the /server/ folder.   This client helps to kick off the 
+// exchange with Plaid: https://plaid.com/docs/quickstart/#user-authentication-item-creation-and-the-public_token
 var client = new plaid.Client(
   process.env.PLAID_CLIENT_ID || keys.PLAID_CLIENT_ID,
   process.env.PLAID_SECRET || keys.PLAID_SECRET,
@@ -10,9 +14,8 @@ var client = new plaid.Client(
 );
 
 module.exports = {
-
+  // This function recieves the public token and returns the private key
   getAccessToken: (request, response) => {
-    console.log("Getting Access Token from Public Token " + request.body.public_token);
     PUBLIC_TOKEN = request.body.public_token;
     metadata = request.body.metadata;
     client.exchangePublicToken(PUBLIC_TOKEN, function(error, tokenResponse) {
@@ -22,12 +25,8 @@ module.exports = {
       }
       ACCESS_TOKEN = tokenResponse.access_token;
       ITEM_ID = tokenResponse.item_id;
-      console.log('Access Token: ' + ACCESS_TOKEN);
-      console.log('Item ID: ' + ITEM_ID); 
-      console.log('Metadata: ' + metadata);
-      model.createItemInDB(request.body.userId, ACCESS_TOKEN, metadata.institution.name, metadata.institution.institution_id, metadata.linkSessionId)
+      model.createItemInDB(request.body.userId, ACCESS_TOKEN, metadata.institution.name, metadata.institution.institution_id, metadata.link_session_id)
       .then(item => {
-        console.log(`Item for ${request.body.userId} at ${metadata.institution.name} was created in the database.`)
         response.sendStatus(200);
       })
       .catch(err => {
@@ -37,8 +36,8 @@ module.exports = {
     });
   },
 
+  // This function retireves account data for the user.
   getAccounts: (req, res) => {
-    console.log("this is req.query in getItem ", req.query)
     model.getItemByID(req.query.itemId)
     .then(item => {
       console.log("this is returned from getItem ", item)
@@ -58,6 +57,9 @@ module.exports = {
     });
   },
 
+
+  // This is an update of the history of a user's current savings.  The update is later retrieved as part of the accounts model, and therefore we 
+  // have grouped it here, even though it is not from Plaid.
   updateHistory: (req, res) => {
     model.addSavingHistory(req.body.userId, req.body.currentBalance, req.body.currentSavings)
       .then((history) => {
