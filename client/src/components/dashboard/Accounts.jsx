@@ -4,12 +4,8 @@ import axios from 'axios';
 
 class Accounts extends React.Component {
   constructor(props) {
-    super(props);
-
-    
+    super(props); 
   }
-
-
 
   render () {
     if (this.props.accounts.accountList) {

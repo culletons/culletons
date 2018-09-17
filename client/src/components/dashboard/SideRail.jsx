@@ -30,16 +30,6 @@ class SideRail extends React.Component {
     return true
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if (this.props.plans !== prevProps.plans) {
-  //     this.forceUpdate()
-  //   }
-  // }
-
-  componentDidMount() {
-
-  }
-
   launchPlaidLink() {
     this.handler.open();
   }
@@ -66,7 +56,6 @@ class SideRail extends React.Component {
                   <h6 className="panel-title theme-hover" data-toggle="collapse" onClick={() => this.props.setActivePlan(plan)} data-target={`#collapseExample${idx}`} aria-expanded="false" aria-controls="collapseExample">
                     <i className="fa fa-caret-down" aria-hidden="true"></i>
                     &nbsp; {plan.name || 'Plan'}
-                    {/* <h6 className="panel-title" data-toggle="collapse" onClick={() => this.props.setActivePlan(plan)} data-target={`#collapseExample${idx}`} aria-expanded="false" aria-controls="collapseExample">Plan name */}
                   </h6>
                   <span className="dropdown align-right">
                     <a className="dropdown-toggle float-right" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

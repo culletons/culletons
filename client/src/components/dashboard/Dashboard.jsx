@@ -7,8 +7,6 @@ import GoalInfo from './goalInfo.jsx';
 import BasicInfo from './BasicInfo.jsx'
 import LineChart from '../charts/LineChart.jsx';
 
-
-
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -304,7 +302,6 @@ class Dashboard extends React.Component {
       this.updateGoals();
       this.updateItems();
     }
-
   }
 
 
@@ -312,7 +309,6 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div className="row">
-
         <div className="col-md-2">
           <SideRail
             activePlan={this.state.activePlan}
@@ -343,7 +339,6 @@ class Dashboard extends React.Component {
             <div className="col-md-7">
               {(this.state.overviewToggle && this.state.activePlan) && <Overview accounts={this.state.accounts} activePlan={this.state.activePlan} plans={this.state.plans} goals={this.state.goals}/>}
             </div>
-            {/* {this.state.accountToggle && <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>} */}
             <div className="col-md-5">{(this.state.accountToggle) && <Accounts user={this.props.user} 
               currentUserId={this.props.currentUserId}
               launchPlaidLink={this.launchPlaidLink}
@@ -355,7 +350,6 @@ class Dashboard extends React.Component {
       </div>
     );
   }
-
 }
 
 export default Dashboard;
