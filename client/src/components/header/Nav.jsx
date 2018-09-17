@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Login from './Login.jsx';
 
 class Nav extends React.Component {
@@ -24,9 +23,11 @@ class Nav extends React.Component {
               <a className="nav-link active" onClick={this.props.onGetStarted} href="#">Get started!</a>
              </div>
             <div className="nav-item">
+              {/* NOT IMPLEMENTED: Create a new component that would give basic information about the app */}
               <a className="nav-link" href="#">About Us</a>
             </div>
             <div className="nav-item">
+              {/* NOT IMPLEMENTED: Create a new component that would give additional resources about retirement to the user. */}
               <a className="nav-link" href="#">Resources</a>
             </div>
             <div className="nav-item">

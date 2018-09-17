@@ -7,8 +7,6 @@ import GoalInfo from './goalInfo.jsx';
 import BasicInfo from './BasicInfo.jsx'
 import LineChart from '../charts/LineChart.jsx';
 
-
-
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -76,6 +74,7 @@ class Dashboard extends React.Component {
   }
 
   setActivePlan(plan) {
+    // when you click on a plan in the siderail, it sets it to active 
     this.setState({
       activePlan: plan,
       overviewToggle: true,
@@ -93,18 +92,18 @@ class Dashboard extends React.Component {
   }
 
   updateItems() {
-    axios.get('/retire/items',{ params: {userId: this.props.userData.userId } })
-         .then(({data}) => {
-           this.setState({
-           items: data
-           })
-           data.forEach((item) => {
-             this.updateAccounts(item);
-           });
-         })
-         .catch((err) => {
-           console.log(err);
-         })
+    axios.get('/retire/items', { params: { userId: this.props.userData.userId } })
+      .then(({ data }) => {
+        this.setState({
+          items: data
+        })
+        data.forEach((item) => {
+          this.updateAccounts(item);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   }
 
   launchPlaidLink() {
@@ -116,8 +115,10 @@ class Dashboard extends React.Component {
       .then(({data}) => {
         this.setState({
           plans: data,
+          // default the active plan as the first one. could later allow users to manually set their "main" plan
           activePlan: data[0]
         })
+        // if the user has plans, just render user's overview
         if(this.state.plans && this.state.plans.length > 0) {
           this.setState({ 
             formToggle: false,
@@ -125,6 +126,7 @@ class Dashboard extends React.Component {
           });
           this.calculateRetirePlan();
         } else {
+          // if user has none, show them the forms to create a plan
           this.setState({
             formToggle: true,
             overviewToggle: false
@@ -148,6 +150,7 @@ class Dashboard extends React.Component {
   }
 
   setOverview() {
+    //toggle on the overview and disable form view
     this.setState({
       overviewToggle: true,
       formToggle: false
@@ -298,13 +301,12 @@ class Dashboard extends React.Component {
         })
       },
     });
-
+    // pull all of the user's data from our database once the userdata is received
     if (this.props.userData.userId) {
       this.updatePlans();
       this.updateGoals();
       this.updateItems();
     }
-
   }
 
 
@@ -312,9 +314,9 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div className="row">
-
         <div className="col-md-2">
           <SideRail
+            updatePlans={this.updatePlans}
             activePlan={this.state.activePlan}
             user={this.props.user} 
             currentUserId={this.props.userData && this.props.userData.userId} 
@@ -329,22 +331,25 @@ class Dashboard extends React.Component {
           />
         </div>
         <div className="col-md-10">
+        {/* render forms when toggle is true. atm this only happens if user has no plans or if they click add plan */}
           {this.state.formToggle && <div className="col-md-12">
+          {/* two different forms for the user to fill out */}
             <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
             {/* <GoalInfo user={this.props.userData} /> */}
           </div>}
           <div className="row">
             <div className="col-md-12">
+            {/* linechart is part of the overview as well. holds retirement projection */}
               {(this.state.overviewToggle && this.state.activePlan) && <LineChart activePlan={this.state.activePlan} retirePlan={this.state.retirePlan} goals={this.state.goals}/>}
             </div>
           </div>
           <br/>
           <div className="row">
             <div className="col-md-7">
-              {(this.state.overviewToggle && this.state.activePlan) && <Overview accounts={this.state.accounts} activePlan={this.state.activePlan} plans={this.state.plans} goals={this.state.goals}/>}
+            {/* overview is the user's splash page that shows all of the current active plans and accompanying charts, accounts */}
+              {(this.state.overviewToggle && this.state.activePlan) && <Overview accounts={this.state.accounts} updatePlans={this.state.updatePlans} activePlan={this.state.activePlan} plans={this.state.plans} goals={this.state.goals}/>}
             </div>
-            {/* {this.state.accountToggle && <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>} */}
-            <div className="col-md-5">{(this.state.overviewToggle) && <Accounts user={this.props.user} 
+            <div className="col-md-5">{(this.state.accountToggle) && <Accounts user={this.props.user} 
               currentUserId={this.props.currentUserId}
               launchPlaidLink={this.launchPlaidLink}
               accounts={this.state.accounts}
@@ -355,7 +360,6 @@ class Dashboard extends React.Component {
       </div>
     );
   }
-
 }
 
 export default Dashboard;

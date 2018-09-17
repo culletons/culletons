@@ -7,6 +7,7 @@ class ComparisonChart extends React.Component {
     this.updateChart = this.updateChart.bind(this);
   }
 
+  // inputs updated data to the chart.
   updateChart(retireAge, totalSavings, idealSavings, monthlySpending, totalIncomeSavings) {
     chart.update({
       tooltip: {
@@ -27,6 +28,7 @@ class ComparisonChart extends React.Component {
     }, true)
   }
 
+  // calculates the updated data and calls updateChart function with the new data.
   componentDidUpdate(prevProps) {
     if (this.props.activePlan !== prevProps.activePlan) {
       let {activePlan} = this.props;
@@ -46,6 +48,7 @@ class ComparisonChart extends React.Component {
     }
   }
 
+  // initial definition of the bar graph.
   componentDidMount() {
     chart = new Highcharts.chart('bar', {
       chart: {
@@ -87,6 +90,7 @@ class ComparisonChart extends React.Component {
     })
   }
 
+  // renders the bar graph
   render() {
     return (
       <div>
@@ -97,7 +101,3 @@ class ComparisonChart extends React.Component {
 }
 
 export default ComparisonChart
-// <div>
-//   <div>Ideal monthly savings: {(activePlan.annualIncome * .125)/12}</div>
-//   <div>Your monthly savings: {activePlan.monthlySavings}</div>
-// </div>

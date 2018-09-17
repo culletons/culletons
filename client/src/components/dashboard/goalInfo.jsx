@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-
+// NOT BEING USED!! PLEASE USE THIS DATA FOR LEGACY!
 class GoalInfo extends React.Component { 
   constructor(props) {
     super(props)
@@ -18,6 +18,7 @@ class GoalInfo extends React.Component {
     this.submitInfo = this.submitInfo.bind(this);  
   }
 
+  // slides to the next page
   nextSlide() {
     let next = this.state.currentSlide + 1
     this.setState({
@@ -25,12 +26,14 @@ class GoalInfo extends React.Component {
     })
   }
 
+  // slides to the previous page
   previousSlide() {
     this.setState({
       currentSlide: this.state.currentSlide - 1
     })
   }
 
+  // post request upon completion of user inputs on goals
   submitInfo() {
     let userInfoToSubmit = {
       userId: this.props.user.userId,
@@ -51,6 +54,7 @@ class GoalInfo extends React.Component {
   }
 
   render() {
+    // this is the physical slides where each element is a page in the slide. Index is the page number.
     let slideOptions = [
         (
           <div className="tab tab0 form-group">
@@ -89,6 +93,8 @@ class GoalInfo extends React.Component {
         )
       ]
     return (
+// This is the questionaire for additional information relating to their retirement goals      
+// this component renders only if the questions weren't answered.
       <div>
         {!this.state.answeredToggle && 
           <div className="card module">
