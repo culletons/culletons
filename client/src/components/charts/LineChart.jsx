@@ -98,7 +98,7 @@ class LineChart extends React.Component {
             <br/>
             <div id="explaination">
               From your current savings of <b>${this.props.activePlan.currentSavings}</b> at the age of <b>{this.props.activePlan.currentAge}</b>,
-              this plan projects a salary growth to <b>${this.props.retirePlan.salaryAtRetirement}</b> while maitaining a savings rate of <b>{this.props.retirePlan.savingsRate}%</b>.
+              this plan projects a salary growth to <b>${this.props.retirePlan.salaryAtRetirement}</b> while maintaining a savings rate of <b>{this.props.retirePlan.savingsRate}%</b>.
               This results in a total estimated savings by the age of <b>{this.props.activePlan.retirementAge}</b> to be <b>${this.props.retirePlan.savingsAtRetirement}</b>.
               Estimated annual spending will be <b>${this.props.retirePlan.spendingAtRetirement}</b> based on projections
             </div>
