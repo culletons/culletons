@@ -7,38 +7,29 @@ class LineChart extends React.Component {
   }
   
 
-  updateChart(dataPlots) {
+  updateChart(retirePlan) {
     chart.series[0].update({
       pointStart: this.props.activePlan.currentAge,
-      data: dataPlots
+      data: retirePlan.retireSavingsMidReturns
+    }, true)
+    chart.series[1].update({
+      pointStart: this.props.activePlan.currentAge,
+      data: retirePlan.retireSavingsHighReturns
+    }, true);
+    chart.series[2].update({
+      pointStart: this.props.activePlan.currentAge,
+      data: retirePlan.retireSavingsLowReturns
     }, true)
   }
 
 
   componentDidUpdate(prevProps) {
-    if (this.props.activePlan !== prevProps.activePlan) {
-      let {activePlan} = this.props
-      let dataPlots = [];
-      if (activePlan) {
-        let savings = activePlan.currentSavings;
-        let age = activePlan.currentAge;
-        while(savings > 0) {
-          if (age < activePlan.retirementAge) {
-            savings = savings + (activePlan.monthlySavings * 12);
-            dataPlots.push(savings);
-            age++;
-          } else {
-            savings = savings - (activePlan.monthlySpending * 12); //add factors from 'GOALS'
-            if (savings >= 0) {
-              dataPlots.push(savings);
-            }
-            age++;
-          }
-        } 
-      }
-      this.updateChart(dataPlots)    
-    }
+    // if (this.props.retirePlan !== prevProps.retirePlan) {
+      this.updateChart(this.props.retirePlan);
+    // }
   }
+
+
 
   componentDidMount() {
     chart = new Highcharts.chart('lineChart', {
@@ -63,11 +54,22 @@ class LineChart extends React.Component {
           label: {
             connectorAllowed: false
           },
-          pointStart: 0
+          pointStart: 0,
+          marker: {
+            enabled: false
+          }
         }
       },
       series: [{
-        name: 'Savings',
+        name: 'Projected Savings',
+        data: []
+      },
+      {
+        name: 'High Returns',
+        data: [],
+      },
+      {
+        name: 'Low Returns',
         data: []
       }],
       navigation: {
@@ -76,12 +78,36 @@ class LineChart extends React.Component {
         }
       }
     })
+    this.updateChart([0,0])
   }
   
   render() {
     return (
-      <div>
-        <div id='lineChart'></div>
+      <div className="card">
+        <div className="row">
+          <div className="card-body col-md-3">
+            <div className="card-title plan-title border-bottom">
+              {this.props.activePlan.name}
+            </div>
+            <div>
+              <div>Retire by: {this.props.activePlan.retirementAge}</div>
+              <div>Starting Annual income: ${this.props.activePlan.annualIncome}</div>
+              <div>Savings Rate: {this.props.retirePlan.savingsRate}%</div>
+              <div>Retirement Goal: ${this.props.retirePlan.savingsAtRetirement}</div>
+              <div>Retirement budget: ${this.props.retirePlan.spendingAtRetirement}</div>
+            </div>
+            <br/>
+            <div id="explaination">
+              From your current savings of <b>${this.props.activePlan.currentSavings}</b> at the age of <b>{this.props.activePlan.currentAge}</b>,
+              this plan projects a salary growth to <b>${this.props.retirePlan.salaryAtRetirement}</b> while maitaining a savings rate of <b>{this.props.retirePlan.savingsRate}%</b>.
+              This results in a total estimated savings by the age of <b>{this.props.activePlan.retirementAge}</b> to be <b>${this.props.retirePlan.savingsAtRetirement}</b>.
+              Estimated annual spending will be <b>${this.props.retirePlan.spendingAtRetirement}</b> based on projections
+            </div>
+          </div>
+          <div className="col-md-9">
+            <div id='lineChart'></div>
+          </div>
+        </div>
       </div>
     )
   }

@@ -30,8 +30,7 @@ class Dashboard extends React.Component {
       },
       formToggle: false,
       accountToggle: true,
-      items: null
-
+      retirePlan: {}
     }
     this.createPlan = this.createPlan.bind(this)
     this.updatePlans = this.updatePlans.bind(this);
@@ -39,17 +38,19 @@ class Dashboard extends React.Component {
     this.updateItems = this.updateItems.bind(this);
     this.updateAccounts = this.updateAccounts.bind(this);
     this.getUserTotalHistory = this.getUserTotalHistory.bind(this);
-    this.setActivePlan = this.setActivePlan.bind(this)
-    this.setOverview = this.setOverview.bind(this)
-    this.deletePlan = this.deletePlan.bind(this)
-    this.editPlanName = this.editPlanName.bind(this)
-    this.submitBasic = this.submitBasic.bind(this)
+    this.setActivePlan = this.setActivePlan.bind(this);
+    this.setOverview = this.setOverview.bind(this);
+    this.deletePlan = this.deletePlan.bind(this);
+    this.editPlanName = this.editPlanName.bind(this);
+    this.submitBasic = this.submitBasic.bind(this);
+    this.calculateRetirePlan = this.calculateRetirePlan.bind(this);
   }
 
   createPlan() {
     this.setState({ 
       formToggle: true,
-      overviewToggle: false
+      overviewToggle: false,
+      accountToggle: false
     })
   }
 
@@ -77,7 +78,8 @@ class Dashboard extends React.Component {
   setActivePlan(plan) {
     this.setState({
       activePlan: plan
-    })
+    });
+    this.calculateRetirePlan();
   }
 
   submitBasic(info) {
@@ -115,7 +117,16 @@ class Dashboard extends React.Component {
           activePlan: data[0]
         })
         if(this.state.plans && this.state.plans.length > 0) {
-          this.setState({ formBasicToggle: false})
+          this.setState({ 
+            formToggle: false,
+            overviewToggle: true
+          });
+          this.calculateRetirePlan();
+        } else {
+          this.setState({
+            formToggle: true,
+            overviewToggle: false
+          })
         }
       })
       .catch((err) => {
@@ -178,6 +189,90 @@ class Dashboard extends React.Component {
       });
   }
 
+  calculateRetirePlan() {
+    var retireLifestyles = {
+      1: .60,
+      2: .80,
+      3: 1.00,
+      4: 1.20,
+      5: 1.40
+    };
+    let retirePlanToSave = {};
+    let activePlan = this.state.activePlan;
+    let projectedSalary = [];
+    let projectedSpending = [];
+    let projectedSavings = [];
+    let retireSavingsHighReturns = [];
+    let retireSavingsLowReturns = [];
+    let retireSavingsMidReturns = [];
+    if (activePlan) {
+      let savingsHigh = activePlan.currentSavings;
+      let savingsLow = activePlan.currentSavings;
+      let savingsMid = activePlan.currentSavings;
+      let spending = activePlan.monthlySpending * 12;
+      let age = activePlan.currentAge;
+      let spendingPercent = activePlan.monthlySpending/(activePlan.annualIncome / 12);
+      let savingPercent = activePlan.monthlySavings/(activePlan.annualIncome / 12);
+      let retirementSpending = 0;
+      while(age < 105) {
+        if (age < activePlan.retirementAge) {
+          var salary = Math.floor(activePlan.annualIncome * (1 + (.02 * (age - activePlan.currentAge)))); // projected salary for a given age
+          projectedSalary.push(salary);
+          spending = Math.floor(salary * spendingPercent); // projected spending based on salary and spend %.  (Adjust for the GOALS set in future work)
+          projectedSpending.push(spending);
+          let savings = Math.floor(salary * savingPercent); // projected yearly savings
+          projectedSavings.push(savings);
+          savingsHigh = Math.floor(savingsHigh * 1.13) + savings; // Savings calculator based on very high market return
+          savingsLow = Math.floor(savingsLow * 1.07) + savings; // Savings calculator based on low market return
+          savingsMid = Math.floor(savingsMid * 1.10) + savings; // Savings calculator based on mid market return
+          retireSavingsHighReturns.push(savingsHigh);
+          retireSavingsLowReturns.push(savingsLow);
+          retireSavingsMidReturns.push(savingsMid);
+          age++;
+        } else {
+          if (age === activePlan.retirementAge) {
+            retirementSpending = Math.floor(spending * retireLifestyles[activePlan.retireGoal]); // projected spending final spending while working * retire lifestyle multiplier.
+            retirePlanToSave.savingsAtRetirement = savingsMid;
+            retirePlanToSave.salaryAtRetirement = salary;
+            retirePlanToSave.spendingAtRetirement = retirementSpending;
+            retirePlanToSave.savingsRate = Math.floor(savingPercent * 100);
+          }
+          projectedSalary.push(0);
+          projectedSavings.push(0);
+          projectedSpending.push(retirementSpending);
+          savingsHigh = Math.floor(savingsHigh * 1.03) - (retirementSpending * (1 + (.02 * (age - activePlan.retirementAge))));
+          if (savingsHigh >= 0) {
+            retireSavingsHighReturns.push(savingsHigh);
+          } else {
+            retireSavingsHighReturns.push(0);
+          };
+          savingsLow = Math.floor(savingsLow * 1.03)  - (retirementSpending * (1 + (.02 * (age - activePlan.retirementAge))));
+          if (savingsLow >= 0) {
+            retireSavingsLowReturns.push(savingsLow);
+          } else {
+            retireSavingsLowReturns.push(0);
+          };
+          savingsMid = Math.floor(savingsMid * 1.03) - (retirementSpending * (1 + (.02 * (age - activePlan.retirementAge))));
+          if (savingsMid >= 0) {
+            retireSavingsMidReturns.push(savingsMid);
+          } else {
+            retireSavingsMidReturns.push(0);
+          }
+          age++;
+        }
+      } 
+    }
+    retirePlanToSave.projectedSalary = projectedSalary;
+    retirePlanToSave.projectedSpending = projectedSpending;
+    retirePlanToSave.projectedSavings = projectedSavings;
+    retirePlanToSave.retireSavingsHighReturns = retireSavingsHighReturns;
+    retirePlanToSave.retireSavingsLowReturns = retireSavingsLowReturns;
+    retirePlanToSave.retireSavingsMidReturns = retireSavingsMidReturns;
+    this.setState({
+      retirePlan: retirePlanToSave 
+    });
+  }
+
   componentDidMount() {
     // Plaid app needs to initialize it's "Link" feature through which accounts can be added. https://plaid.com/docs/#integrating-with-link
     this.handler = Plaid.create({
@@ -231,26 +326,31 @@ class Dashboard extends React.Component {
             launchPlaidLink={this.launchPlaidLink}
           />
         </div>
-
-          {this.state.formToggle && 
-          <div className="col-md-10">
-          <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
-          <GoalInfo user={this.props.userData} />
+        <div className="col-md-10">
+          {this.state.formToggle && <div className="col-md-12">
+            <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
+            <GoalInfo user={this.props.userData} />
           </div>}
-
-
-            <div className="col-md-6">
+          <div className="row">
+            <div className="col-md-12">
+              {(this.state.overviewToggle && this.state.activePlan) && <LineChart activePlan={this.state.activePlan} retirePlan={this.state.retirePlan} goals={this.state.goals}/>}
+            </div>
+          </div>
+          <br/>
+          <div className="row">
+            <div className="col-md-7">
               {(this.state.overviewToggle && this.state.activePlan) && <Overview activePlan={this.state.activePlan} plans={this.state.plans} goals={this.state.goals}/>}
             </div>
             {/* {this.state.accountToggle && <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>} */}
-            <div className="col-md-4">{this.state.accountToggle && <Accounts user={this.props.user} 
-            currentUserId={this.props.currentUserId}
-            launchPlaidLink={this.launchPlaidLink}
-            accounts={this.state.accounts}
-  />}
-                    
+            <div className="col-md-5">{this.state.accountToggle && <Accounts user={this.props.user} 
+              currentUserId={this.props.currentUserId}
+              launchPlaidLink={this.launchPlaidLink}
+              accounts={this.state.accounts}
+            />}
+            </div>
           </div>
-</div>
+        </div>
+      </div>
     );
   }
 
