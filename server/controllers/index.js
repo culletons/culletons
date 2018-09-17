@@ -1,12 +1,15 @@
 const express = require('express');
-const parser = require('body-parser');
+const bodyParser = require('body-parser');
+const path = require('path');
 
 var app = express();
 
-app.use(express.static(__dirname + '/../client/dist'));
+app.use(express.static(path.join(__dirname + '/../../client/dist')));
+app.use(express.static(path.join(__dirname, '/../../node_modules')));
 
 const routes = require('../routes.js');
 
+app.use(bodyParser.json())
 app.use('/retire', routes);
 
 var port = process.env.PORT || 3000;

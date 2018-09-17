@@ -1,1 +1,250 @@
 
+.form-elegant .font-small {
+    font-size: 0.8rem; }
+
+#home-jumbo {
+  background-image: url('./images/child-clouds-dad-110573.jpg');
+  background-size: cover;
+  background-position: center center;
+  height: 40vw;
+}
+
+.module {
+  background-color: lightgrey;
+}
+.form-elegant .z-depth-1a {
+    -webkit-box-shadow: 0 2px 5px 0 rgba(55, 161, 255, 0.26), 0 4px 12px 0 rgba(121, 155, 254, 0.25);
+    box-shadow: 0 2px 5px 0 rgba(55, 161, 255, 0.26), 0 4px 12px 0 rgba(121, 155, 254, 0.25); }
+
+.form-elegant .z-depth-1-half,
+.form-elegant .btn:hover {
+    -webkit-box-shadow: 0 5px 11px 0 rgba(85, 182, 255, 0.28), 0 4px 15px 0 rgba(36, 133, 255, 0.15);
+    box-shadow: 0 5px 11px 0 rgba(85, 182, 255, 0.28), 0 4px 15px 0 rgba(36, 133, 255, 0.15); }
+
+.form-elegant .modal-header {
+    border-bottom: none; }
+
+.modal-dialog .form-elegant .btn .fa {
+    color: #547a99!important; }
+
+.form-elegant .modal-body, .form-elegant .modal-footer {
+    font-weight: 400; }
+
+
+/* Make circles that indicate the steps of the form: */
+.step {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbbbbb;
+  border: none; 
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+}
+
+/* Mark the active step: */
+.step.active {
+  opacity: 1;
+}
+
+/* Mark the steps that are finished and valid: */
+.step.finish {
+  background-color: #547a99;
+}
+
+#basic-info-form {
+  height: 250px;
+}
+
+#step-icon-row {
+  text-align: center;
+  margin-top: 10px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  bottom: 10px;
+}
+
+#form-buttons {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+}
+
+.side-rail {
+  height: 90vh;
+  /* background-color: lightgreen; */
+}
+
+.panel {
+  border-radius: 2px;
+  border-color: black;
+}
+
+.login .social .google{
+  background-color: #F74933;
+}
+
+.login .google:hover{
+  background-color: #FF7566;
+}
+
+.login .box .social {
+  float: none;
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
+.login .social .circle{
+  background-color: #EEEEEE;
+  color: #FFFFFF;
+  border-radius: 100px;
+  display: inline-block;
+  margin: 0 17px;
+  padding: 15px;
+}
+.login .social .circle .fa{
+  font-size: 16px;
+}
+
+.fa-google-plus-square:before {
+  content: "\f0d4";
+}
+.fa-google-plus:before {
+  content: "\f0d5";
+}
+
+.hidden {
+  display: none;
+}
+
+input:focus { 
+  outline: none; 
+}
+
+button:focus { 
+  outline: none; 
+}
+
+
+
+#bttn {
+  border-radius: 7px;
+  color: white;
+  background-color: #547a99;
+  padding: 0 5 0 5;
+}
+
+.collapse, .panel-body {
+  font-size: 12px;
+}
+
+
+p, h6 {
+  display: inline
+}
+
+.fa-plus-square {
+  color: #547a99
+}
+
+.fa:hover {
+  font-size: 22px
+}
+
+.footer-dk {
+  background: #547a99;
+  color: #FFFFFF
+}
+
+a {
+  color: #547a99
+}
+
+.vertical-align {
+  display: flex;
+  align-items: center;
+}
+
+.fa-x5 {
+  font-size: 150px;
+}
+
+.theme {
+  color: #547a99
+}
+
+.theme-btn {
+  background-color: #547a99;
+  color: #FFF
+}
+
+.bg-theme{
+  background-color: #547a99
+}
+
+.plan-title {
+  font-size: 40px
+}
+/* .breakout {
+  margin:1em -100%;
+  margin:1em calc(50% - 50vw);
+  background-color:#547a99
+} */
+
+.dropdown-toggle::after {
+  display:none;
+}
+
+.fa-ellipsis-v {
+  color: darkgray
+}
+
+.fa-ellipsis-v:hover {
+  font-size: 16px
+}
+
+#auth-btn {
+  border-width: 2px;
+  border-radius: 7px;
+  color: white;
+  background-color: #547a99;
+  padding: 10px;
+}
+
+#auth-btn:hover {
+  font-size: 14px;
+  color: #547a99;
+  background-color: white;
+  border: 2px solid #547a99;
+}
+
+.clr:hover {
+  color: transparent;
+}
+
+.theme-hover:hover {
+  color: #547a99;
+}
+
+.overview {
+  font-size: 14px
+}
+
+.approved {
+  color: green;
+  font-size: 12px;
+  border-bottom: 1px dotted grey
+}
+
+#explaination {
+  font-size: .75em;
+}
+
+.account-table {
+  display: block;
+  height: 100vh;
+  overflow: scroll;
+}
