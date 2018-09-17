@@ -37,7 +37,7 @@ class LineChart extends React.Component {
         type: 'spline'
       },
       title: {
-        text: "Here's a look at your potential retirement path"
+        text: ""
       },
       yAxis: {
         title: {

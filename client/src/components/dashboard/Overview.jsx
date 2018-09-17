@@ -1,6 +1,9 @@
 import React from 'react';
 import PieChart from '../charts/PieChart.jsx'
+import LineChart from '../charts/LineChart.jsx'
+import ComparisonChart from '../charts/ComparisonChart.jsx';
 import axios from 'axios'
+
 var chart
 class Overview extends React.Component {
   constructor(props) {
@@ -76,14 +79,28 @@ class Overview extends React.Component {
     return (
       <div className="card">
         <div className="card-body border-bottom">
-          <div className="card-body border-bottom">
-            <div className="card-title border-bottom">
-              <h4>Monthly breakdown</h4>
-            </div>
-            <div id="pie">
+          <div className="card-title plan-title border-bottom">
+            {this.props.activePlan.name}</div>
+            <div>
+              <div>Annual income: ${this.props.activePlan.annualIncome.toLocaleString()}</div>
+              <div>Monthly spending: ${this.props.activePlan.monthlySpending.toLocaleString()}</div>
+              <div>Monthly saving: ${this.props.activePlan.monthlySavings.toLocaleString()}</div>
+              <div>Monthly expense: ${this.props.activePlan.annualIncome.toLocaleString()}</div>
+              <div>Retire by: {this.props.activePlan.retirementAge}</div>
             </div>
           </div>
-        </div>
+          <div className="card-body border-bottom">
+            <div className="card-title border-bottom"><h4>Potential retirement path</h4></div>
+            {/* <LineChart activePlan={this.props.activePlan} plans={this.props.plans} goals={this.props.goals}/> */}
+          </div>
+          <div className="card-body border-bottom">
+            <div className="card-title border-bottom"><h4>Monthly breakdown</h4></div>
+            <div id="pie"></div>
+          </div>
+          <div className="card-body border-bottom">
+            <div className="card-title border-bottom"><h4>Retirement Calculator</h4></div>
+            <ComparisonChart activePlan={this.props.activePlan} plans={this.props.plans} goals={this.props.goals}/>
+          </div>
           <div className="card-body">
             <div className="card-title border-bottom">
               <h4>Spending</h4>
