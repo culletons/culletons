@@ -238,3 +238,13 @@ a {
   font-size: 12px;
   border-bottom: 1px dotted grey
 }
+
+#explaination {
+  font-size: .75em;
+}
+
+.account-table {
+  display: block;
+  height: 100vh;
+  overflow: scroll;
+}

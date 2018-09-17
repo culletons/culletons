@@ -2,6 +2,7 @@ import React from 'react';
 import PieChart from '../charts/PieChart.jsx'
 import LineChart from '../charts/LineChart.jsx'
 import ColumnChart from '../charts/ColumnChart.jsx'
+import ComparisonChart from '../charts/ComparisonChart.jsx';
 import axios from 'axios'
 
 var chart
@@ -78,7 +79,7 @@ class Overview extends React.Component {
   render() {
     return (
       <div className="card overview">
-        <div className="card-body border-bottom">
+        {/* <div className="card-body border-bottom">
           <div className="card-title plan-title border-bottom">
             {this.props.activePlan.name}</div>
             <div className="row">
@@ -101,11 +102,8 @@ class Overview extends React.Component {
               {(this.props.activePlan.monthlySpending < 3000) && <a className="approved" tabindex="0" data-toggle="popover" data-placement="right" title="The recommended spending is 15%" >GOOD</a>}
               </div>
             </div>
-          </div>
-          <div className="card-body border-bottom">
-            <div className="card-title border-bottom"><h4>Potential retirement path</h4></div>
-            <LineChart activePlan={this.props.activePlan} plans={this.props.plans} goals={this.props.goals}/>
-          </div>
+          </div> */}
+
           <div className="card-body border-bottom">
             <div className="card-title border-bottom"><h4>Monthly breakdown</h4></div>
             <div id="pie"></div>
@@ -114,10 +112,13 @@ class Overview extends React.Component {
             <div className="card-title border-bottom"><h4>Account balances</h4></div>
             <ColumnChart activePlan={this.props.activePlan} accounts={this.props.accounts} />
           </div>
-          {/* <div className="card-body">
-            <div className="card-title border-bottom"><h4>Spending</h4></div>
-            Spending on food, utils, rent etc.
-        </div> */}
+
+            <div className="card-body">
+            <div className="card-title border-bottom"><h4>Retirement Calculator</h4></div>
+            <ComparisonChart activePlan={this.props.activePlan} plans={this.props.plans} goals={this.props.goals}/>
+          </div>
+
+
       </div>
     )
   }
