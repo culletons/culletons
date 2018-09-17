@@ -93,7 +93,8 @@ class GoalInfo extends React.Component {
         )
       ]
     return (
-      // this component renders only if the questions weren't answered.
+// This is the questionaire for additional information relating to their retirement goals      
+// this component renders only if the questions weren't answered.
       <div>
         {!this.state.answeredToggle && 
           <div className="card module">

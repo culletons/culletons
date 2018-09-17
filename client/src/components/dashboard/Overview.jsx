@@ -9,9 +9,6 @@ var chart
 class Overview extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
- 
-    }
     this.updateChart = this.updateChart.bind(this)
   }
   
@@ -33,12 +30,15 @@ class Overview extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    //If the plan changes, update the chart
     if (this.props.activePlan !== prevProps.activePlan) {
       this.updateChart()
     }
   }
 
   componentDidMount() {
+    // Currently, the pie chart has hard coded starting values until you select a plan and is not its own 
+    // individual component.
    chart = new Highcharts.Chart({
      title: { text: ''},
       chart: {
@@ -79,6 +79,7 @@ class Overview extends React.Component {
   render() {
     return (
       <div className="card overview">
+      {/* Each card body shows an aspect of their finances, usually rendering out a graphic/visual aide */}
           <div className="card-body border-bottom">
             <div className="card-title border-bottom"><h4>Monthly breakdown</h4></div>
             <div id="pie"></div>
@@ -87,7 +88,6 @@ class Overview extends React.Component {
             <div className="card-title border-bottom"><h4>Account balances</h4></div>
             <ColumnChart activePlan={this.props.activePlan} accounts={this.props.accounts} />
           </div>
-
             <div className="card-body">
             <div className="card-title border-bottom"><h4>Retirement Calculator</h4></div>
             <ComparisonChart activePlan={this.props.activePlan} plans={this.props.plans} goals={this.props.goals}/>

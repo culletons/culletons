@@ -134,7 +134,7 @@ class App extends React.Component {
       });
   }
   
-    
+  // allow people to use the website without signing up
   onGetStarted() {
     this.setState({
       isLoggedIn: true,
@@ -172,6 +172,7 @@ class App extends React.Component {
         {this.state.isLoggedIn && <Dashboard userData={this.state.userData} />}
       </div>
         <footer className="section footer-dk">
+        {/* a basic footer that doesn't feature anything as of yet */}
           <div>
           <div className="container">
             <div className="row">

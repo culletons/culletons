@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios'
 
 class SideRail extends React.Component {
   constructor(props) {
@@ -16,10 +15,15 @@ class SideRail extends React.Component {
 
   confirmDelete(id) {
     this.props.deletePlan(id)
+    this.props.updatePlans()
   }
 
   saveName(name, id) {
     this.props.editPlanName(name, id)
+    this.setState({
+      editValue: ''
+    })
+    this.props.updatePlans()
   }
 
   onEdit(e) {
@@ -49,6 +53,7 @@ class SideRail extends React.Component {
           <div className="card-body border-bottom">
             <i className="fa fa-list-alt " aria-hidden="true"></i><a >&nbsp; Plans </a>
           </div>
+          {/* After receiving the props, map them to the rail including all handlers */}
           {this.props.plans && this.props.plans.map((plan, idx) => (
             <div className="card-body border-bottom py-1">
               <div key={idx} className="panel-default">
@@ -57,6 +62,12 @@ class SideRail extends React.Component {
                     <i className="fa fa-caret-down" aria-hidden="true"></i>
                     &nbsp; {plan.name || 'Plan'}
                   </h6>
+                  {/* Ellipsis that allows you to open the modals for edit/delete plans */}
+
+                  {/* VERY IMPORTANT: Edit/delete works upon the active plan which is selected by clicking on the plan name.
+                  You are able to select the dropdown for a plan that isn't the active one, but the action will be performed
+                  on the active plan. */}
+
                   <span className="dropdown align-right">
                     <a className="dropdown-toggle float-right" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i className="fa fa-ellipsis-v " aria-hidden="true"></i>
@@ -115,7 +126,7 @@ class SideRail extends React.Component {
                       </div>
                       <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" data-dismiss="modal" onClick={(e) => this.confirmDelete(this.props.activePlan.planId)} className="btn btn-danger">Delete</button>
+                        <button type="button" data-dismiss="modal" onClick={() => this.confirmDelete(this.props.activePlan.planId)} className="btn btn-danger">Delete</button>
                       </div>
                     </div>
                   </div>

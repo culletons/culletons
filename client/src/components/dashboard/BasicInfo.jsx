@@ -1,5 +1,4 @@
 import React from 'react';
-import LineChart from '../charts/LineChart.jsx'
 import axios from 'axios'
 
 class BasicInfo extends React.Component {
@@ -21,7 +20,6 @@ class BasicInfo extends React.Component {
     this.submitInfo = this.submitInfo.bind(this);
     this.nextSlide = this.nextSlide.bind(this);
     this.previousSlide = this.previousSlide.bind(this);
-    this.test = this.test.bind(this)
   }
   
   componentDidMount() {
@@ -52,8 +50,9 @@ class BasicInfo extends React.Component {
     })
   }
 
-  submitInfo() {
-    this.test()
+
+
+  submitInfo() {  
     this.setState({ chartToggle: true})
     let userInfoToSubmit = {
       name: 'New Plan',
@@ -142,12 +141,18 @@ class BasicInfo extends React.Component {
           <br/>
           <form id="basic-info-form">
             {slideOptions[this.state.currentSlide]}
+            {/* this is the current question the user is on */}
 
             <div style={{"overflow":"auto"}}>
               <div id="form-buttons">
+              {/* This is the button render control for the form */}
                 {this.state.currentSlide !== 0 && <button type="button" id="prevBtn" className="btn btn-secondary" onClick={this.previousSlide}>Previous</button>}
+                {/* Show a "previous" button if the user has answered at least one question and gone on to the next slide */}
+
                 {this.state.currentSlide !== slideOptions.length - 1 && <button type="button" id="nextBtn" className="btn btn-light" onClick={this.nextSlide}>Next</button>}
+
                 {this.state.currentSlide === slideOptions.length - 1 && <button type="button" id="nextBtn" className="btn btn-success" onClick={this.submitInfo}>Submit</button>}
+                {/* If the user is on the final slide, allow them to submit */}
               </div>
             </div>
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import Signup from './header/Signup.jsx'
 
-// This is the page that renders in initial start
 const Home = (props) => {
+  // This is just a static home page to display to new users and provide them with short intro to the app
   return (
     <div>
       <div className="jumbotron jumbotron-fluid" id="home-jumbo">
