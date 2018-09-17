@@ -1,6 +1,7 @@
 import React from 'react';
 import PieChart from '../charts/PieChart.jsx'
 import LineChart from '../charts/LineChart.jsx'
+import ColumnChart from '../charts/ColumnChart.jsx'
 import ComparisonChart from '../charts/ComparisonChart.jsx';
 import axios from 'axios'
 
@@ -77,36 +78,47 @@ class Overview extends React.Component {
 
   render() {
     return (
-      <div className="card">
-        <div className="card-body border-bottom">
+      <div className="card overview">
+        {/* <div className="card-body border-bottom">
           <div className="card-title plan-title border-bottom">
             {this.props.activePlan.name}</div>
-            <div>
-              <div>Annual income: ${this.props.activePlan.annualIncome.toLocaleString()}</div>
-              <div>Monthly spending: ${this.props.activePlan.monthlySpending.toLocaleString()}</div>
-              <div>Monthly saving: ${this.props.activePlan.monthlySavings.toLocaleString()}</div>
-              <div>Monthly expense: ${this.props.activePlan.annualIncome.toLocaleString()}</div>
-              <div>Retire by: {this.props.activePlan.retirementAge}</div>
+            <div className="row">
+            <div className="col-md-3">
+              <div>Annual income:</div>
+              <div>Monthly spending:</div>
+              <div>Monthly saving:</div>
+              <div>Monthly expense:</div>
+              <div>Retire by:</div>
+              </div>
+              <div className="col-md-3">
+              <div>${this.props.activePlan.annualIncome.toLocaleString()}</div>
+              <div>${this.props.activePlan.monthlySpending.toLocaleString()}</div>
+              <div>${this.props.activePlan.monthlySavings.toLocaleString()}</div>
+              <div>${this.props.activePlan.annualIncome.toLocaleString()}</div>
+              <div>{this.props.activePlan.retirementAge}</div>
+              </div>
+              <div className="col-md-3">
+              <div></div>
+              {(this.props.activePlan.monthlySpending < 3000) && <a className="approved" tabindex="0" data-toggle="popover" data-placement="right" title="The recommended spending is 15%" >GOOD</a>}
+              </div>
             </div>
-          </div>
-          <div className="card-body border-bottom">
-            <div className="card-title border-bottom"><h4>Potential retirement path</h4></div>
-            {/* <LineChart activePlan={this.props.activePlan} plans={this.props.plans} goals={this.props.goals}/> */}
-          </div>
+          </div> */}
+
           <div className="card-body border-bottom">
             <div className="card-title border-bottom"><h4>Monthly breakdown</h4></div>
             <div id="pie"></div>
           </div>
           <div className="card-body border-bottom">
+            <div className="card-title border-bottom"><h4>Account balances</h4></div>
+            <ColumnChart activePlan={this.props.activePlan} accounts={this.props.accounts} />
+          </div>
+
+            <div className="card-body">
             <div className="card-title border-bottom"><h4>Retirement Calculator</h4></div>
             <ComparisonChart activePlan={this.props.activePlan} plans={this.props.plans} goals={this.props.goals}/>
           </div>
-          <div className="card-body">
-            <div className="card-title border-bottom">
-              <h4>Spending</h4>
-            </div>
-            Spending on food, utils, rent etc.
-        </div>
+
+
       </div>
     )
   }

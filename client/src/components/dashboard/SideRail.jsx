@@ -53,8 +53,8 @@ class SideRail extends React.Component {
             <h5 className="card-title">Welcome {this.props.userData && this.props.userData.fullname}</h5>
             <button id="link-btn" className="btn theme-btn" onClick={this.props.launchPlaidLink}>Link Account</button>
             <br /></div>
-          <div className="card-body border-bottom">
-            <i className="fa fa-home fa-fw" aria-hidden="true"></i><a onClick={this.props.setOverview} >&nbsp;Home</a>
+          <div className="card-body border-bottom theme-hover" onClick={this.props.setOverview}>
+            <i className="fa fa-home fa-fw" aria-hidden="true"></i><a  >&nbsp;Home</a>
           </div>
           <div className="card-body border-bottom">
             <i className="fa fa-list-alt " aria-hidden="true"></i><a >&nbsp; Plans </a>
@@ -63,7 +63,7 @@ class SideRail extends React.Component {
             <div className="card-body border-bottom py-1">
               <div key={idx} className="panel-default">
                 <div className="panel-heading">
-                  <h6 className="panel-title" data-toggle="collapse" onClick={() => this.props.setActivePlan(plan)} data-target={`#collapseExample${idx}`} aria-expanded="false" aria-controls="collapseExample">
+                  <h6 className="panel-title theme-hover" data-toggle="collapse" onClick={() => this.props.setActivePlan(plan)} data-target={`#collapseExample${idx}`} aria-expanded="false" aria-controls="collapseExample">
                     <i className="fa fa-caret-down" aria-hidden="true"></i>
                     &nbsp; {plan.name || 'Plan'}
                     {/* <h6 className="panel-title" data-toggle="collapse" onClick={() => this.props.setActivePlan(plan)} data-target={`#collapseExample${idx}`} aria-expanded="false" aria-controls="collapseExample">Plan name */}
@@ -84,7 +84,7 @@ class SideRail extends React.Component {
                   <div>Created: {plan['created_at'].slice(0, 10)}</div>
                   <div>Current savings: ${plan.currentSavings.toLocaleString()}</div>
                   <div>Monthly savings: ${plan.monthlySavings.toLocaleString()}</div>
-                  <div>Retirement age: {plan.retirementAge}</div>
+                  <div>Retire by {plan.retirementAge}</div>
                   <br></br>
                 </div>
                
@@ -131,8 +131,8 @@ class SideRail extends React.Component {
                     </div>
                   </div>
                 </div>
-          <div className="card-body border-bottom">
-          <a onClick={this.props.createPlan}><i className="fa fa-plus-square" aria-hidden="true"></i>&nbsp; Add new plan </a>
+          <div className="card-body border-bottom theme-hover" onClick={this.props.createPlan}>
+          <a ><i className="fa fa-plus-square" aria-hidden="true"></i>&nbsp; Add new plan </a>
           </div>
         </div>
       </div>

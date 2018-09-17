@@ -77,8 +77,10 @@ class Dashboard extends React.Component {
 
   setActivePlan(plan) {
     this.setState({
-      activePlan: plan
-    });
+      activePlan: plan,
+      overviewToggle: true,
+      formToggle: false
+    })
     this.calculateRetirePlan();
   }
 
@@ -339,10 +341,10 @@ class Dashboard extends React.Component {
           <br/>
           <div className="row">
             <div className="col-md-7">
-              {(this.state.overviewToggle && this.state.activePlan) && <Overview activePlan={this.state.activePlan} plans={this.state.plans} goals={this.state.goals}/>}
+              {(this.state.overviewToggle && this.state.activePlan) && <Overview accounts={this.state.accounts} activePlan={this.state.activePlan} plans={this.state.plans} goals={this.state.goals}/>}
             </div>
             {/* {this.state.accountToggle && <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>} */}
-            <div className="col-md-5">{this.state.accountToggle && <Accounts user={this.props.user} 
+            <div className="col-md-5">{(this.state.accountToggle) && <Accounts user={this.props.user} 
               currentUserId={this.props.currentUserId}
               launchPlaidLink={this.launchPlaidLink}
               accounts={this.state.accounts}

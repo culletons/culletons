@@ -123,7 +123,7 @@ const Home = (props) => {
           <div className="col-md-6 text-center pb-5">
             <div className="pb-2"></div>
             <i className="fa fa-5x fa-thumbs-o-up" aria-hidden="true"></i>
-            <h5> Plan for success with Culletons! </h5>
+            <h5> Plan for success with Plan+Life! </h5>
             <Signup onSignUp={props.onSignUp} />
           </div>
           <div className="col-md-3"></div>

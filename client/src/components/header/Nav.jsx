@@ -18,7 +18,7 @@ class Nav extends React.Component {
         <nav className="navbar navbar-toggleable-md navbar-inverse bg-inverse navbar-toggle collapsed ">
           <div className="container-fluid">
             <div className="navbar-header">
-              <a className="navbar-brand" href=""><h3>Culletons</h3></a>
+              <a className="navbar-brand" href=""><h3>Plan+Life</h3></a>
             </div>
             <div className="nav-item">
               <a className="nav-link active" onClick={this.props.onGetStarted} href="#">Get started!</a>
@@ -33,7 +33,7 @@ class Nav extends React.Component {
               <p className="nav-item">{this.props.userData && "Welcome " +this.props.userData.fullname}</p>
             </div>
             {!this.props.isLoggedIn && <Login onLogin={this.props.onLogin} oAuthLogin={this.props.oAuthLogin}/>}
-            {this.props.isLoggedIn && <button className="btn btn-outline-success mb-4" onClick={this.clickHandler}>Logout</button>}
+            {this.props.isLoggedIn && <div className="nav-item"><a className="loginbtn mb-4" id="auth-btn" onClick={this.clickHandler}>Logout</a></div>}
             </div>
         </nav>
       </div>
