@@ -24,7 +24,7 @@ class Overview extends React.Component {
       selected: true
     }, {
       name: 'Expense',
-      y: 5000 - this.props.activePlan.monthlySavings - this.props.activePlan.monthlySpending
+      y: ( this.props.activePlan.annualIncome / 12 ) - this.props.activePlan.monthlySavings - this.props.activePlan.monthlySpending
     }, {
       name: 'Spending',
       y: this.props.activePlan.monthlySpending

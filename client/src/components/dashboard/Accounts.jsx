@@ -1,16 +1,11 @@
 import React from 'react';
-import axios from 'axios';
-
 
 class Accounts extends React.Component {
   constructor(props) {
     super(props);
-
-    
   }
 
-
-
+  // Displays the table of accounts or the button to add a Plaid API link and retrieve those accounts.
   render () {
     if (this.props.accounts.accountList) {
       return (

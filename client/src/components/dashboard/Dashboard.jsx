@@ -287,7 +287,7 @@ class Dashboard extends React.Component {
         axios.post('/retire/get_access_token', {
           public_token: public_token,
           metadata: metadata,
-          userId: this.props.currentUserId
+          userId: this.props.userData.userId
         })
         .then(() => {
           console.log('Post Successful');
@@ -331,7 +331,7 @@ class Dashboard extends React.Component {
         <div className="col-md-10">
           {this.state.formToggle && <div className="col-md-12">
             <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
-            <GoalInfo user={this.props.userData} />
+            {/* <GoalInfo user={this.props.userData} /> */}
           </div>}
           <div className="row">
             <div className="col-md-12">
@@ -344,7 +344,7 @@ class Dashboard extends React.Component {
               {(this.state.overviewToggle && this.state.activePlan) && <Overview accounts={this.state.accounts} activePlan={this.state.activePlan} plans={this.state.plans} goals={this.state.goals}/>}
             </div>
             {/* {this.state.accountToggle && <Accounts user={this.props.user} currentUserId={this.props.currentUserId}/>} */}
-            <div className="col-md-5">{(this.state.accountToggle) && <Accounts user={this.props.user} 
+            <div className="col-md-5">{(this.state.overviewToggle) && <Accounts user={this.props.user} 
               currentUserId={this.props.currentUserId}
               launchPlaidLink={this.launchPlaidLink}
               accounts={this.state.accounts}

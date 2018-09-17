@@ -41,7 +41,8 @@ const Home = (props) => {
         <div className="container" style={{ marginLeft: 50, marginRight: 25 }}>
           <h1 className="display-4">Plan+Life</h1>
           <p className="lead">If you fail to plan, you plan to fail. </p>
-          <p className="lead">Let's plan for <em>SUCCESS</em>.</p>
+
+          <p className="lead">Let's plan for <em>SUCCESS</em>.  - Kenni Silverio</p>
           <div className="pb-1"></div>
           <Signup emailAndPassSignUp={props.emailAndPassSignUp} googleSignUp={props.googleSignUp} />
         </div>
