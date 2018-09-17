@@ -102,7 +102,10 @@ class BasicInfo extends React.Component {
     let retireDescriptions = ['Planning on pinching pennies', 'Going to take it easy', 'Would like to be comfortable', 'Want to live well', 'Plan on balling out'];
     let retireDesire = retireDescriptions[this.state.retireGoal - 1];
     let retireCountdown = this.state.currentAge !== 0 && this.state.currentAge !== '' ? 'Great! Lets see how to get you ready to retire in ' + (this.state.retireAge - this.state.currentAge) + ' years': '';
-
+    
+    let earningsTax = this.state.annualIncome < 10000 ? .1 : this.state.annualIncome < 30000 ? .15 : this.state.annualIncome < 90000 ? .25 : this.state.annualIncome < 400000 ? .30 : .40
+    let monthlyTakehome = (this.state.annualIncome / 12) * (1 - earningsTax);
+    
     let slideOptions = [
       (
         <div className="tab tab0 form-group">
@@ -136,8 +139,6 @@ class BasicInfo extends React.Component {
         <div className="tab tab4 form-group">
           How much progress have you made? What's your current savings?
           <p><input type="number" className="form-control" value={this.state.currentSavings} min="0" onChange={(event)=>{this.setState({currentSavings: event.target.value})}} /></p>
-          How much do you or can you save each month?
-          <p><input type="number" className="form-control" value={this.state.monthlySavings} min="0" onChange={(event)=>{this.setState({monthlySavings: event.target.value})}} /></p>
         </div>
       ),
       (
@@ -148,8 +149,13 @@ class BasicInfo extends React.Component {
       ),
       (
         <div className="tab tab6 form-group">
-          Last question, how costly is your current lifestyle? How much do you spend per month?
-          <p><input type="number" className="form-control" value={this.state.monthlySpending} min="0" onChange={(event)=>{this.setState({monthlySpending: event.target.value})}} /></p>
+          Last question, how much of your estimated monthly takehome of ${monthlyTakehome} do you save? <br/>
+          The recommended savings is 10%-14%, which would be around ${monthlyTakehome * .12}.
+          <div className="slidecontainer">
+            <input type="range" min="1" max={monthlyTakehome} value={this.state.monthlySavings} className="form-control-range" id="saveSpendSlider" onChange={(event)=>{this.setState({monthlySavings: event.target.value, monthlySpending: monthlyTakehome - event.target.value})}}/>
+            <br/>
+            ${this.state.monthlySavings} OR {Math.floor(100 * (this.state.monthlySavings / monthlyTakehome))}%
+          </div>
         </div>
       )
     ]

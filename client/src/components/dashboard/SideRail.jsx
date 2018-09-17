@@ -18,8 +18,7 @@ class SideRail extends React.Component {
     this.props.deletePlan(id)
   }
 
-  saveName(name, id, e) {
-    console.log('e', e.currentTarget.name)
+  saveName(name, id) {
     this.props.editPlanName(name, id)
   }
 

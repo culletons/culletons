@@ -76,23 +76,18 @@ class Overview extends React.Component {
     return (
       <div className="card">
         <div className="card-body border-bottom">
-          <div className="card-title plan-title border-bottom">
-            {this.props.activePlan.name}</div>
-            <div>
-              <div>Annual income: ${this.props.activePlan.annualIncome}</div>
-              <div>Monthly spending: ${this.props.activePlan.monthlySpending}</div>
-              <div>Monthly saving: ${this.props.activePlan.monthlySavings}</div>
-              <div>Monthly expense: ${this.props.activePlan.annualIncome}</div>
-              <div>Retire by: {this.props.activePlan.retirementAge}</div>
+          <div className="card-body border-bottom">
+            <div className="card-title border-bottom">
+              <h4>Monthly breakdown</h4>
+            </div>
+            <div id="pie">
             </div>
           </div>
-          <div className="card-body border-bottom">
-            <div className="card-title border-bottom"><h4>Monthly breakdown</h4></div>
-            <div id="pie"></div>
-            Nonono
         </div>
           <div className="card-body">
-            <div className="card-title border-bottom"><h4>Spending</h4></div>
+            <div className="card-title border-bottom">
+              <h4>Spending</h4>
+            </div>
             Spending on food, utils, rent etc.
         </div>
       </div>

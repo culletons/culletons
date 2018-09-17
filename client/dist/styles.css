@@ -223,3 +223,12 @@ a {
 .clr:hover {
   color: transparent;
 }
+
+#explaination {
+  font-size: .75em;
+}
+
+.account-table {
+  height: 100vh;
+  overflow: scroll;
+}

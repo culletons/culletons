@@ -18,7 +18,7 @@ class Accounts extends React.Component {
           <div className="card-body">
             <h3 className="card-title">Budget with Linked Accounts:</h3>
             <button id="link-btn" className="btn theme-btn" onClick={this.props.launchPlaidLink}>Link a New Account</button>
-            <table className="table">
+            <table className="table account-table">
             <thead>
               <tr>
                 <th scope="col">#</th>
