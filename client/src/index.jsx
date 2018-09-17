@@ -9,7 +9,7 @@ import firebase from 'firebase';
 import Rebase from 're-base';
 import config from './components/header/googleKey.js';
 
-
+// create firebase config.js file inside components/header/googleKey.js
 const app = firebase.initializeApp(config);
 const base = Rebase.createClass(app.database())
 
@@ -170,10 +170,6 @@ class App extends React.Component {
       <div className="container-fluid">
         <div id="cont"></div>
         {this.state.isLoggedIn && <Dashboard userData={this.state.userData} />}
-        {/* <LineChart options={options} /> */}
-        {/* <Nav onGetStarted={this.onGetStarted} onLogin={this.onLogin} onSignUp={this.signUp} isLoggedIn={this.state.isLoggedIn} logOut={this.logOut}  authenticate={this.oAuthLogin}/>
-        {this.state.isLoggedIn && <Dashboard user={this.state.userData} currentUserId={this.state.currentUserId}/>}
-        {!this.state.isLoggedIn && <Home onSignUp={this.signUp} authenticate={this.oAuthSignUp}/>} */}
       </div>
         <footer className="section footer-dk">
           <div>
