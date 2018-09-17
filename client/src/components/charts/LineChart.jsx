@@ -1,12 +1,15 @@
 import React from 'React'
 var chart;
+
+// This linechart displays the retirement plan projected over time
+
 class LineChart extends React.Component {
   constructor(props) {
     super(props);
     this.updateChart = this.updateChart.bind(this);
   }
   
-
+  // This function recieves the retirement plan via props, and updates each of the three line series with the savings projections.
   updateChart(retirePlan) {
     chart.series[0].update({
       pointStart: this.props.activePlan.currentAge,
@@ -24,12 +27,8 @@ class LineChart extends React.Component {
 
 
   componentDidUpdate(prevProps) {
-    // if (this.props.retirePlan !== prevProps.retirePlan) {
-      this.updateChart(this.props.retirePlan);
-    // }
+    this.updateChart(this.props.retirePlan);
   }
-
-
 
   componentDidMount() {
     chart = new Highcharts.chart('lineChart', {

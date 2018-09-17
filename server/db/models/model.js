@@ -1,15 +1,10 @@
 const db = require('../connection')
 const moment = require('moment');
 
+// Model for the users of the application
 var User = db.bookshelf.Model.extend({
     tableName: 'users',
     hasTimeStamps: true,
-    // verifyPassword: function(password) {
-    //     return this.get('password') === password;
-    // },
-    // byEmail: function(email) {
-    //     return this.forge().query({where:{ email: email }}).fetch();
-    // }
     plan: function() {
         return this.hasMany(Plan);
     },
@@ -20,6 +15,8 @@ var User = db.bookshelf.Model.extend({
         return this.hasOne(Goal);
     }
 })
+
+// Model for the retirement plans created.  Tied to users
 var Plan = db.bookshelf.Model.extend({
     tableName: 'plans',
     hasTimeStamps: true,
@@ -28,6 +25,8 @@ var Plan = db.bookshelf.Model.extend({
     }
   });
 
+// Model for the items. One item corresponds to a Bank for a given user which Plaid can then exchange for that bank's account information.
+// There is one per user per bank, not one per account.
 var Item = db.bookshelf.Model.extend({
     tableName: 'items',
     hasTimeStamps: true,
@@ -36,6 +35,7 @@ var Item = db.bookshelf.Model.extend({
     }
 });
 
+// Model for goals.  Goals have been created for each user, but a user can create many goals.
 var Goal = db.bookshelf.Model.extend({
     tableName: 'goals',
     hasTimeStamps: true,
@@ -44,6 +44,8 @@ var Goal = db.bookshelf.Model.extend({
     }
 })
 
+// This is used to log the current balance for a user any time they log in.  In the future, this table will be helpful to track
+// savings progress against the user's plan.
 var SavingsHistory = db.bookshelf.Model.extend({
   tableName: 'savingsHistory',
   hasTimeStamps: true,
@@ -52,22 +54,25 @@ var SavingsHistory = db.bookshelf.Model.extend({
   }
 })
   
+// Collection of users
 var Users = db.bookshelf.Collection.extend({  
     model: User
 });
 
-var getUserFromDB = (username, password) => {
-    return new User({username: username, password: password}).fetch()
-    .then(user => {
-        return user;
-    })
-    .catch(err => {
-        console.log("this error occurred in getUserFromDB ", err);
-    })
-}
+// // Searches and pulls one user by username and password not used now that Firebase authenticates. 
+// var getUserFromDB = (username, password) => {
+//     return new User({username: username, password: password}).fetch()
+//     .then(user => {
+//         return user;
+//     })
+//     .catch(err => {
+//         console.log("this error occurred in getUserFromDB ", err);
+//     })
+// }
 
-var getUserByOAuthFromDB = (OAuthId) => {
-    return new User({oAuthId: OAuthId}).fetch()
+// This is the current method for tracking users based on Firebase's provided token.  This works regardless of login method used within firebase.
+var getUserByOAuthFromDB = (firebaseToken) => {
+    return new User({oAuthId: firebaseToken}).fetch()
     .then(user => {
         return user;
     })
@@ -76,28 +81,27 @@ var getUserByOAuthFromDB = (OAuthId) => {
     })
 }
 
-var createUserInDB = (username, password, fullname, email) => {
-    return new User({ username: username }).fetch().then(function(found, err) {
-        if(!found){
-            return db.knex('users').insert({username: username, password: password, fullname: fullname, email: email})
-            .then(newUser => {
-                // console.log(newUser, " was created in the database model.")
-                return newUser;
-            })
-            .catch(err => {
-                console.log("this error occurred in createUserInDB ", err);
-            })
-        }
-    })
-}
+// // Saves the new user as provided.  No longer used thanks to firebase
+// var createUserInDB = (username, password, fullname, email) => {
+//     return new User({ username: username }).fetch().then(function(found, err) {
+//         if(!found){
+//             return db.knex('users').insert({username: username, password: password, fullname: fullname, email: email})
+//             .then(newUser => {
+//                 return newUser;
+//             })
+//             .catch(err => {
+//                 console.log("this error occurred in createUserInDB ", err);
+//             })
+//         }
+//     })
+// }
 
-var createUserInDBByOAuth = (oAuthId, fullname, email, username) => {
-    console.log("this is token ", oAuthId)
-    return (new User({ oAuthId: oAuthId })).fetch().then(function(found) {
+// Creates a user by saving thier firebase token and passed metadata.
+var createUserInDBByOAuth = (firebaseToken, fullname, email, username) => {
+    return (new User({ oAuthId: firebaseToken })).fetch().then(function(found) {
         if(!found){
-            return db.knex('users').insert({oAuthId: oAuthId, fullname: fullname, email: email, username: username})
+            return db.knex('users').insert({oAuthId: firebaseToken, fullname: fullname, email: email, username: username})
             .then(newUser => {
-                // console.log(newUser, " was created in the database model.")
                 return newUser;
             })
             .catch(err => {
@@ -110,13 +114,7 @@ var createUserInDBByOAuth = (oAuthId, fullname, email, username) => {
     })
 }
 
-var updateUserInDB = (update) => {
-}
-
-var userLoginDB = (req, res) => {
-
-}
-
+// Retrieves all plans for a user 
 var getPlansFromDB = (userIdToSearch) => {
   console.log(userIdToSearch);
   return new Plan().query({where: {userId: userIdToSearch}}).fetchAll()    
@@ -128,26 +126,29 @@ var getPlansFromDB = (userIdToSearch) => {
   })
 }
 
+// Creates a new plan for the user
 var createPlanInDB = (name, userId, retireAge, retireGoal, currentAge, annualIncome, currentSavings, monthlySavings, monthlySpending) => {
   return db.knex('plans').insert({name: name, userId: userId, retirementAge: retireAge, retireGoal: retireGoal, currentAge: currentAge, annualIncome: annualIncome, currentSavings: currentSavings, monthlySavings: monthlySavings, monthlySpending: monthlySpending})
   .then(newPlan => {
-    //   console.log(newPlan, " was created in the database model.")
       return newPlan;
   })
   .catch(err => {
       console.log("this error occurred in createPlanInDB ", err);
   })
 }
+
+// Updates a new plan for user
 var updatePlan = (name, id) => {
     db.knex('plans').where('planId', id).update({name: name})
     .then(model => {
-        return model
+      return model;
     })
     .catch(err => {
-        console.log(err)
-    })
+      console.log(err);
+    });
 }
 
+// Deletes the plan by id
 var deletePlan = (planId) => {
     new Plan().query({where: {planId: planId}}).destroy()
     .then(model => {
@@ -158,6 +159,7 @@ var deletePlan = (planId) => {
     })
 }
 
+// Retrieves all items for the given user
 var getItemsFromDB = (userId) => {
     return new Item({userId: userId}).query({where: {userId: userId}}).fetchAll() 
     .then(items => {
@@ -168,6 +170,7 @@ var getItemsFromDB = (userId) => {
     })
 }
 
+// Retrieves a single item  by its ID
 var getItemByID = (id) => {
   return new Item({itemId: id}).query({where: {itemId: id}}).fetch() 
   .then(item => {
@@ -178,7 +181,9 @@ var getItemByID = (id) => {
   })
 }
 
+// Saves an item in the DB for the user
 var createItemInDB = (userId, accessToken, institutionName, institutionId, linkSessionId) => {
+  console.log(userId, accessToken, institutionName, institutionId, linkSessionId)
     return new Item({ userId: userId, institutionId: institutionId }).fetch().then(function(found, err) {
         if(!found){
             return db.knex('items').insert({userId: userId, itemToken: accessToken, institutionName: institutionName, institutionId: institutionId, linkSessionId: linkSessionId})
@@ -193,15 +198,14 @@ var createItemInDB = (userId, accessToken, institutionName, institutionId, linkS
     })
 }
 
-var updateItemInDB = (update) => {
-}
-
+// Retrieves all of the goals for the user
 var getGoalsFromDB = (userId) => {
   return new Goal({userId: userId}).query({where: {userId: userId}}).fetchAll()
   .then(goals => goals)
   .catch(err => console.log('this error occured in getGoalsFromDB', err))
 }
 
+// Creates a goal for the user
 var createGoalInDB = (userId, familySize, numberOfKids, travel, hobbySpending, luxurySpending) => {
   return new Goal({ userId: userId }).fetch().then((found, err) => {
     if(!found) {
@@ -214,7 +218,6 @@ var createGoalInDB = (userId, familySize, numberOfKids, travel, hobbySpending, l
         luxurySpending: luxurySpending
       })
       .then(newGoal => {
-        // console.log(newGoal, "was created in the database model.")
         return newGoal
       })
       .catch((err) => console.log("this error occured in createGoalInDB", err))
@@ -222,11 +225,7 @@ var createGoalInDB = (userId, familySize, numberOfKids, travel, hobbySpending, l
   })
 }
 
-var updateGoalInDB = (update) => {
-  
-}
-
-
+// creates a record of the user's savings total, for a given day. 
 var addSavingHistory = (userId, savingsAmt, availableAmt) => {
   let today = moment().format('l');
   return new SavingsHistory({ userId: userId, date: today }).fetch().then((found, err) => {
@@ -263,15 +262,14 @@ var addSavingHistory = (userId, savingsAmt, availableAmt) => {
         })
     }
   })
-
   
 }
 
 module.exports = {
-  User, Users, getUserFromDB, getUserByOAuthFromDB, createUserInDB, 
-  createUserInDBByOAuth, updateUserInDB, userLoginDB, 
+  User, Users, getUserByOAuthFromDB, 
+  createUserInDBByOAuth, 
   getPlansFromDB, createPlanInDB, updatePlan, deletePlan,
-  getItemsFromDB, createItemInDB, updateItemInDB,
-  getGoalsFromDB, createGoalInDB, updateGoalInDB,
+  getItemsFromDB, createItemInDB,
+  getGoalsFromDB, createGoalInDB,
   getItemByID, addSavingHistory
 }
