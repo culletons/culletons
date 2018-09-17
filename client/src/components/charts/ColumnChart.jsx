@@ -11,6 +11,7 @@ class ColumnChart extends React.Component {
   
 
   updateChart(institutions, data) {
+    // update the chart with the account information
     chart.update({
       xAxis: {
         categories: institutions
@@ -21,12 +22,14 @@ class ColumnChart extends React.Component {
 
 
   componentDidUpdate(prevProps) {
+    // when component receives accounts from plaid, populate the chart that was created on mount
     if(this.props.accounts !== prevProps.accounts) {
       var {accounts} = this.props
       var institutions = []
       var accData = {}
       var series = []
-  
+
+      // map through the account props and put into array to update the chart
       accounts.accountList.map(account => {
         if (institutions.indexOf(account.institutionName) === -1) {
           institutions.push(account.institutionName)
@@ -45,11 +48,13 @@ class ColumnChart extends React.Component {
           data: accData[key]
         })
       }
+      // pass the arrays to highcharts updater fn
       this.updateChart(institutions, series)
     }
   }
 
   componentDidMount() {
+    // create the chart with empty series. chart update requires preexisting series to update
     chart = new Highcharts.chart('column', {
       chart: {
         type: 'column'
@@ -71,12 +76,10 @@ class ColumnChart extends React.Component {
   
   
   render() {
-
-
-
     return (
       <div>
-        <div id='column'>Hi</div>
+        <div id='column'></div>
+        
       </div>
     )
     }

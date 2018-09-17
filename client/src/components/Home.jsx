@@ -2,39 +2,7 @@ import React from 'react';
 import Signup from './header/Signup.jsx'
 
 const Home = (props) => {
-  const options = {
-    title: {
-      text: 'Retirement at a glance',
-    },
-    xAxis: {
-      tickInterval: 5,
-      labels: {
-        enabled: true
-      }
-    },
-    yAxis: {
-      title: {
-        text: '$ thousand',
-      },
-    },
-    chart: {
-      type: 'line',
-    },
-    series: [
-      {
-        name: 'Jane',
-        data: [1, 0, 4, 0, 3],
-      },
-      {
-        name: 'John',
-        data: [5, 7, 3, 2, 4],
-      },
-      {
-        name: 'Doe',
-        data: [0, 0, 0, 1, 0],
-      },
-    ],
-  };
+  // this is just a static home page to display to new users and provide them with short intro to the app
   return (
     <div>
       <div className="jumbotron jumbotron-fluid" id="home-jumbo">

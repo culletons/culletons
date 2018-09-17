@@ -134,7 +134,7 @@ class App extends React.Component {
       });
   }
   
-    
+  // allow people to use the website without signing up
   onGetStarted() {
     this.setState({
       isLoggedIn: true,
@@ -170,12 +170,9 @@ class App extends React.Component {
       <div className="container-fluid">
         <div id="cont"></div>
         {this.state.isLoggedIn && <Dashboard userData={this.state.userData} />}
-        {/* <LineChart options={options} /> */}
-        {/* <Nav onGetStarted={this.onGetStarted} onLogin={this.onLogin} onSignUp={this.signUp} isLoggedIn={this.state.isLoggedIn} logOut={this.logOut}  authenticate={this.oAuthLogin}/>
-        {this.state.isLoggedIn && <Dashboard user={this.state.userData} currentUserId={this.state.currentUserId}/>}
-        {!this.state.isLoggedIn && <Home onSignUp={this.signUp} authenticate={this.oAuthSignUp}/>} */}
       </div>
         <footer className="section footer-dk">
+        {/* a basic footer that doesn't feature anything as of yet */}
           <div>
           <div className="container">
             <div className="row">

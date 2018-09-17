@@ -24,9 +24,7 @@ class LineChart extends React.Component {
 
 
   componentDidUpdate(prevProps) {
-    // if (this.props.retirePlan !== prevProps.retirePlan) {
       this.updateChart(this.props.retirePlan);
-    // }
   }
 
 

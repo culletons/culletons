@@ -1,5 +1,4 @@
 import React from 'react';
-import LineChart from '../charts/LineChart.jsx'
 import axios from 'axios'
 
 class BasicInfo extends React.Component {
@@ -21,7 +20,6 @@ class BasicInfo extends React.Component {
     this.submitInfo = this.submitInfo.bind(this);
     this.nextSlide = this.nextSlide.bind(this);
     this.previousSlide = this.previousSlide.bind(this);
-    this.test = this.test.bind(this)
   }
 
   //window.localStorage.setItem('key', 'value')
@@ -55,8 +53,7 @@ class BasicInfo extends React.Component {
 
 
 
-  submitInfo() {
-    this.test()
+  submitInfo() {  
     this.setState({ chartToggle: true})
     let userInfoToSubmit = {
       name: 'New Plan',
@@ -71,31 +68,7 @@ class BasicInfo extends React.Component {
     }
     this.props.submitBasic(userInfoToSubmit)
   }
-
-  test() {
-    var diff = this.state.retireAge - this.state.currentAge
-    var arr = []
-    for (var i = 0; i < diff; i++) {
-      arr.push(i)
-    }
-    
-    this.setState((state) => {
-      return {chartPoints: arr}
-    })
-
-    // var calculateRetirement = function(currentAge, retirementAge, comfort, savings, perMonthSavings, perMonthExpense) {
-    //   var perYearSavings = {}
-    //   var yearsSaving = retirementAge - currentAge
-    //   var yearsRetired = 95 - retirementAge
-    //   var annualSaved = perMonthSavings * 12
-    //   var annualExp = perMonthExpense * 12
-    //   var income = 60000
-    //   var saveRate = annualSaved / income
-    
-    //   return perYearSavings;
-    
-    // }
-  }
+  
 
   render () { 
     // Create the text which will be displayed to the user dynamically based on inputs while answering questions
@@ -162,12 +135,6 @@ class BasicInfo extends React.Component {
 
     return (
       <div>
-        {/* {this.state.chartToggle && 
-        <div>
-          <h3>Here's a look at your potential retirement path:</h3>
-          
-        <LineChart user={this.props.user}/>
-        </div>} */}
 
 
 

@@ -89,6 +89,7 @@ class GoalInfo extends React.Component {
         )
       ]
     return (
+      // This is the questionaire for additional information relating to their retirement goals
       <div>
         {!this.state.answeredToggle && 
           <div className="card module">
