@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import LineChart from './components/charts/LineChart.jsx'
+import LineChart from './components/charts/LineChart.jsx';
 import Home from './components/Home.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
 import Nav from './components/header/Nav.jsx';
@@ -11,17 +11,16 @@ import config from './components/header/googleKey.js';
 
 // create firebase config.js file inside components/header/googleKey.js
 const app = firebase.initializeApp(config);
-const base = Rebase.createClass(app.database())
+const base = Rebase.createClass(app.database());
 
 class App extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      username: "",
+      username: '',
       isLoggedIn: false,
-      userData: null,
-      currentUserId: 0
-    }
+      userData: null
+    };
 
     this.possibleToMount = true;
 
@@ -32,10 +31,10 @@ class App extends React.Component {
     this.onGetStarted = this.onGetStarted.bind(this);
     this.signUp = this.signUp.bind(this);
     this.getUserInfo = this.getUserInfo.bind(this);
-  } 
+  }
 
   componentDidMount() {
-    if(this.possibleToMount === true) {
+    if (this.possibleToMount === true) {
       this.getUserInfo();
     }
   }
@@ -43,23 +42,32 @@ class App extends React.Component {
   getUserInfo() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        firebase.auth().currentUser.getIdToken(true)
+        firebase
+          .auth()
+          .currentUser.getIdToken(true)
           .then((idToken) => {
-            axios.get('/retire/users', { params: { idToken: idToken } })
+            axios
+              .get('/retire/users', { params: { idToken: idToken } })
               .then(({ data }) => {
-                this.setState({
-                  isLoggedIn: true,
-                  userData: data
-                })
+                this.setState(
+                  {
+                    isLoggedIn: true,
+                    userData: data
+                  },
+                  () => {
+                    console.log('getUserInfo', this.state.userData.userId);
+                  }
+                );
               })
               .catch((err) => {
                 console.log(err);
               });
-          }).catch((error) => {
+          })
+          .catch((error) => {
             console.log(error);
           });
       } else {
-        console.log("No user is logged in");
+        console.log('No user is logged in');
       }
     });
   }
@@ -67,11 +75,21 @@ class App extends React.Component {
   //for local signup
   signUp(username, password, fullname, email) {
     this.possibleToMount = false;
-    firebase.auth().createUserWithEmailAndPassword(email, password)
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        firebase.auth().currentUser.getIdToken(true)
+        firebase
+          .auth()
+          .currentUser.getIdToken(true)
           .then((idToken) => {
-            axios.post('/retire/users', { idToken: idToken, fullname: fullname, email: email, username: username })
+            axios
+              .post('/retire/users', {
+                idToken: idToken,
+                fullname: fullname,
+                email: email,
+                username: username
+              })
               .then(({ data }) => {
                 this.setState({
                   isLoggedIn: true,
@@ -81,14 +99,16 @@ class App extends React.Component {
                     fullname: fullname,
                     email: email
                   }
-                })
+                });
                 this.possibleToMount = true;
               })
-              .catch((err) => { console.error(err) })
+              .catch((err) => {
+                console.error(err);
+              });
           })
           .catch((err) => {
             console.log(err);
-          })
+          });
       })
       .catch((error) => {
         console.log(error);
@@ -96,102 +116,120 @@ class App extends React.Component {
   }
 
   //for OAuth signup
-  oAuthSignUp (provider) {
-    firebase.auth().signInWithPopup(provider)
+  oAuthSignUp(provider) {
+    firebase
+      .auth()
+      .signInWithPopup(provider)
       .then((authData) => {
-        firebase.auth().currentUser.getIdToken(true)
+        firebase
+          .auth()
+          .currentUser.getIdToken(true)
           .then((idToken) => {
-            axios.post('/retire/users', {
-              fullname: authData.additionalUserInfo.profile.name,
-              email: authData.additionalUserInfo.profile.email,
-              username: authData.additionalUserInfo.username,
-              idToken: idToken
-            })
-              .then((user) => {
+            axios
+              .post('/retire/users', {
+                fullname: authData.additionalUserInfo.profile.name,
+                email: authData.additionalUserInfo.profile.email,
+                username: authData.additionalUserInfo.username,
+                idToken: idToken
               })
-              .catch((err) => console.error(err))
-          })
+              .then((user) => {})
+              .catch((err) => console.error(err));
+          });
       })
       .catch((err) => console.error(err));
   }
 
   //for OAuth login
-  oAuthLogin (provider) {
-    firebase.auth().signInWithPopup(provider)
+  oAuthLogin(provider) {
+    firebase
+      .auth()
+      .signInWithPopup(provider)
       .then((authData) => {
-        console.log('signed in');
+        // gets the userId in database and sets it to state so we can pull
+        // additional information from other tables
+        console.log('signed in', authData.user.uid);
+        // axios.get('/retire/users', {params:{}})
       })
       .catch((err) => console.error(err));
   }
-  
+
   //for local login
-  onLogin (email, password) {
-    firebase.auth().signInWithEmailAndPassword(email, password)
-      .then((authData) => {
-      })
+  onLogin(email, password) {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((authData) => {})
       .catch((error) => {
         console.log(error);
       });
   }
-  
+
   // allow people to use the website without signing up
   onGetStarted() {
     this.setState({
       isLoggedIn: true,
-      userData: {userId: 3}
-    })
-  }
-  
-  logOut() {
-    firebase.auth().signOut().then(() => {
-      this.setState({
-        isLoggedIn: false,
-        userData: null
-      })
-    }).catch((error) => {
-      console.error(error)
+      userData: { userId: 3 }
     });
+  }
+
+  logOut() {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        this.setState({
+          isLoggedIn: false,
+          userData: null
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   render() {
     return (
       <div>
-        <Nav 
-          onGetStarted={this.onGetStarted} 
-          onLogin={this.onLogin} 
-          oAuthLogin={this.oAuthLogin} 
-          isLoggedIn={this.state.isLoggedIn} 
-          logOut={this.logOut}  
-          emailAndPassSignUp={this.signUp} 
+        <Nav
+          onGetStarted={this.onGetStarted}
+          onLogin={this.onLogin}
+          oAuthLogin={this.oAuthLogin}
+          isLoggedIn={this.state.isLoggedIn}
+          logOut={this.logOut}
+          emailAndPassSignUp={this.signUp}
           googleSignUp={this.oAuthSignUp}
           userData={this.state.userData}
         />
-        {!this.state.isLoggedIn && <Home onSignUp={this.signUp} emailAndPassSignUp={this.signUp} googleSignUp={this.oAuthSignUp}/>}
-      <div className="container-fluid">
-        <div id="cont"></div>
-        {this.state.isLoggedIn && <Dashboard userData={this.state.userData} />}
-      </div>
+        {!this.state.isLoggedIn && (
+          <Home
+            onSignUp={this.signUp}
+            emailAndPassSignUp={this.signUp}
+            googleSignUp={this.oAuthSignUp}
+          />
+        )}
+        <div className="container-fluid">
+          <div id="cont" />
+          {this.state.isLoggedIn && <Dashboard userData={this.state.userData} />}
+        </div>
         <footer className="section footer-dk">
-        {/* a basic footer that doesn't feature anything as of yet */}
+          {/* a basic footer that doesn't feature anything as of yet */}
           <div>
-          <div className="container">
-            <div className="row">
+            <div className="container">
+              <div className="row">
                 <div className="col-sm-6 col-sm-offset-2 text-center p-4">
                   <h2>Plan+Life</h2>
-                  <h4>
-                    WOO
-                   </h4>
+                  <h4>WOO</h4>
                 </div>
                 <div className="col-sm-6 text-center p-4">
-                <h4>Contact us: never</h4>
+                  <h4>Contact us: never</h4>
                 </div>
               </div>
             </div>
           </div>
-        </ footer>
+        </footer>
       </div>
-    )
+    );
   }
 }
 
-ReactDOM.render(<App/>, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app'));

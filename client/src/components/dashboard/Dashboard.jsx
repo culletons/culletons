@@ -151,7 +151,9 @@ class Dashboard extends React.Component {
     axios
       .get('retire/goals', { params: { userId: this.props.userData.userId } })
       .then(({ data }) => {
-        this.setState({ goals: data });
+        this.setState({ goals: data }, () => {
+          this.calculateRetirePlan();
+        });
         if (this.state.goals) {
           this.setState({ formGoalsToggle: false });
         }
@@ -213,12 +215,20 @@ class Dashboard extends React.Component {
   // think we can move this to node pretty cleanly, setState in .then()
   calculateRetirePlan() {
     axios
-      .get('/retire/trajectory', { params: { activePlan: this.state.activePlan } })
+      .get('/retire/trajectory', {
+        params: { activePlan: this.state.activePlan, goals: this.state.goals }
+      })
       .then((result) => {
         console.log(result.data);
-        this.setState({
-          retirePlan: result.data
-        });
+        console.log(this.state.goals);
+        this.setState(
+          {
+            retirePlan: result.data
+          },
+          () => {
+            console.log(this.state.retirePlan);
+          }
+        );
       })
       .catch((err) => console.error(err));
   }
@@ -281,7 +291,7 @@ class Dashboard extends React.Component {
             <div className="col-md-12">
               {/* two different forms for the user to fill out */}
               <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
-              {/* <GoalInfo user={this.props.userData} /> */}
+              <GoalInfo user={this.props.userData} />
             </div>
           )}
           <div className="row">
