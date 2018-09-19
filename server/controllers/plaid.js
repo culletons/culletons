@@ -1,15 +1,14 @@
 // These controller functions work to retireve account information provided by Plaid's API.   At a high level you need to recieve from the front
 // end a public key, and then exchange it for a private token on your backend, which then can securely request data for that user.
 const plaid = require('plaid');
-const keys = require('../config.js');
 const model = require('../db/models/model.js');
 
 // Plaid keys can be gained offline, here they are referenced from a config.js file in the /server/ folder.   This client helps to kick off the 
 // exchange with Plaid: https://plaid.com/docs/quickstart/#user-authentication-item-creation-and-the-public_token
 var client = new plaid.Client(
-  process.env.PLAID_CLIENT_ID || keys.PLAID_CLIENT_ID,
-  process.env.PLAID_SECRET || keys.PLAID_SECRET,
-  process.env.PLAID_PUBLIC_KEY || keys.PLAID_PUBLIC_KEY,
+  process.env.PLAID_CLIENT_ID,
+  process.env.PLAID_SECRET,
+  process.env.PLAID_PUBLIC_KEY,
   plaid.environments.sandbox
 );
 

@@ -5,13 +5,14 @@ import LineChart from './components/charts/LineChart.jsx'
 import Home from './components/Home.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
 import Nav from './components/header/Nav.jsx';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import Rebase from 're-base';
-import config from './components/header/googleKey.js';
+import config from './config/googleKey.js';
 
 // create firebase config.js file inside components/header/googleKey.js
 const app = firebase.initializeApp(config);
-const base = Rebase.createClass(app.database())
+// const base = Rebase.createClass(app.database())
 
 class App extends React.Component {
   constructor(props) {
@@ -23,8 +24,6 @@ class App extends React.Component {
       currentUserId: 0
     }
 
-    this.possibleToMount = true;
-
     this.onLogin = this.onLogin.bind(this);
     this.logOut = this.logOut.bind(this);
     this.oAuthLogin = this.oAuthLogin.bind(this);
@@ -35,9 +34,7 @@ class App extends React.Component {
   } 
 
   componentDidMount() {
-    if(this.possibleToMount === true) {
-      this.getUserInfo();
-    }
+    // this.getUserInfo();
   }
 
   getUserInfo() {
@@ -66,7 +63,6 @@ class App extends React.Component {
 
   //for local signup
   signUp(username, password, fullname, email) {
-    this.possibleToMount = false;
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(() => {
         firebase.auth().currentUser.getIdToken(true)
@@ -82,7 +78,6 @@ class App extends React.Component {
                     email: email
                   }
                 })
-                this.possibleToMount = true;
               })
               .catch((err) => { console.error(err) })
           })
@@ -108,30 +103,26 @@ class App extends React.Component {
               idToken: idToken
             })
               .then((user) => {
+                console.log(user)
               })
               .catch((err) => console.error(err))
+          })
+          .catch((err) => {
+            console.log(err);
           })
       })
       .catch((err) => console.error(err));
   }
 
   //for OAuth login
+  //check if 
   oAuthLogin (provider) {
-    firebase.auth().signInWithPopup(provider)
-      .then((authData) => {
-        console.log('signed in');
-      })
-      .catch((err) => console.error(err));
+    return firebase.auth().signInWithPopup(provider);
   }
   
   //for local login
   onLogin (email, password) {
-    firebase.auth().signInWithEmailAndPassword(email, password)
-      .then((authData) => {
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    return firebase.auth().signInWithEmailAndPassword(email, password);
   }
   
   // allow people to use the website without signing up

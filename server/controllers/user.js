@@ -1,12 +1,13 @@
 const model = require('../db/models/model.js');
 var admin = require('firebase-admin');
 
-var serviceAccount = require('../config.js').FIREBASE_credential;
-var database = require('../config.js').FIREBASE_databaseURL;
-
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: database
+  credential: admin.credential.cert({
+    projectId : process.env.FIREBASE_project_id,
+    clientEmail: process.env.FIREBASE_client_email,
+    privateKey: process.env.FIREBASE_private_key
+  }),
+  databaseURL: process.env.FIREBASE_databaseURL
 });
 
 module.exports = {
@@ -21,18 +22,19 @@ module.exports = {
                   .then(user => {
                     if (user) {
                       // if user is in the database send the user information to client
-                      res.status(200).send(user)
+                      res.send(user)
                     } else {
-                      setTimeout(() => {
-                        // else return error 
-                        console.log('user not found in DB');
-                        res.sendStatus(500);
-                      }, 2000);
+                      // setTimeout(() => {
+                      //   // else return error 
+                      //   console.log('user not found in DB');
+                      //   res.sendStatus(404);
+                      // }, 2000);
+                      res.sendStatus(404);
                     }
                   })
                   .catch(err => {
                     console.log('user not found in DB');
-                    res.sendStatus(500);
+                    res.sendStatus(404);
                   })
           }).catch(function(error) {
             console.log(error);

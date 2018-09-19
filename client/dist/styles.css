@@ -248,3 +248,15 @@ a {
   height: 100vh;
   overflow: scroll;
 }
+
+.loginbtn {
+  cursor: pointer;
+}
+
+.loginOptions{
+  padding: 5px;
+}
+
+.loginButton{
+  width: 40px;
+}
