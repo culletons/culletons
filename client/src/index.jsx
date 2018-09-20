@@ -1,18 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import LineChart from './components/charts/LineChart.jsx'
 import Home from './components/Home.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
 import Nav from './components/header/Nav.jsx';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import Rebase from 're-base';
 import config from './config/googleKey.js';
 
 // create firebase config.js file inside components/header/googleKey.js
 const app = firebase.initializeApp(config);
-// const base = Rebase.createClass(app.database())
 
 class App extends React.Component {
   constructor(props) {
@@ -24,17 +21,37 @@ class App extends React.Component {
       currentUserId: 0
     }
 
-    this.onLogin = this.onLogin.bind(this);
-    this.logOut = this.logOut.bind(this);
-    this.oAuthLogin = this.oAuthLogin.bind(this);
-    this.oAuthSignUp = this.oAuthSignUp.bind(this);
+    this.checkifUserExistsinUserTable = this.checkifUserExistsinUserTable.bind(this);
+    this.updateUserState = this.updateUserState.bind(this);
+    this.getUserInfo = this.getUserInfo.bind(this); 
     this.onGetStarted = this.onGetStarted.bind(this);
-    this.signUp = this.signUp.bind(this);
-    this.getUserInfo = this.getUserInfo.bind(this);
+    this.logOut = this.logOut.bind(this);
   } 
 
   componentDidMount() {
-    // this.getUserInfo();
+    this.getUserInfo();
+  }
+
+  checkifUserExistsinUserTable(idToken){
+    return axios.get('/retire/users', { params: { idToken: idToken } })
+    .then(({ data }) => {
+      this.setState({
+        isLoggedIn: true,
+        userData: data
+      })
+    })
+  }
+
+  updateUserState(idToken, name, username, email){
+    this.setState({
+      isLoggedIn: true,
+      userData: {
+        userId: idToken,
+        username: username,
+        fullname: name,
+        email: email
+      }
+    })
   }
 
   getUserInfo() {
@@ -42,13 +59,7 @@ class App extends React.Component {
       if (user) {
         firebase.auth().currentUser.getIdToken(true)
           .then((idToken) => {
-            axios.get('/retire/users', { params: { idToken: idToken } })
-              .then(({ data }) => {
-                this.setState({
-                  isLoggedIn: true,
-                  userData: data
-                })
-              })
+            this.checkifUserExistsinUserTable(idToken)
               .catch((err) => {
                 console.log(err);
               });
@@ -59,70 +70,6 @@ class App extends React.Component {
         console.log("No user is logged in");
       }
     });
-  }
-
-  //for local signup
-  signUp(username, password, fullname, email) {
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        firebase.auth().currentUser.getIdToken(true)
-          .then((idToken) => {
-            axios.post('/retire/users', { idToken: idToken, fullname: fullname, email: email, username: username })
-              .then(({ data }) => {
-                this.setState({
-                  isLoggedIn: true,
-                  userData: {
-                    userId: data,
-                    username: username,
-                    fullname: fullname,
-                    email: email
-                  }
-                })
-              })
-              .catch((err) => { console.error(err) })
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  //for OAuth signup
-  oAuthSignUp (provider) {
-    firebase.auth().signInWithPopup(provider)
-      .then((authData) => {
-        firebase.auth().currentUser.getIdToken(true)
-          .then((idToken) => {
-            axios.post('/retire/users', {
-              fullname: authData.additionalUserInfo.profile.name,
-              email: authData.additionalUserInfo.profile.email,
-              username: authData.additionalUserInfo.username,
-              idToken: idToken
-            })
-              .then((user) => {
-                console.log(user)
-              })
-              .catch((err) => console.error(err))
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-      })
-      .catch((err) => console.error(err));
-  }
-
-  //for OAuth login
-  //check if 
-  oAuthLogin (provider) {
-    return firebase.auth().signInWithPopup(provider);
-  }
-  
-  //for local login
-  onLogin (email, password) {
-    return firebase.auth().signInWithEmailAndPassword(email, password);
   }
   
   // allow people to use the website without signing up
@@ -148,16 +95,13 @@ class App extends React.Component {
     return (
       <div>
         <Nav 
-          onGetStarted={this.onGetStarted} 
-          onLogin={this.onLogin} 
-          oAuthLogin={this.oAuthLogin} 
-          isLoggedIn={this.state.isLoggedIn} 
-          logOut={this.logOut}  
-          emailAndPassSignUp={this.signUp} 
-          googleSignUp={this.oAuthSignUp}
+          onGetStarted={this.onGetStarted}
+          updateUserState={this.updateUserState}
+          logOut={this.logOut}
+          isLoggedIn={this.state.isLoggedIn}
           userData={this.state.userData}
         />
-        {!this.state.isLoggedIn && <Home onSignUp={this.signUp} emailAndPassSignUp={this.signUp} googleSignUp={this.oAuthSignUp}/>}
+        {!this.state.isLoggedIn && <Home updateUserState={this.updateUserState} />}
       <div className="container-fluid">
         <div id="cont"></div>
         {this.state.isLoggedIn && <Dashboard userData={this.state.userData} />}
