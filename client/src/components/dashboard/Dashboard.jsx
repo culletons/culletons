@@ -147,13 +147,12 @@ class Dashboard extends React.Component {
       });
   }
 
+  // remove calculateRetireplan() after factoring button to do so
   updateGoals() {
     axios
       .get('retire/goals', { params: { userId: this.props.userData.userId } })
       .then(({ data }) => {
-        this.setState({ goals: data }, () => {
-          this.calculateRetirePlan();
-        });
+        this.setState({ goals: data });
         if (this.state.goals) {
           this.setState({ formGoalsToggle: false });
         }
@@ -213,10 +212,14 @@ class Dashboard extends React.Component {
   }
 
   // think we can move this to node pretty cleanly, setState in .then()
-  calculateRetirePlan() {
+  calculateRetirePlan(addGoals) {
+    let goals = undefined;
+    if (addGoals) {
+      goals = this.state.goals;
+    }
     axios
       .get('/retire/trajectory', {
-        params: { activePlan: this.state.activePlan, goals: this.state.goals }
+        params: { activePlan: this.state.activePlan, goals: goals }
       })
       .then((result) => {
         console.log(result.data);
@@ -283,6 +286,7 @@ class Dashboard extends React.Component {
             setOverview={this.setOverview}
             goals={this.state.goals}
             launchPlaidLink={this.launchPlaidLink}
+            calculateRetirePlan={this.calculateRetirePlan}
           />
         </div>
         <div className="col-md-10">

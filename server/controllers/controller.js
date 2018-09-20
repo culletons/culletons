@@ -255,12 +255,15 @@ module.exports = {
           var salary = Math.floor(
             activePlan.annualIncome * (1 + 0.02 * (age - activePlan.currentAge))
           ); // projected salary for a given age
+          if (goals) {
+            salary = salary * goals.familySize;
+          }
           projectedSalary.push(salary);
           // factor child expenses
           if (goals && goals.numberOfKids > 0 && (age > 30 && age < 49)) {
-            let childCost = 28000;
+            let childCost = 20000;
             for (let i = 1; i < goals.numberOfKids; i++) {
-              childCost = childCost + 28000 * (1 - 0.2 * i);
+              childCost = childCost + 20000 * (1 - 0.2 * i);
             }
             spending = Math.floor(salary * spendingPercent) + childCost;
             projectedSpending.push(spending);
