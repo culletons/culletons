@@ -3,6 +3,7 @@ import PieChart from '../charts/PieChart.jsx'
 import LineChart from '../charts/LineChart.jsx'
 import ColumnChart from '../charts/ColumnChart.jsx'
 import ComparisonChart from '../charts/ComparisonChart.jsx';
+import SavingsHistChart from '../charts/SavingsHistChart.jsx';
 import axios from 'axios'
 
 var chart
@@ -91,6 +92,10 @@ class Overview extends React.Component {
             <div className="card-body">
             <div className="card-title border-bottom"><h4>Retirement Calculator</h4></div>
             <ComparisonChart activePlan={this.props.activePlan} plans={this.props.plans} goals={this.props.goals}/>
+          </div>
+          <div className="card-body">
+            <div className="card-title border-bottom"><h4>Savings History</h4></div>
+            <SavingsHistChart/>
           </div>
       </div>
     )

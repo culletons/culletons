@@ -48,14 +48,14 @@ module.exports = {
     model
       .getItemByID(req.query.itemId)
       .then((item) => {
-        // console.log("this is returned from getItem ", item)
+        //console.log("this is returned from getItem ", item)
         client.getAuth(item.attributes.itemToken, (error, numbersData) => {
           if (error != null) {
             var msg = 'Unable to pull accounts from Plaid API.';
             console.log(msg + '\n' + error);
             return res.json({ error: msg });
           }
-          // console.log(numbersData);
+          //console.log(numbersData);
           res.send(numbersData);
         });
       })
@@ -77,5 +77,18 @@ module.exports = {
         console.log(err);
         res.sendStatus(500);
       });
+  },
+
+  //seeds savings history database with fake entries sent in post body
+  seedHistory: (req, res) => {
+    model
+      .seedSavingsHistory(req.body.seed)
+      .then(() => {
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.sendStatus(500);
+      })
   }
 };

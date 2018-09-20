@@ -6,6 +6,7 @@ import Overview from './Overview.jsx';
 import GoalInfo from './goalInfo.jsx';
 import BasicInfo from './BasicInfo.jsx';
 import LineChart from '../charts/LineChart.jsx';
+import SavingsHistChart from '../charts/SavingsHistChart.jsx';
 
 class Dashboard extends React.Component {
   constructor(props) {

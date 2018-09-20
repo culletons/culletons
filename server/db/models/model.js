@@ -133,6 +133,25 @@ var getPlansFromDB = (userIdToSearch) => {
     });
 };
 
+//seeds database for fake savings history data. Takes an array of objects with balance, savings, and date entries
+var seedSavingsHistory = (seed) => {
+  seed.forEach((entry) => {
+    return new SavingsHistory({
+      userId: 7,
+      balanceAmt: entry.balance,
+      availableAmt: entry.savings,
+      created_at: entry.date
+    })
+    .save()
+    .then(function(newSave) {
+      console.log(newSave, ' was created in the database model.');
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  });
+};
+
 // Creates a new plan for the user
 var createPlanInDB = (
   name,
@@ -276,6 +295,7 @@ var createGoalInDB = (userId, familySize, numberOfKids, travel, hobbySpending, l
   });
 };
 
+
 // creates a record of the user's savings total, for a given day.
 var addSavingHistory = (userId, savingsAmt, availableAmt) => {
   let today = moment().format('l');
@@ -341,5 +361,6 @@ module.exports = {
   getGoalsFromDB,
   createGoalInDB,
   getItemByID,
-  addSavingHistory
+  addSavingHistory,
+  seedSavingsHistory
 };

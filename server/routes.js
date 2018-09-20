@@ -33,4 +33,6 @@ router.put('/history', plaidController.updateHistory);
 // handles retirement calculation
 router.get('/trajectory', usersController.calculateRetirePlan);
 
+//seeds savings history database
+router.post('/seedHistory', plaidController.seedHistory);
 module.exports = router;
