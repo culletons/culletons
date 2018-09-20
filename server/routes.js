@@ -10,13 +10,13 @@ router.post('/users', usersController.createUser);
 router.put('/users', usersController.updateUser);
 
 // handles user inputs such as retirement age, income, savings
-router.get('/plans', usersController.getPlans)
+router.get('/plans', usersController.getPlans);
 router.post('/plans', usersController.createPlan);
 router.delete('/plans', usersController.deletePlan);
 router.put('/plans', usersController.updatePlan);
 
 // handles user plaid data
-router.get('/items', usersController.getItems)
+router.get('/items', usersController.getItems);
 router.post('/items', usersController.createItem);
 router.put('/items', usersController.updateItem);
 
@@ -29,5 +29,8 @@ router.put('/goals', usersController.updateGoal);
 router.post('/get_access_token', plaidController.getAccessToken);
 router.get('/accounts', plaidController.getAccounts);
 router.put('/history', plaidController.updateHistory);
+
+// handles retirement calculation
+router.get('/trajectory', usersController.calculateRetirePlan);
 
 module.exports = router;

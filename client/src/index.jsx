@@ -29,6 +29,7 @@ class App extends React.Component {
   } 
 
   componentDidMount() {
+    // debugger;
     this.getUserInfo();
   }
 
@@ -42,19 +43,20 @@ class App extends React.Component {
     })
   }
 
-  updateUserState(idToken, name, username, email){
+  updateUserState(idToken, fullname, username, email){
     this.setState({
       isLoggedIn: true,
       userData: {
         userId: idToken,
         username: username,
-        fullname: name,
+        fullname: fullname,
         email: email
       }
     })
   }
 
   getUserInfo() {
+    debugger;
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         firebase.auth().currentUser.getIdToken(true)

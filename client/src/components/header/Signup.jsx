@@ -11,7 +11,8 @@ class Signup extends React.Component {
       password: '',
       fullname: '',
       email: '',
-      errorEmail: ''
+      errorEmail: '',
+      dupUser: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.emailAndPassAuth = this.emailAndPassAuth.bind(this);
@@ -23,26 +24,40 @@ class Signup extends React.Component {
 
   //create user
   createUser(idToken, fullname, email, username){
-    this.closeModal();
-    axios.post('/retire/users', { idToken, fullname, email, username })
-    .then(({ data }) => {
-       this.props.updateUserState(idToken,username,fullname,email);
-    })
+    if(!username) username = email;
+    debugger;
+    return axios.post('/retire/users', { idToken, fullname, email, username });
   }
 
   //for OAuth signup
   authHandler (provider) {
     firebase.auth().signInWithPopup(provider)
-      .then((authData) => {
-        firebase.auth().currentUser.getIdToken(true)
-          .then((idToken) => {
-            this.createUser(idToken, authData.additionalUserInfo.profile.name, authData.additionalUserInfo.profile.email, authData.additionalUserInfo.username);
-          })
-          .catch((err) => {
-            console.log(err);
-          })
+    .then((authData) => {
+      this.closeModal();
+      firebase.auth().currentUser.getIdToken(true)
+      .then((idToken) => {
+        this.createUser(idToken, authData.additionalUserInfo.profile.name, authData.additionalUserInfo.profile.email, authData.additionalUserInfo.username)
+        .then(({data})=> {
+          console.log(data);
+          if(data == 'USER ALREADY EXISTS IN DB') {
+            this.setState({
+              dupUser : true
+            })
+          } else {
+            if(!authData.additionalUserInfo.username) authData.additionalUserInfo.username = authData.additionalUserInfo.profile.email;
+            this.props.updateUserState(idToken,authData.additionalUserInfo.username,authData.additionalUserInfo.profile.name,authData.additionalUserInfo.profile.email);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.log(err);
+      })
+    })
+    .catch((err) => console.error(err));
   }
 
   //for local signup
@@ -86,7 +101,8 @@ class Signup extends React.Component {
       password: '',
       fullname: '',
       email: '',
-      errorEmail: ''
+      errorEmail: '',
+      dupUser: false
     })
   }
 
@@ -117,7 +133,7 @@ class Signup extends React.Component {
                   </div>
                   <div className="md-form pb-1">
                     <label data-error="wrong" data-success="right" htmlFor="Form-pass-signup">Password</label>
-                    <input type="password" value={this.state.password} className="form-control validate" autoComplete="new-password" name="password" onChange={this.handleChange}/>
+                    <input type="password" value={this.state.password} className="form-control validate" autoComplete="current-password" name="password" onChange={this.handleChange}/>
                   </div>
                   <div className="md-form pb-1">
                     <label data-error="wrong" data-success="right" htmlFor="Form-username-signup">Username</label>
@@ -133,6 +149,9 @@ class Signup extends React.Component {
                   <div className="text-center pb-1">
                       {/* Button to make post request */}
                       <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" onClick={this.emailAndPassAuth}>Register</button>
+                  </div>
+                  <div>
+                    {this.state.dupUser ? 'User already exists' : ''}
                   </div>
                 </div>
               </form>

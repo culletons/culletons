@@ -25,10 +25,7 @@ class Login extends React.Component {
   checkifUserExistsinUserTable(idToken){
     return axios.get('/retire/users', { params: { idToken: idToken } })
     .then(({ data }) => {
-      this.setState({
-        isLoggedIn: true,
-        userData: data
-      })
+      this.props.updateUserState(data.oAuthId, data.fullname, data.username, data.email);
     })
   }
 
@@ -37,6 +34,7 @@ class Login extends React.Component {
   oAuthLogin (provider) {
     return firebase.auth().signInWithPopup(provider)
      .then((authData) => {
+      $(this.modal).modal('hide');
       return firebase.auth().currentUser.getIdToken(true)
       .then((idToken) => {
         return this.checkifUserExistsinUserTable(idToken)
@@ -47,7 +45,6 @@ class Login extends React.Component {
   authHandler(provider) {
     this.oAuthLogin(provider)
      .then((data) => {
-      $(this.modal).modal('hide');
      })
      .catch((err) => {
        var error;
@@ -65,14 +62,20 @@ class Login extends React.Component {
 
   //for local login
   emailLogin (email, password) {
-    return firebase.auth().signInWithEmailAndPassword(email, password);
+    return firebase.auth().signInWithEmailAndPassword(email, password)
+      .then((authData) => {
+        return firebase.auth().currentUser.getIdToken(true)
+        .then((idToken) => {
+          return this.checkifUserExistsinUserTable(idToken)
+        })
+      })
   }
 
   emailClickHandler(email, password) {
     if(email && password){
       this.emailLogin(email, password)
         .then((data) => {
-          $(this.modal).modal('hide');
+          // $(this.modal).modal('hide');
         })
         .catch((err) => {
           console.log(err.message)
