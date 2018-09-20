@@ -152,7 +152,9 @@ class Dashboard extends React.Component {
     axios
       .get('retire/goals', { params: { userId: this.props.userData.userId } })
       .then(({ data }) => {
-        this.setState({ goals: data });
+        this.setState({ goals: data }, () => {
+          console.log(this.state.goals);
+        });
         if (this.state.goals) {
           this.setState({ formGoalsToggle: false });
         }
@@ -295,7 +297,11 @@ class Dashboard extends React.Component {
             <div className="col-md-12">
               {/* two different forms for the user to fill out */}
               <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
-              <GoalInfo user={this.props.userData} />
+              {this.state.goals ? (
+                this.state.goals.length === 0 ? (
+                  <GoalInfo user={this.props.userData} />
+                ) : null
+              ) : null}
             </div>
           )}
           <div className="row">

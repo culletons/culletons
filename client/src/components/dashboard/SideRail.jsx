@@ -10,10 +10,7 @@ class SideRail extends React.Component {
     this.saveName = this.saveName.bind(this);
     this.onEdit = this.onEdit.bind(this);
     this.launchPlaidLink = this.launchPlaidLink.bind(this);
-    this.toggleGoals = this.toggleGoals.bind(this);
   }
-
-  toggleGoals() {}
 
   confirmDelete(id) {
     this.props.deletePlan(id);
@@ -68,8 +65,8 @@ class SideRail extends React.Component {
           {/* After receiving the props, map them to the rail including all handlers */}
           {this.props.plans &&
             this.props.plans.map((plan, idx) => (
-              <div className="card-body border-bottom py-1">
-                <div key={idx} className="panel-default">
+              <div key={idx} className="card-body border-bottom py-1">
+                <div className="panel-default">
                   <div className="panel-heading">
                     <h6
                       className="panel-title theme-hover"

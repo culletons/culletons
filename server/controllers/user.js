@@ -1,43 +1,36 @@
 const model = require('../db/models/model.js');
 var admin = require('firebase-admin');
 
-var serviceAccount = require('../config.js').FIREBASE_credential;
-var database = require('../config.js').FIREBASE_databaseURL;
-
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: database
+  credential: admin.credential.cert({
+    projectId : process.env.FIREBASE_project_id,
+    clientEmail: process.env.FIREBASE_client_email,
+    privateKey: process.env.FIREBASE_private_key
+  }),
+  databaseURL: process.env.FIREBASE_databaseURL
 });
 
 module.exports = {
   // looks into the database if the user is saved into our database
   getUser: (req, res) => {
     let idToken = req.query.idToken;
-    admin
-      .auth()
-      .verifyIdToken(idToken)
+    admin.auth().verifyIdToken(idToken)
       .then((decodedToken) => {
         var uid = decodedToken.uid;
-        model
-          .getUserByOAuthFromDB(uid)
-          .then((user) => {
-            if (user) {
-              // if user is in the database send the user information to client
-              res.status(200).send(user);
-            } else {
-              setTimeout(() => {
-                // else return error
+        model.getUserByOAuthFromDB(uid)
+              .then(user => {
+                if (user) {
+                  // if user is in the database send the user information to client
+                  res.send(user)
+                } else {
+                  res.sendStatus(404);
+                }
+              })
+              .catch(err => {
                 console.log('user not found in DB');
-                res.sendStatus(500);
-              }, 2000);
-            }
-          })
-          .catch((err) => {
-            console.log('user not found in DB');
-            res.sendStatus(500);
-          });
-      })
-      .catch(function(error) {
+                res.sendStatus(404);
+              })
+      }).catch(function(error) {
         console.log(error);
         res.sendStatus(500);
       });
@@ -57,7 +50,7 @@ module.exports = {
             // if the user already exists in our database, throw error
             if (user) {
               console.log('USER ALREADY EXISTS IN DB');
-              res.sendStatus(500);
+              res.send('USER ALREADY EXISTS IN DB');
             } else {
               // else create the user account in our database
               model
@@ -77,7 +70,7 @@ module.exports = {
             res.sendStatus(500);
           });
       })
-      .catch(function(error) {
+      .catch((error) => {
         console.log(error);
         res.sendStatus(500);
       });
