@@ -10,40 +10,41 @@ import config from './config/googleKey.js';
 
 // create firebase config.js file inside components/header/googleKey.js
 const app = firebase.initializeApp(config);
-
 class App extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      username: "",
+      username: '',
       isLoggedIn: false,
-      userData: null,
-      currentUserId: 0
-    }
+      userData: null
+    };
 
     this.checkifUserExistsinUserTable = this.checkifUserExistsinUserTable.bind(this);
     this.updateUserState = this.updateUserState.bind(this);
-    this.getUserInfo = this.getUserInfo.bind(this); 
+    this.getUserInfo = this.getUserInfo.bind(this);
     this.onGetStarted = this.onGetStarted.bind(this);
     this.logOut = this.logOut.bind(this);
-  } 
+  }
 
   componentDidMount() {
-    // debugger;
     this.getUserInfo();
   }
 
-  checkifUserExistsinUserTable(idToken){
-    return axios.get('/retire/users', { params: { idToken: idToken } })
-    .then(({ data }) => {
-      this.setState({
-        isLoggedIn: true,
-        userData: data
-      })
-    })
+  checkifUserExistsinUserTable(idToken) {
+    return axios.get('/retire/users', { params: { idToken: idToken } }).then(({ data }) => {
+      this.setState(
+        {
+          isLoggedIn: true,
+          userData: data
+        },
+        () => {
+          console.log(this.state.userData);
+        }
+      );
+    });
   }
 
-  updateUserState(idToken, fullname, username, email){
+  updateUserState(idToken, fullname, username, email) {
     this.setState({
       isLoggedIn: true,
       userData: {
@@ -52,51 +53,56 @@ class App extends React.Component {
         fullname: fullname,
         email: email
       }
-    })
+    });
   }
 
   getUserInfo() {
-    debugger;
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        firebase.auth().currentUser.getIdToken(true)
+        firebase
+          .auth()
+          .currentUser.getIdToken(true)
           .then((idToken) => {
-            this.checkifUserExistsinUserTable(idToken)
-              .catch((err) => {
-                console.log(err);
-              });
-          }).catch((error) => {
+            this.checkifUserExistsinUserTable(idToken).catch((err) => {
+              console.log(err);
+            });
+          })
+          .catch((error) => {
             console.log(error);
           });
       } else {
-        console.log("No user is logged in");
+        console.log('No user is logged in');
       }
     });
   }
-  
+
   // allow people to use the website without signing up
   onGetStarted() {
     this.setState({
       isLoggedIn: true,
-      userData: {userId: 3}
-    })
-  }
-  
-  logOut() {
-    firebase.auth().signOut().then(() => {
-      this.setState({
-        isLoggedIn: false,
-        userData: null
-      })
-    }).catch((error) => {
-      console.error(error)
+      userData: { userId: 3 }
     });
+  }
+
+  logOut() {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        this.setState({
+          isLoggedIn: false,
+          userData: null
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   render() {
     return (
       <div>
-        <Nav 
+        <Nav
           onGetStarted={this.onGetStarted}
           updateUserState={this.updateUserState}
           logOut={this.logOut}
@@ -104,31 +110,29 @@ class App extends React.Component {
           userData={this.state.userData}
         />
         {!this.state.isLoggedIn && <Home updateUserState={this.updateUserState} />}
-      <div className="container-fluid">
-        <div id="cont"></div>
-        {this.state.isLoggedIn && <Dashboard userData={this.state.userData} />}
-      </div>
+        <div className="container-fluid">
+          <div id="cont" />
+          {this.state.isLoggedIn && <Dashboard userData={this.state.userData} />}
+        </div>
         <footer className="section footer-dk">
-        {/* a basic footer that doesn't feature anything as of yet */}
+          {/* a basic footer that doesn't feature anything as of yet */}
           <div>
-          <div className="container">
-            <div className="row">
+            <div className="container">
+              <div className="row">
                 <div className="col-sm-6 col-sm-offset-2 text-center p-4">
                   <h2>Plan+Life</h2>
-                  <h4>
-                    WOO
-                   </h4>
+                  <h4>WOO</h4>
                 </div>
                 <div className="col-sm-6 text-center p-4">
-                <h4>Contact us: never</h4>
+                  <h4>Contact us: never</h4>
                 </div>
               </div>
             </div>
           </div>
-        </ footer>
+        </footer>
       </div>
-    )
+    );
   }
 }
 
-ReactDOM.render(<App/>, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app'));
