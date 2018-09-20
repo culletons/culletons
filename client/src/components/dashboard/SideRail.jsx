@@ -55,8 +55,8 @@ class SideRail extends React.Component {
           </div>
           {/* After receiving the props, map them to the rail including all handlers */}
           {this.props.plans && this.props.plans.map((plan, idx) => (
-            <div className="card-body border-bottom py-1">
-              <div key={idx} className="panel-default">
+            <div key={idx} className="card-body border-bottom py-1">
+              <div className="panel-default">
                 <div className="panel-heading">
                   <h6 className="panel-title theme-hover" data-toggle="collapse" onClick={() => this.props.setActivePlan(plan)} data-target={`#collapseExample${idx}`} aria-expanded="false" aria-controls="collapseExample">
                     <i className="fa fa-caret-down" aria-hidden="true"></i>

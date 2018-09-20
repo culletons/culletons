@@ -4,9 +4,9 @@
 
 ## Team
 
-  - __Product Owner__: Trent Going
-  - __Scrum Master__: Shirley Hu
-  - __Development Team Members__: Jay Paek
+  - __Product Owner__: Milton Lopez
+  - __Scrum Master__: Alan Yang
+  - __Development Team Members__: Laura Zhang
 
 ## Table of Contents
 
@@ -26,7 +26,6 @@
 ## Requirements
 
 - Node 0.10.x
-- Redis 2.6.x
 - MySQL 2.16.x
 - Express 4.16.x
 - Plaid 2.8.x
@@ -55,8 +54,8 @@ From within the root directory:
 npm install
 
 ### Running in Development
-npm run dev-server
-npm run react-dev
+npm run server
+npm run react
 
 ### Roadmap
 

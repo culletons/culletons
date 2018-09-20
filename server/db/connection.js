@@ -2,11 +2,11 @@ const mysql = require('mysql')
 const knex = require('knex')({
     client: 'mysql',
     connection: {
-        host: 'culletons.cj3egt8fhnki.us-east-1.rds.amazonaws.com',
-        port: '3306',
-        user: 'Culletons',
-        password: 'culletons',
-        database: 'Culletons'
+        host: process.env.DBHOST,
+        port: process.env.DBPORT,
+        user: process.env.DBUSER,
+        password: process.env.DBPASSWORD,
+        database: process.env.DBNAME
     },
     useNullAsDefault: true,
     pool: { 
@@ -27,7 +27,6 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
         user.string('password', 255)
         user.string("email", 255)
         user.string('oAuthId', 255)
-        user.timestamps();
         user.timestamps(true, true);
       })
       .then(function (table) {

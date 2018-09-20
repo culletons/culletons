@@ -1,5 +1,7 @@
 import React from 'react';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import axios from 'axios';
 
 class Signup extends React.Component {
   constructor(props){
@@ -8,28 +10,99 @@ class Signup extends React.Component {
       username: '',
       password: '',
       fullname: '',
-      email: ''
+      email: '',
+      errorEmail: '',
+      dupUser: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.emailAndPassAuth = this.emailAndPassAuth.bind(this);
-    this.googleAuth = this.googleAuth.bind(this);
+    this.authHandler = this.authHandler.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.emailSignUp = this.emailSignUp.bind(this);
+    this.createUser = this.createUser.bind(this);
   }
 
-  googleAuth(provider) {
-    this.props.googleSignUp(provider)
+  //create user
+  createUser(idToken, fullname, email, username){
+    if(!username) username = email;
+    debugger;
+    return axios.post('/retire/users', { idToken, fullname, email, username });
+  }
+
+  //for OAuth signup
+  authHandler (provider) {
+    firebase.auth().signInWithPopup(provider)
+    .then((authData) => {
+      this.closeModal();
+      firebase.auth().currentUser.getIdToken(true)
+      .then((idToken) => {
+        this.createUser(idToken, authData.additionalUserInfo.profile.name, authData.additionalUserInfo.profile.email, authData.additionalUserInfo.username)
+        .then(({data})=> {
+          console.log(data);
+          if(data == 'USER ALREADY EXISTS IN DB') {
+            this.setState({
+              dupUser : true
+            })
+          } else {
+            if(!authData.additionalUserInfo.username) authData.additionalUserInfo.username = authData.additionalUserInfo.profile.email;
+            this.props.updateUserState(idToken,authData.additionalUserInfo.username,authData.additionalUserInfo.profile.name,authData.additionalUserInfo.profile.email);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    })
+    .catch((err) => console.error(err));
+  }
+
+  //for local signup
+  emailSignUp (email, password) {
+    return firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        return firebase.auth().currentUser.getIdToken(true)
+      })
   }
 
   emailAndPassAuth(e) {
     e.preventDefault();
-    this.props.emailAndPassSignUp(this.state.username, this.state.password, this.state.fullname, this.state.email);
+    if(this.state.username !== '' && this.state.password !== '' && this.state.fullname !== '' && this.state.email) {
+      this.emailSignUp(this.state.email, this.state.password)
+      .then((idToken)=> {
+        this.createUser(idToken, this.state.fullname, this.state.email, this.state.username);
+      })
+      .catch((err) => {
+        this.setState({
+          errorEmail: err.message
+        })
+      })
+    } else {
+      this.setState({
+        errorEmail : 'Please enter all fields.'
+      })
+    }
   }
 
   handleChange(evt) {
     this.setState({
       [evt.target.name]: evt.target.value,
-      [evt.target.name]: evt.target.value,
-      [evt.target.name]: evt.target.value,
-      [evt.target.name]: evt.target.value,
+      errorEmail : ''
+    })
+  }
+
+  closeModal(){
+    $(this.modal).modal('hide');
+    this.setState({
+      username: '',
+      password: '',
+      fullname: '',
+      email: '',
+      errorEmail: '',
+      dupUser: false
     })
   }
 
@@ -41,56 +114,76 @@ class Signup extends React.Component {
           <a className="btn clr py-2" id="auth-btn" data-toggle="modal" data-target="#signUp" >Sign Up</a>
         <div className="container">
         </div>
-
         {/* MODAL: Creates popup for SignUp */}
-        <div className="modal fade" id="signUp" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div className="modal fade" ref={modal => this.modal = modal} id="signUp" data-keyboard="false" data-backdrop="static" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div className="modal-dialog" role="document">
             <div className="modal-content form-elegant">
-
               {/* MODAL: header */}
               <div className="modal-header text-center">
                 {/* Creates close button for popup */}
-                <h4 className="modal-title w-100 dark-grey-text font-weight-bold my-3" id="myModalLabel"><strong>Register With</strong></h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4>Sign Up With Email</h4>
+                <button type="button" className="close" onClick={this.closeModal} aria-hidden="true">&times;</button>
               </div>
-
+              <form>
               {/* MODAL: Body */}
-              <div className="modal-body mx-4">
-                <div className="md-form mb-5">
-                  <input type="username" id="Form-username-signup" className="form-control validate" name="username" onChange={this.handleChange}/>
-                  <label data-error="wrong" data-success="right" htmlFor="Form-username-signup">Your username</label>
+                <div className="modal-body mx-4">
+                <div className="md-form pb-1">
+                    <label data-error="wrong" data-success="right" htmlFor="Form-username-signup">Email</label>
+                    <input type="username" value={this.state.email} className="form-control validate" name="email" onChange={this.handleChange}/>
+                  </div>
+                  <div className="md-form pb-1">
+                    <label data-error="wrong" data-success="right" htmlFor="Form-pass-signup">Password</label>
+                    <input type="password" value={this.state.password} className="form-control validate" autoComplete="current-password" name="password" onChange={this.handleChange}/>
+                  </div>
+                  <div className="md-form pb-1">
+                    <label data-error="wrong" data-success="right" htmlFor="Form-username-signup">Username</label>
+                    <input type="username" value={this.state.username} className="form-control validate" name="username" onChange={this.handleChange}/>
+                  </div>
+                  <div className="md-form pb-3">
+                    <label data-error="wrong" data-success="right" htmlFor="Form-username-signup">Fullname</label>
+                    <input type="username" value={this.state.fullname} className="form-control validate" name="fullname" onChange={this.handleChange}/>
+                  </div>
+                  <div>
+                    {this.state.errorEmail}
+                  </div>
+                  <div className="text-center pb-1">
+                      {/* Button to make post request */}
+                      <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" onClick={this.emailAndPassAuth}>Register</button>
+                  </div>
+                  <div>
+                    {this.state.dupUser ? 'User already exists' : ''}
+                  </div>
                 </div>
-    
-                <div className="md-form pb-3">
-                    <input type="password" id="Form-pass-signup" className="form-control validate" name="password" onChange={this.handleChange}/>
-                    <label data-error="wrong" data-success="right" htmlFor="Form-pass-signup">Your password</label>
-                </div>
-
-                <div className="md-form mb-5">
-                  <input type="username" id="Form-fullname-signup" className="form-control validate" name="fullname" onChange={this.handleChange}/>
-                  <label data-error="wrong" data-success="right" htmlFor="Form-username-signup">Your fullname</label>
-                </div>
-
-                <div className="md-form mb-5">
-                  <input type="username" id="Form-email-signup" className="form-control validate" name="email" onChange={this.handleChange}/>
-                  <label data-error="wrong" data-success="right" htmlFor="Form-username-signup">Your email</label>
-                </div>
-    
-                <div className="text-center mb-3">
-                    {/* Button to make post request */}
-                    <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" onClick={(e) => {this.emailAndPassAuth(e)}} 
-                            data-dismiss="modal"
-                    >Register</button>
-                </div>
+              </form>
+              <div className="modal-header text-center">
+                {/* Creates close button for popup */}
+                <h4>Or Sign Up With:</h4>
               </div>
-
-               <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2"> or Register with:</p>
-    
                <div className="row my-3 d-flex justify-content-center social">
-                   {/* Button to SignUp with google*/}
-                   <button type="button" className="btn btn-white btn-rounded z-depth-1a" data-dismiss="modal" aria-hidden="true" onClick={this.googleAuth.bind(this, new firebase.auth.GoogleAuthProvider())}>
-                     <i className="fa fa-google-plus"></i>
-                   </button>
+                    {/* Button to Login with google*/}
+                    <div className="loginOptions">
+                      <button type="button" className="btn btn-white btn-rounded z-depth-1a loginButton" onClick={this.authHandler.bind(this, new firebase.auth.GoogleAuthProvider())} aria-hidden="true">
+                        <i className="fa fa-google-plus"></i>
+                      </button>
+                    </div>
+                    {/* Button to Login with facebook*/}
+                    <div className="loginOptions">
+                      <button type="button" className="btn btn-white btn-rounded z-depth-1a loginButton" onClick={this.authHandler.bind(this, new firebase.auth.FacebookAuthProvider())} aria-hidden="true">
+                        <i className="fa fa-facebook"></i>                    
+                      </button>
+                    </div>
+                    {/* Button to Sign up with github*/}
+                    <div className="loginOptions">
+                      <button type="button" className="btn btn-white btn-rounded z-depth-1a loginButton" onClick={this.authHandler.bind(this, new firebase.auth.GithubAuthProvider())} aria-hidden="true">
+                        <i className="fa fa-github"></i>
+                      </button>  
+                    </div>
+                    {/* Button to Sign up with twitter*/}
+                    <div className="loginOptions">
+                      <button type="button" className="btn btn-white btn-rounded z-depth-1a loginButton" onClick={this.authHandler.bind(this, new firebase.auth.TwitterAuthProvider())} aria-hidden="true">
+                        <i className="fa fa-twitter"></i>
+                      </button>  
+                    </div>
                </div>
             </div>
           </div>

@@ -1,7 +1,9 @@
-node_modules/
-client/dist/bundle.js
-build/
-server/config.js
-package-lock.json
 .DS_Store
-client/src/components/header/googleKey.js
+package-lock.json
+.env
+build/
+node_modules/
+server/config.js
+client/dist/bundle.js
+client/src/config/googleKey*
+config/*.env
