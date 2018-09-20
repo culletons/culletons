@@ -22,14 +22,18 @@
     box-shadow: 0 5px 11px 0 rgba(85, 182, 255, 0.28), 0 4px 15px 0 rgba(36, 133, 255, 0.15); }
 
 .form-elegant .modal-header {
-    border-bottom: none; }
+    border-bottom: none;
+    padding-bottom:0;
+}
 
 .modal-dialog .form-elegant .btn .fa {
     color: #547a99!important; }
 
 .form-elegant .modal-body, .form-elegant .modal-footer {
     font-weight: 400; }
-
+.form-elegant .modal-body {
+  padding-top:10px;
+}
 
 /* Make circles that indicate the steps of the form: */
 .step {
@@ -247,4 +251,16 @@ a {
   display: block;
   height: 100vh;
   overflow: scroll;
+}
+
+.loginbtn {
+  cursor: pointer;
+}
+
+.loginOptions{
+  padding: 5px;
+}
+
+.loginButton{
+  width: 40px;
 }

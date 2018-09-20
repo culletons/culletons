@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const usersController = require('./controllers/controller.js');
+const usersController = require('./controllers/user.js');
 const plaidController = require('./controllers/plaid.js');
 
 // routes all requests from the client to the controller.js

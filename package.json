@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev-server": "nodemon --inspect server/controllers/index.js",
-    "react-dev": "webpack -d --watch"
+    "test": "mocha --bail --reporter nyan test/ServerSpec.js",
+    "server": "nodemon --inspect server/index.js",
+    "react": "webpack -d --watch"
   },
   "author": "",
   "license": "ISC",
@@ -41,7 +41,10 @@
     "babel-loader": "^6.3.2",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-react": "^6.23.0",
+    "chai": "^4.1.2",
+    "dotenv": "^6.0.0",
     "firebase": "^5.4.2",
+    "mocha": "^5.2.0",
     "webpack": "^2.2.1"
   }
 }
