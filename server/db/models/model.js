@@ -75,6 +75,7 @@ var getUserByOAuthFromDB = (firebaseToken) => {
   return new User({ oAuthId: firebaseToken })
     .fetch()
     .then((user) => {
+      console.log(user);
       return user;
     })
     .catch((err) => {

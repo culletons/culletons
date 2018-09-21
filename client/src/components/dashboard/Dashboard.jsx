@@ -149,11 +149,14 @@ class Dashboard extends React.Component {
       });
   }
 
+  // remove calculateRetireplan() after factoring button to do so
   updateGoals() {
     axios
       .get('retire/goals', { params: { userId: this.props.userData.userId } })
       .then(({ data }) => {
-        this.setState({ goals: data });
+        this.setState({ goals: data }, () => {
+          console.log(this.state.goals);
+        });
         if (this.state.goals) {
           this.setState({ formGoalsToggle: false });
         }
@@ -213,14 +216,26 @@ class Dashboard extends React.Component {
   }
 
   // think we can move this to node pretty cleanly, setState in .then()
-  calculateRetirePlan() {
+  calculateRetirePlan(addGoals) {
+    let goals = undefined;
+    if (addGoals) {
+      goals = this.state.goals;
+    }
     axios
-      .get('/retire/trajectory', { params: { activePlan: this.state.activePlan } })
+      .get('/retire/trajectory', {
+        params: { activePlan: this.state.activePlan, goals: goals }
+      })
       .then((result) => {
         console.log(result.data);
-        this.setState({
-          retirePlan: result.data
-        });
+        console.log(this.state.goals);
+        this.setState(
+          {
+            retirePlan: result.data
+          },
+          () => {
+            console.log(this.state.retirePlan);
+          }
+        );
       })
       .catch((err) => console.error(err));
   }
@@ -275,6 +290,7 @@ class Dashboard extends React.Component {
             setOverview={this.setOverview}
             goals={this.state.goals}
             launchPlaidLink={this.launchPlaidLink}
+            calculateRetirePlan={this.calculateRetirePlan}
           />
         </div>
         <div className="col-md-10">
@@ -283,7 +299,11 @@ class Dashboard extends React.Component {
             <div className="col-md-12">
               {/* two different forms for the user to fill out */}
               <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
-              {/* <GoalInfo user={this.props.userData} /> */}
+              {this.state.goals ? (
+                this.state.goals.length === 0 ? (
+                  <GoalInfo user={this.props.userData} />
+                ) : null
+              ) : null}
             </div>
           )}
           <div className="row">

@@ -221,6 +221,11 @@ module.exports = {
       4: 1.2,
       5: 1.4
     };
+    let goals = null;
+    if (req.query.goals) {
+      goals = JSON.parse(req.query.goals);
+      console.log(goals);
+    }
     let retirePlanToSave = {};
     let activePlan = JSON.parse(req.query.activePlan);
     let projectedSalary = [];
@@ -243,14 +248,30 @@ module.exports = {
           var salary = Math.floor(
             activePlan.annualIncome * (1 + 0.02 * (age - activePlan.currentAge))
           ); // projected salary for a given age
+          if (goals) {
+            salary = salary * goals.familySize;
+          }
           projectedSalary.push(salary);
-          spending = Math.floor(salary * spendingPercent); // projected spending based on salary and spend %.  (Adjust for the GOALS set in future work)
-          projectedSpending.push(spending);
-          let savings = Math.floor(salary * savingPercent); // projected yearly savings
-          projectedSavings.push(savings);
-          savingsHigh = Math.floor(savingsHigh * 1.13) + savings; // Savings calculator based on very high market return
-          savingsLow = Math.floor(savingsLow * 1.07) + savings; // Savings calculator based on low market return
-          savingsMid = Math.floor(savingsMid * 1.1) + savings; // Savings calculator based on mid market return
+          // factor child expenses
+          if (goals && goals.numberOfKids > 0 && (age > 30 && age < 49)) {
+            let childCost = 20000;
+            for (let i = 1; i < goals.numberOfKids; i++) {
+              childCost = childCost + 20000 * (1 - 0.2 * i);
+            }
+            spending = Math.floor(salary * spendingPercent) + childCost;
+            projectedSpending.push(spending);
+            var savings = Math.floor(salary * savingPercent) - childCost; // projected yearly savings
+            projectedSavings.push(savings);
+          } else {
+            spending = Math.floor(salary * spendingPercent); // projected spending based on salary and spend %.  (Adjust for the GOALS set in future work)
+            projectedSpending.push(spending);
+            var savings = Math.floor(salary * savingPercent); // projected yearly savings
+            projectedSavings.push(savings);
+          }
+          // console.log(goals);
+          savingsHigh = Math.floor(savingsHigh * 1.1) + savings; // Savings calculator based on very high market return
+          savingsLow = Math.floor(savingsLow * 1.04) + savings; // Savings calculator based on low market return
+          savingsMid = Math.floor(savingsMid * 1.07) + savings; // Savings calculator based on mid market return
           retireSavingsHighReturns.push(savingsHigh);
           retireSavingsLowReturns.push(savingsLow);
           retireSavingsMidReturns.push(savingsMid);
