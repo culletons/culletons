@@ -1,11 +1,12 @@
 import React from 'react';
 import axios from 'axios';
-import Accounts from './Accounts.jsx'
+import Accounts from './Accounts.jsx';
 import SideRail from './SideRail.jsx';
-import Overview from './Overview.jsx'
+import Overview from './Overview.jsx';
 import GoalInfo from './goalInfo.jsx';
-import BasicInfo from './BasicInfo.jsx'
+import BasicInfo from './BasicInfo.jsx';
 import LineChart from '../charts/LineChart.jsx';
+import SavingsHistChart from '../charts/SavingsHistChart.jsx';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -29,8 +30,8 @@ class Dashboard extends React.Component {
       formToggle: false,
       accountToggle: true,
       retirePlan: {}
-    }
-    this.createPlan = this.createPlan.bind(this)
+    };
+    this.createPlan = this.createPlan.bind(this);
     this.updatePlans = this.updatePlans.bind(this);
     this.launchPlaidLink = this.launchPlaidLink.bind(this);
     this.updateItems = this.updateItems.bind(this);
@@ -45,65 +46,73 @@ class Dashboard extends React.Component {
   }
 
   createPlan() {
-    this.setState({ 
+    this.setState({
       formToggle: true,
       overviewToggle: false,
       accountToggle: false
-    })
+    });
   }
 
   deletePlan(id) {
-    axios.delete('/retire/plans', {
-      params: {planId: id}})
-      .then(res => {
-        this.updatePlans()
-    })
-    .catch(err => {
-      console.log(err)
-    })
+    axios
+      .delete('/retire/plans', {
+        params: { planId: id }
+      })
+      .then((res) => {
+        this.updatePlans();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   editPlanName(name, id) {
-    axios.put('/retire/plans', {name: name, planId: id})
-    .then(res => {
-      this.updatePlans()
-    })
-    .catch(err => {
-      console.log(err)
-    })
+    axios
+      .put('/retire/plans', { name: name, planId: id })
+      .then((res) => {
+        this.updatePlans();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   setActivePlan(plan) {
-    // when you click on a plan in the siderail, it sets it to active 
+    // when you click on a plan in the siderail, it sets it to active
     this.setState({
       activePlan: plan,
       overviewToggle: true,
       formToggle: false
-    })
+    });
     this.calculateRetirePlan();
   }
 
   submitBasic(info) {
-    axios.post('/retire/plans', info
-    ).then(res => {
-      this.updatePlans()
-    }).catch(err => {console.log(err)})
+    axios
+      .post('/retire/plans', info)
+      .then((res) => {
+        this.updatePlans();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     console.log('Trying to submit');
   }
 
   updateItems() {
-    axios.get('/retire/items', { params: { userId: this.props.userData.userId } })
+    axios
+      .get('/retire/items', { params: { userId: this.props.userData.userId } })
       .then(({ data }) => {
         this.setState({
           items: data
-        })
+        });
         data.forEach((item) => {
           this.updateAccounts(item);
         });
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
   }
 
   launchPlaidLink() {
@@ -111,16 +120,18 @@ class Dashboard extends React.Component {
   }
 
   updatePlans() {
-    axios.get('/retire/plans', { params: {userId: this.props.userData.userId } })
-      .then(({data}) => {
+    axios
+      .get('/retire/plans', { params: { userId: this.props.userData.userId } })
+      .then(({ data }) => {
+        console.log('this is the plan data: ', data);
         this.setState({
           plans: data,
           // default the active plan as the first one. could later allow users to manually set their "main" plan
           activePlan: data[0]
-        })
+        });
         // if the user has plans, just render user's overview
-        if(this.state.plans && this.state.plans.length > 0) {
-          this.setState({ 
+        if (this.state.plans && this.state.plans.length > 0) {
+          this.setState({
             formToggle: false,
             overviewToggle: true
           });
@@ -130,23 +141,29 @@ class Dashboard extends React.Component {
           this.setState({
             formToggle: true,
             overviewToggle: false
-          })
+          });
         }
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
   }
 
+  // remove calculateRetireplan() after factoring button to do so
   updateGoals() {
-    axios.get('retire/goals', { params:{ userId:this.props.userData.userId }})
-    .then(({data}) => {
-      this.setState({goals: data})
-      if (this.state.goals) {
-        this.setState({ formGoalsToggle: false })
-      }
-    })
-    .catch(err => {console.log(err)})
+    axios
+      .get('retire/goals', { params: { userId: this.props.userData.userId } })
+      .then(({ data }) => {
+        this.setState({ goals: data }, () => {
+          console.log(this.state.goals);
+        });
+        if (this.state.goals) {
+          this.setState({ formGoalsToggle: false });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   setOverview() {
@@ -154,22 +171,25 @@ class Dashboard extends React.Component {
     this.setState({
       overviewToggle: true,
       formToggle: false
-    })
+    });
   }
 
   updateAccounts(item) {
-    axios.get('retire/accounts', { params: { itemId: item.itemId }})
-      .then(({data}) => {
+    axios
+      .get('retire/accounts', { params: { itemId: item.itemId } })
+      .then(({ data }) => {
         let currentAccounts = Object.assign({}, this.state.accounts);
         data.accounts.forEach((account) => {
-          currentAccounts.accountList.push(Object.assign(account, data.item, {institutionName: item.institutionName}));
+          currentAccounts.accountList.push(
+            Object.assign(account, data.item, { institutionName: item.institutionName })
+          );
           currentAccounts.userTotal.currentTotal += account.balances.current;
           currentAccounts.userTotal.currentAvailable += account.balances.available;
         });
         this.setState({
           accounts: currentAccounts
         });
-        this.getUserTotalHistory()
+        this.getUserTotalHistory();
       })
       .catch((err) => {
         console.log(err);
@@ -177,105 +197,47 @@ class Dashboard extends React.Component {
   }
 
   getUserTotalHistory(currentBalance, currentAvailable) {
-    axios.put('retire/history', {
-      userId: this.props.userData.userId,
-      currentBalance: currentBalance,
-      currentAvailable: currentAvailable
-    })
-      .then(({data}) => {
+    axios
+      .put('retire/history', {
+        userId: this.props.userData.userId,
+        currentBalance: currentBalance,
+        currentAvailable: currentAvailable
+      })
+      .then(({ data }) => {
         let newAccounts = Object.assign({}, this.state.accounts);
         newAccounts.userTotal.history = data;
         this.setState({
           accounts: newAccounts
-        })
+        });
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
-  calculateRetirePlan() {
-    var retireLifestyles = {
-      1: .60,
-      2: .80,
-      3: 1.00,
-      4: 1.20,
-      5: 1.40
-    };
-    let retirePlanToSave = {};
-    let activePlan = this.state.activePlan;
-    let projectedSalary = [];
-    let projectedSpending = [];
-    let projectedSavings = [];
-    let retireSavingsHighReturns = [];
-    let retireSavingsLowReturns = [];
-    let retireSavingsMidReturns = [];
-    if (activePlan) {
-      let savingsHigh = activePlan.currentSavings;
-      let savingsLow = activePlan.currentSavings;
-      let savingsMid = activePlan.currentSavings;
-      let spending = activePlan.monthlySpending * 12;
-      let age = activePlan.currentAge;
-      let spendingPercent = activePlan.monthlySpending/(activePlan.annualIncome / 12);
-      let savingPercent = activePlan.monthlySavings/(activePlan.annualIncome / 12);
-      let retirementSpending = 0;
-      while(age < 105) {
-        if (age < activePlan.retirementAge) {
-          var salary = Math.floor(activePlan.annualIncome * (1 + (.02 * (age - activePlan.currentAge)))); // projected salary for a given age
-          projectedSalary.push(salary);
-          spending = Math.floor(salary * spendingPercent); // projected spending based on salary and spend %.  (Adjust for the GOALS set in future work)
-          projectedSpending.push(spending);
-          let savings = Math.floor(salary * savingPercent); // projected yearly savings
-          projectedSavings.push(savings);
-          savingsHigh = Math.floor(savingsHigh * 1.13) + savings; // Savings calculator based on very high market return
-          savingsLow = Math.floor(savingsLow * 1.07) + savings; // Savings calculator based on low market return
-          savingsMid = Math.floor(savingsMid * 1.10) + savings; // Savings calculator based on mid market return
-          retireSavingsHighReturns.push(savingsHigh);
-          retireSavingsLowReturns.push(savingsLow);
-          retireSavingsMidReturns.push(savingsMid);
-          age++;
-        } else {
-          if (age === activePlan.retirementAge) {
-            retirementSpending = Math.floor(spending * retireLifestyles[activePlan.retireGoal]); // projected spending final spending while working * retire lifestyle multiplier.
-            retirePlanToSave.savingsAtRetirement = savingsMid;
-            retirePlanToSave.salaryAtRetirement = salary;
-            retirePlanToSave.spendingAtRetirement = retirementSpending;
-            retirePlanToSave.savingsRate = Math.floor(savingPercent * 100);
-          }
-          projectedSalary.push(0);
-          projectedSavings.push(0);
-          projectedSpending.push(retirementSpending);
-          savingsHigh = Math.floor(savingsHigh * 1.03) - (retirementSpending * (1 + (.02 * (age - activePlan.retirementAge))));
-          if (savingsHigh >= 0) {
-            retireSavingsHighReturns.push(savingsHigh);
-          } else {
-            retireSavingsHighReturns.push(0);
-          };
-          savingsLow = Math.floor(savingsLow * 1.03)  - (retirementSpending * (1 + (.02 * (age - activePlan.retirementAge))));
-          if (savingsLow >= 0) {
-            retireSavingsLowReturns.push(savingsLow);
-          } else {
-            retireSavingsLowReturns.push(0);
-          };
-          savingsMid = Math.floor(savingsMid * 1.03) - (retirementSpending * (1 + (.02 * (age - activePlan.retirementAge))));
-          if (savingsMid >= 0) {
-            retireSavingsMidReturns.push(savingsMid);
-          } else {
-            retireSavingsMidReturns.push(0);
-          }
-          age++;
-        }
-      } 
+  // think we can move this to node pretty cleanly, setState in .then()
+  calculateRetirePlan(addGoals) {
+    let goals = undefined;
+    if (addGoals) {
+      goals = this.state.goals;
     }
-    retirePlanToSave.projectedSalary = projectedSalary;
-    retirePlanToSave.projectedSpending = projectedSpending;
-    retirePlanToSave.projectedSavings = projectedSavings;
-    retirePlanToSave.retireSavingsHighReturns = retireSavingsHighReturns;
-    retirePlanToSave.retireSavingsLowReturns = retireSavingsLowReturns;
-    retirePlanToSave.retireSavingsMidReturns = retireSavingsMidReturns;
-    this.setState({
-      retirePlan: retirePlanToSave 
-    });
+    axios
+      .get('/retire/trajectory', {
+        params: { activePlan: this.state.activePlan, goals: goals }
+      })
+      .then((result) => {
+        console.log(result.data);
+        console.log(this.state.goals);
+        this.setState(
+          {
+            retirePlan: result.data
+          },
+          () => {
+            console.log(this.state.retirePlan);
+          }
+        );
+      })
+      .catch((err) => console.error(err));
   }
 
   componentDidMount() {
@@ -286,20 +248,22 @@ class Dashboard extends React.Component {
       env: 'sandbox',
       product: ['transactions'],
       key: '2dec9b90cfcc7a2d76b295ac1b3504',
-      onSuccess: (public_token, metadata) => {   // Defining what should happen upon success of the Plaid 'Link' feature, at minimum, send public_token to our server.
-        axios.post('/retire/get_access_token', {
-          public_token: public_token,
-          metadata: metadata,
-          userId: this.props.userData.userId
-        })
-        .then(() => {
-          console.log('Post Successful');
-          this.updateItems();
-        })
-        .catch((err) => {
-          console.log('Plaid didnt work!' + err);
-        })
-      },
+      onSuccess: (public_token, metadata) => {
+        // Defining what should happen upon success of the Plaid 'Link' feature, at minimum, send public_token to our server.
+        axios
+          .post('/retire/get_access_token', {
+            public_token: public_token,
+            metadata: metadata,
+            userId: this.props.userData.userId
+          })
+          .then(() => {
+            console.log('Post Successful');
+            this.updateItems();
+          })
+          .catch((err) => {
+            console.log('Plaid didnt work!' + err);
+          });
+      }
     });
     // pull all of the user's data from our database once the userdata is received
     if (this.props.userData.userId) {
@@ -309,8 +273,6 @@ class Dashboard extends React.Component {
     }
   }
 
-
-
   render() {
     return (
       <div className="row">
@@ -318,42 +280,69 @@ class Dashboard extends React.Component {
           <SideRail
             updatePlans={this.updatePlans}
             activePlan={this.state.activePlan}
-            user={this.props.user} 
-            currentUserId={this.props.userData && this.props.userData.userId} 
-            plans={this.state.plans} 
-            createPlan={this.createPlan} 
-            editPlanName={this.editPlanName} 
-            deletePlan={this.deletePlan} 
+            user={this.props.user}
+            currentUserId={this.props.userData && this.props.userData.userId}
+            plans={this.state.plans}
+            createPlan={this.createPlan}
+            editPlanName={this.editPlanName}
+            deletePlan={this.deletePlan}
             setActivePlan={this.setActivePlan}
-            setOverview={this.setOverview} 
-            goals={this.state.goals} 
+            setOverview={this.setOverview}
+            goals={this.state.goals}
             launchPlaidLink={this.launchPlaidLink}
+            calculateRetirePlan={this.calculateRetirePlan}
           />
         </div>
         <div className="col-md-10">
-        {/* render forms when toggle is true. atm this only happens if user has no plans or if they click add plan */}
-          {this.state.formToggle && <div className="col-md-12">
-          {/* two different forms for the user to fill out */}
-            <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
-            {/* <GoalInfo user={this.props.userData} /> */}
-          </div>}
+          {/* render forms when toggle is true. atm this only happens if user has no plans or if they click add plan */}
+          {this.state.formToggle && (
+            <div className="col-md-12">
+              {/* two different forms for the user to fill out */}
+              <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
+              {this.state.goals ? (
+                this.state.goals.length === 0 ? (
+                  <GoalInfo user={this.props.userData} />
+                ) : null
+              ) : null}
+            </div>
+          )}
           <div className="row">
             <div className="col-md-12">
-            {/* linechart is part of the overview as well. holds retirement projection */}
-              {(this.state.overviewToggle && this.state.activePlan) && <LineChart activePlan={this.state.activePlan} retirePlan={this.state.retirePlan} goals={this.state.goals}/>}
+              {/* linechart is part of the overview as well. holds retirement projection */}
+              {this.state.overviewToggle &&
+                this.state.activePlan && (
+                  <LineChart
+                    activePlan={this.state.activePlan}
+                    retirePlan={this.state.retirePlan}
+                    goals={this.state.goals}
+                  />
+                )}
             </div>
           </div>
-          <br/>
+          <br />
           <div className="row">
             <div className="col-md-7">
-            {/* overview is the user's splash page that shows all of the current active plans and accompanying charts, accounts */}
-              {(this.state.overviewToggle && this.state.activePlan) && <Overview accounts={this.state.accounts} updatePlans={this.state.updatePlans} activePlan={this.state.activePlan} plans={this.state.plans} goals={this.state.goals}/>}
+              {/* overview is the user's splash page that shows all of the current active plans and accompanying charts, accounts */}
+              {this.state.overviewToggle &&
+                this.state.activePlan && (
+                  <Overview
+                    accounts={this.state.accounts}
+                    updatePlans={this.state.updatePlans}
+                    activePlan={this.state.activePlan}
+                    plans={this.state.plans}
+                    goals={this.state.goals}
+                  />
+                )}
             </div>
-            <div className="col-md-5">{(this.state.accountToggle) && <Accounts user={this.props.user} 
-              currentUserId={this.props.currentUserId}
-              launchPlaidLink={this.launchPlaidLink}
-              accounts={this.state.accounts}
-            />}
+            <div className="col-md-5">
+              {this.state.accountToggle && (
+                <Accounts
+                  user={this.props.user}
+                  currentUserId={this.props.currentUserId}
+                  launchPlaidLink={this.launchPlaidLink}
+                  accounts={this.state.accounts}
+                />
+              )}
             </div>
           </div>
         </div>

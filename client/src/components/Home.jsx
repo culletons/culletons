@@ -9,11 +9,10 @@ const Home = (props) => {
         <div className="container" style={{ marginLeft: 50, marginRight: 25 }}>
           <h1 className="display-4">Plan+Life</h1>
           <p className="lead">If you fail to plan, you plan to fail. </p>
-
           <p className="lead">Let's plan for <em>SUCCESS</em>.  - Kenni Silverio</p>
           <div className="pb-1"></div>
           {/* renders signup popup */}
-          <Signup emailAndPassSignUp={props.emailAndPassSignUp} googleSignUp={props.googleSignUp} />
+          <Signup updateUserState={props.updateUserState} />
         </div>
       </div>
       <div className="container">
@@ -95,7 +94,7 @@ const Home = (props) => {
             <i className="fa fa-5x fa-thumbs-o-up" aria-hidden="true"></i>
             <h5> Plan for success with Plan+Life! </h5>
              {/* renders signup popup */}
-            <Signup onSignUp={props.onSignUp} />
+            <Signup updateUserState={props.updateUserState} />
           </div>
           <div className="col-md-3"></div>
         </div>
