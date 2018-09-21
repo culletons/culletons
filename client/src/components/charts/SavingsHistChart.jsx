@@ -1,32 +1,44 @@
-import React from 'React'
+import React from 'React';
+import axios from 'axios';
 var chart;
 
-// This linechart displays the retirement plan projected over time
+// This linechart displays the the savings and balance amounts recorded from the past 30 days
 
 class SavingsHistChart extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      balance: [],
+      savings: []
+    }
+
     this.updateChart = this.updateChart.bind(this);
+    this.getSavingsHistory = this.getSavingsHistory.bind(this);
   }
   
   // This function receives the retirement plan via props, and updates each of the three line series with the savings projections.
   updateChart() {
     chart.series[0].update({
       pointStart: 0,
-      data: [[1, 300], [2, 400], [3, 500], [4, 600]]
+      data: this.state.balance
     }, true)
     chart.series[1].update({
       pointStart: 0,
-      data: [[1, 150], [2, 200], [3, 250], [4, 300]]
+      data: this.state.savings
     }, true)
   }
 
 
-  // componentDidUpdate() {
-  //   this.updateChart();
-  // }
+  componentDidUpdate(prevProps) {
+    //updates chart whenever component updates
+    if(prevProps !== this.props) {
+      this.getSavingsHistory();
+    }
+  }
 
   componentDidMount() {
+    //creates new highcharts chart
     chart = new Highcharts.chart('savingsHistChart', {
       chart: {
         type: 'spline'
@@ -36,12 +48,12 @@ class SavingsHistChart extends React.Component {
       },
       yAxis: {
         title: {
-          text: "Your Savings"
+          text: "Amount"
         }
       },
       xAxis: {
         title: {
-          text: "Age"
+          text: "Date"
         }
       },
       plotOptions: {
@@ -70,22 +82,21 @@ class SavingsHistChart extends React.Component {
         }
       }
     })
-    this.updateChart([0,0])
+  }
+
+  //retrieves the recorded savings balances from the database and sets the balances to state
+  getSavingsHistory() {
+    axios.get('/retire/history')
+    .then(({data}) => {
+      console.log('this is some savings history: ', data);
+      this.setState(data);
+    })
+    .then(this.updateChart)
   }
   
   render() {
     return (
-      <div className="card">
-        <div className="row">
-          <div className="card-body col-md-3">
-            <div className="card-title plan-title border-bottom"></div>
-            <br/>
-          </div>
-          <div className="col-md-9">
-            <div id='savingsHistChart'></div>
-          </div>
-         </div>
-       </div>
+      <div id='savingsHistChart'></div>
     )
   }
 }

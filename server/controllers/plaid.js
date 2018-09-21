@@ -89,5 +89,27 @@ module.exports = {
         console.log(err);
         res.sendStatus(500);
       })
+  },
+
+
+  //gets the balance and savings history from the past 30 days and formats it for highcharts
+  getHistory: (req, res) => {
+    model
+    .getSavingsHistory()
+    .then(({models}) => {
+      console.log('this is the savings hist data ', models[0].attributes);
+      let body = { balance : [], savings : [] };
+      models.forEach(({attributes})=> {
+        let balancePoint = [attributes.date, attributes.balanceAmt];
+        body.balance.push(balancePoint);
+        let savingsPoint = [attributes.date, attributes.availableAmt];
+        body.savings.push(savingsPoint);
+      })
+      res.send(body);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    })
   }
 };

@@ -29,6 +29,7 @@ router.put('/goals', usersController.updateGoal);
 router.post('/get_access_token', plaidController.getAccessToken);
 router.get('/accounts', plaidController.getAccounts);
 router.put('/history', plaidController.updateHistory);
+router.get('/history', plaidController.getHistory);
 
 // handles retirement calculation
 router.get('/trajectory', usersController.calculateRetirePlan);

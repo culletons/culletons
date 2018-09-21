@@ -133,14 +133,14 @@ var getPlansFromDB = (userIdToSearch) => {
     });
 };
 
-//seeds database for fake savings history data. Takes an array of objects with balance, savings, and date entries
+//accepts an array of objects to seed the database for balance and savings amounts in order to render the savings history chart
 var seedSavingsHistory = (seed) => {
   seed.forEach((entry) => {
     return new SavingsHistory({
       userId: 7,
       balanceAmt: entry.balance,
       availableAmt: entry.savings,
-      created_at: entry.date
+      date: entry.date
     })
     .save()
     .then(function(newSave) {
@@ -347,6 +347,17 @@ var addSavingHistory = (userId, savingsAmt, availableAmt) => {
   });
 };
 
+//fetches the savings history for a user in order to render it in a chart
+var getSavingsHistory = () => {
+  return new SavingsHistory()
+  .query({ where: { userId : '7' }})
+  .fetchAll()
+  .then((data) => {
+    return data;
+  })
+};
+
+
 module.exports = {
   User,
   Users,
@@ -362,5 +373,6 @@ module.exports = {
   createGoalInDB,
   getItemByID,
   addSavingHistory,
-  seedSavingsHistory
+  seedSavingsHistory,
+  getSavingsHistory
 };
