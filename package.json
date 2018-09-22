@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-server": "nodemon --inspect server/controllers/index.js",
-    "react-dev": "webpack -d --watch"
+    "react-dev": "webpack -d --watch",
+    "heroku-postbuild": "webpack -p",
+    "start": "node server/controllers/index.js"
   },
   "author": "",
   "license": "ISC",
